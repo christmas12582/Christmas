@@ -1,4 +1,4 @@
-package com.christmas.demo.utils;
+package com.lottery.utils;
 
 import org.apache.shiro.crypto.hash.SimpleHash;
 

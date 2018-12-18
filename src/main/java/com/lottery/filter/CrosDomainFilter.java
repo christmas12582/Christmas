@@ -1,4 +1,4 @@
-package com.christmas.demo.filter;
+package com.lottery.filter;
 
 import org.springframework.stereotype.Component;
 

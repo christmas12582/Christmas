@@ -1,4 +1,4 @@
-package com.christmas.demo;
+package com.lottery;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

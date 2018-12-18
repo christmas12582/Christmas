@@ -1,4 +1,4 @@
-package com.christmas.demo.utils;
+package com.lottery.utils;
 
 
 import com.fasterxml.jackson.core.JsonParseException;

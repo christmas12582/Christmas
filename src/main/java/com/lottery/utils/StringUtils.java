@@ -1,4 +1,4 @@
-package com.christmas.demo.utils;
+package com.lottery.utils;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;

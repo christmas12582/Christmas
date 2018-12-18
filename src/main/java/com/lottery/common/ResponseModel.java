@@ -1,4 +1,4 @@
-package com.christmas.demo.common;
+package com.lottery.common;
 
 public class ResponseModel {
     Long code;

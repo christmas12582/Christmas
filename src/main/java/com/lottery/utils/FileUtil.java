@@ -1,4 +1,4 @@
-package com.christmas.demo.utils;
+package com.lottery.utils;
 
 import java.io.File;
 import java.io.FileOutputStream;

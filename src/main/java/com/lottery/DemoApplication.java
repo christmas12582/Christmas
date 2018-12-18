@@ -1,4 +1,4 @@
-package com.christmas.demo;
+package com.lottery;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
