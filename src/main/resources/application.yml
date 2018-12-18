@@ -10,7 +10,7 @@ spring:
         max-request-size: 1024Mb
 
     datasource:
-        name: welove
+        name: lottery
         type: com.alibaba.druid.pool.DruidDataSource
         #druid相关配置
         druid:
@@ -18,9 +18,9 @@ spring:
           filters: stat
           driver-class-name: com.mysql.jdbc.Driver
           #基本属性
-          url: jdbc:mysql://47.92.115.215:3306/welove?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=false
+          url: jdbc:mysql://59.110.240.36:3306/lottery?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=false
           username: root
-          password: root@12582
+          password: root_
           #配置初始化大小/最小/最大
           initial-size: 1
           min-idle: 1
