@@ -12,13 +12,13 @@
             <property name="suppressAllComments" value="true"/>
         </commentGenerator>
         <!--数据库链接URL，用户名、密码 -->
-        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://47.92.115.215:3306/welove" userId="root" password="root@12582">
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://59.110.240.36:3306/lottery" userId="root" password="root_">
         </jdbcConnection>
         <javaTypeResolver>
             <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>
         <!-- 生成模型的包名和位置-->
-        <javaModelGenerator targetPackage="com.welove.demo.model" targetProject="src/main/java">
+        <javaModelGenerator targetPackage="com.lottery.model" targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
@@ -27,16 +27,18 @@
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
         <!-- 生成DAO的包名和位置-->
-        <javaClientGenerator type="XMLMAPPER" targetPackage="com.welove.demo.dao" targetProject="src/main/java">
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.lottery.dao" targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
         <!-- 要生成的表 tableName是数据库中的表名或视图名 domainObjectName是实体类名-->
-        <!--<table tableName="t_d_auth" domainObjectName="Auth"></table>-->
-        <!--<table tableName="t_d_company" domainObjectName="Company"></table>-->
-        <!--<table tableName="t_d_location" domainObjectName="Location"></table>-->
-        <table tableName="t_d_resource" domainObjectName="Resource"></table>
-        <!--<table tableName="t_d_role" domainObjectName="Role"></table>-->
-        <!--<table tableName="t_d_resource" domainObjectName="Resource"></table>-->
-        <!--<table tableName="t_d_user" domainObjectName="User"></table>-->
+
+        <table tableName="t_buy" domainObjectName="Buy"></table>
+        <table tableName="t_lottery" domainObjectName="Lottery"></table>
+        <table tableName="t_lottery_item" domainObjectName="LotteryItem"></table>
+        <table tableName="t_product" domainObjectName="Product"></table>
+        <table tableName="t_unit" domainObjectName="Unit"></table>
+        <table tableName="t_user" domainObjectName="User"></table>
+        <table tableName="t_user_lottery" domainObjectName="UserLottery"></table>
+
     </context>
 </generatorConfiguration>
