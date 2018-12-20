@@ -63,8 +63,8 @@ public class FileController {
                     String fileName=uuid+"_"+file.getOriginalFilename();
                     String suffix = fileName.substring(fileName.lastIndexOf(".") + 1);
                     if (imageSuffixList.contains(suffix)){
-                        if (filesize>5*1048576)
-                            return new ResponseModel(500l,"图片大小不能大于5M",null);
+                        if (filesize>10*1048576)
+                            return new ResponseModel(500l,"图片大小不能大于10M",null);
                         filePath+="images/";
                         filepathnameList.add(contextpath+"/file/images/"+fileName);
                     }
