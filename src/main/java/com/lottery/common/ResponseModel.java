@@ -34,6 +34,13 @@ public class ResponseModel {
         this.msg = msg;
         this.data = data;
     }
+
+    public ResponseModel(Object data) {
+        this.code = 0L;
+        this.msg = "";
+        this.data = data;
+    }
+
     public ResponseModel(){
 
     }

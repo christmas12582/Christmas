@@ -60,7 +60,11 @@ logging:
   file: logs/spring-boot-logging.log
 
 
+file:
+  image: jpg,bmp,gif,png
+  video: avi,mov,mpeg,mp4
 
+locationpath: D:/upload/
 
 
 
