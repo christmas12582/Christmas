@@ -3,6 +3,9 @@ package com.lottery.controller;
 
 import com.lottery.common.ResponseModel;
 import com.lottery.utils.FileUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +26,7 @@ import java.util.UUID;
 
 @Controller
 @RequestMapping("/fileupload")
+@Api("文件上传")
 public class FileController {
 
     @Value("${file.image}")
@@ -37,6 +41,7 @@ public class FileController {
     //多文件上传
     @RequestMapping(value = "/multiUpload", method = RequestMethod.POST)
     @ResponseBody
+    @ApiOperation(value = "图片上传", notes = "图片上传")
     public ResponseModel handleFileUpload(HttpServletRequest request) {
         HttpSession session = request.getSession();
         ServletContext context = session.getServletContext();
