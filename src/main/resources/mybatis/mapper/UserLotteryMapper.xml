@@ -208,4 +208,15 @@
       exchangedate = #{exchangedate,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="selectByUserIdAndLotteryId" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_user_lottery
+    where userid = #{userId,jdbcType=INTEGER}
+      and lotteryitemid in (
+        select id 
+        from t_lottery_item 
+        where lotteryid = #{lotteryId,jdbcType=INTEGER}
+      )
+  </select>
 </mapper>

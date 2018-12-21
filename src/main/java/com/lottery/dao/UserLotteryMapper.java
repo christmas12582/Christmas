@@ -29,4 +29,6 @@ public interface UserLotteryMapper {
     int updateByPrimaryKeySelective(UserLottery record);
 
     int updateByPrimaryKey(UserLottery record);
+    
+    List<UserLottery> selectByUserIdAndLotteryId(@Param("userId") Integer userId, @Param("lotteryId") Integer lotteryId);
 }
