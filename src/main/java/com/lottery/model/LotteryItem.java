@@ -15,6 +15,8 @@ public class LotteryItem {
 
     private Integer mcount;
 
+    private Integer weight;
+
     public Integer getId() {
         return id;
     }
@@ -69,5 +71,13 @@ public class LotteryItem {
 
     public void setMcount(Integer mcount) {
         this.mcount = mcount;
+    }
+
+    public Integer getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Integer weight) {
+        this.weight = weight;
     }
 }

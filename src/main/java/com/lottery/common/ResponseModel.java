@@ -34,6 +34,11 @@ public class ResponseModel {
         this.msg = msg;
         this.data = data;
     }
+    
+    public ResponseModel(Long code, String msg) {
+        this.code = code;
+        this.msg = msg;
+    }
 
     public ResponseModel(Object data) {
         this.code = 0L;

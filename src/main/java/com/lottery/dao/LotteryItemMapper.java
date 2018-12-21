@@ -4,9 +4,7 @@ import com.lottery.model.LotteryItem;
 import com.lottery.model.LotteryItemExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Component;
 
-@Component
 public interface LotteryItemMapper {
     int countByExample(LotteryItemExample example);
 
