@@ -29,4 +29,6 @@ public interface LotteryItemMapper {
     int updateByPrimaryKeySelective(LotteryItem record);
 
     int updateByPrimaryKey(LotteryItem record);
+    
+    List<LotteryItem> selectByLotteryId(Integer lotteryId);
 }

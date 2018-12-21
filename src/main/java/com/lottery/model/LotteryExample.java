@@ -223,6 +223,66 @@ public class LotteryExample {
             addCriterion("isvalid not between", value1, value2, "isvalid");
             return (Criteria) this;
         }
+
+        public Criteria andMcountIsNull() {
+            addCriterion("mcount is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMcountIsNotNull() {
+            addCriterion("mcount is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMcountEqualTo(Integer value) {
+            addCriterion("mcount =", value, "mcount");
+            return (Criteria) this;
+        }
+
+        public Criteria andMcountNotEqualTo(Integer value) {
+            addCriterion("mcount <>", value, "mcount");
+            return (Criteria) this;
+        }
+
+        public Criteria andMcountGreaterThan(Integer value) {
+            addCriterion("mcount >", value, "mcount");
+            return (Criteria) this;
+        }
+
+        public Criteria andMcountGreaterThanOrEqualTo(Integer value) {
+            addCriterion("mcount >=", value, "mcount");
+            return (Criteria) this;
+        }
+
+        public Criteria andMcountLessThan(Integer value) {
+            addCriterion("mcount <", value, "mcount");
+            return (Criteria) this;
+        }
+
+        public Criteria andMcountLessThanOrEqualTo(Integer value) {
+            addCriterion("mcount <=", value, "mcount");
+            return (Criteria) this;
+        }
+
+        public Criteria andMcountIn(List<Integer> values) {
+            addCriterion("mcount in", values, "mcount");
+            return (Criteria) this;
+        }
+
+        public Criteria andMcountNotIn(List<Integer> values) {
+            addCriterion("mcount not in", values, "mcount");
+            return (Criteria) this;
+        }
+
+        public Criteria andMcountBetween(Integer value1, Integer value2) {
+            addCriterion("mcount between", value1, value2, "mcount");
+            return (Criteria) this;
+        }
+
+        public Criteria andMcountNotBetween(Integer value1, Integer value2) {
+            addCriterion("mcount not between", value1, value2, "mcount");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

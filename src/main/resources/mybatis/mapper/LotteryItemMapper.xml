@@ -255,4 +255,12 @@
       weight = #{weight,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="selectByLotteryId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from t_lottery_item
+    where lotteryid = #{lotteryId,jdbcType=INTEGER}
+      and <![CDATA[ gcount < mcount ]]>
+    order by orderno asc
+  </select>
 </mapper>
