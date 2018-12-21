@@ -132,7 +132,7 @@ public class HttpClientUtil {
 
 
     public static String doDelete(String url)  {
-        logger.info("==================================doDelete=={}",url);
+        logger.info("=================================doDelete=={}",url);
 
         String response= "";
         HttpClient httpClient= new HttpClient();
