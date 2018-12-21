@@ -75,7 +75,7 @@ public class LotteryService {
 	@Transactional
 	public void saveLotteryItem(LotteryItem lotteryItem){
 		if(lotteryItem.getId()==null){
-			lotteryItemMapper.insert(lotteryItem)
+			lotteryItemMapper.insert(lotteryItem);
 		}else{
 			lotteryItemMapper.updateByPrimaryKeySelective(lotteryItem);
 		}
