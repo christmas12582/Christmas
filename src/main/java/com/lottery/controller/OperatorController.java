@@ -163,6 +163,32 @@ public class OperatorController {
     }
 
 
+    @ApiOperation(value = "添加规格", notes = "添加规格")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "productid", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "isvalid", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "expired", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "price", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "name", dataType = "String", paramType = "query"),
+
+    })
+    @RequestMapping(value = "unitadd", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseModel addUnit(
+            @RequestParam(value = "productid") Integer productid,
+            @RequestParam(value = "isvalid",required = false,defaultValue = "1") Integer isvalid,
+            @RequestParam(value = "name") String name,
+            @RequestParam(value = "price") Integer price,
+            @RequestParam(value = "expired") Integer expired
+    ){
+        HashMap<String,Integer> result=operatorService.addUnit(productid,isvalid,price,name,expired);
+        if(result.get("count")>0)
+            return new ResponseModel(0L,"新增成功",result.get("unitid"));
+        else
+            return new ResponseModel(500L,"新增失败",null);
+
+
+    }
 
 
     //添加规格
