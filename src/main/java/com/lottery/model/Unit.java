@@ -11,6 +11,8 @@ public class Unit {
 
     private String name;
 
+    private Integer expired;
+
     public Integer getId() {
         return id;
     }
@@ -49,5 +51,13 @@ public class Unit {
 
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
+    }
+
+    public Integer getExpired() {
+        return expired;
+    }
+
+    public void setExpired(Integer expired) {
+        this.expired = expired;
     }
 }

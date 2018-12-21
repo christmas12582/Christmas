@@ -413,6 +413,66 @@ public class UnitExample {
             addCriterion("name not between", value1, value2, "name");
             return (Criteria) this;
         }
+
+        public Criteria andExpiredIsNull() {
+            addCriterion("expired is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpiredIsNotNull() {
+            addCriterion("expired is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpiredEqualTo(Integer value) {
+            addCriterion("expired =", value, "expired");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpiredNotEqualTo(Integer value) {
+            addCriterion("expired <>", value, "expired");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpiredGreaterThan(Integer value) {
+            addCriterion("expired >", value, "expired");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpiredGreaterThanOrEqualTo(Integer value) {
+            addCriterion("expired >=", value, "expired");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpiredLessThan(Integer value) {
+            addCriterion("expired <", value, "expired");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpiredLessThanOrEqualTo(Integer value) {
+            addCriterion("expired <=", value, "expired");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpiredIn(List<Integer> values) {
+            addCriterion("expired in", values, "expired");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpiredNotIn(List<Integer> values) {
+            addCriterion("expired not in", values, "expired");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpiredBetween(Integer value1, Integer value2) {
+            addCriterion("expired between", value1, value2, "expired");
+            return (Criteria) this;
+        }
+
+        public Criteria andExpiredNotBetween(Integer value1, Integer value2) {
+            addCriterion("expired not between", value1, value2, "expired");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

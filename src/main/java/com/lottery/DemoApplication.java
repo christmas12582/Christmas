@@ -8,7 +8,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @EnableTransactionManagement
-@MapperScan("com.christmas.demo.dao")
+@MapperScan("com.lottery.dao")
 @EnableSwagger2
 public class DemoApplication {
 

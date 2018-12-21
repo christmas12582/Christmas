@@ -105,7 +105,12 @@
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{isvalid,jdbcType=INTEGER}, 
       #{icon,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.lottery.model.Product" >
+  <insert id="insertSelective" parameterType="com.lottery.model.Product" useGeneratedKeys="true" keyProperty="id">
+
+    <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+      SELECT max(id) AS id from t_product
+    </selectKey>
+
     insert into t_product
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
