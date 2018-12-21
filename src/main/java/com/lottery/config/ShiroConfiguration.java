@@ -1,5 +1,6 @@
 package com.lottery.config;
 
+import com.lottery.filter.Loginfilter;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy;
 import org.apache.shiro.authc.pam.ModularRealmAuthenticator;
@@ -133,9 +134,11 @@ public class ShiroConfiguration {
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         Map<String, Filter> filters = new LinkedHashMap<String, Filter>();
         LogoutFilter logoutFilter = new LogoutFilter();
+        Loginfilter loginfilter = new Loginfilter();
 
 
         filters.put("logout", logoutFilter);
+        filters.put("loginf", loginfilter);
         System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 
         Map<String, String> filterChainDefinitionManager = shiroFilterFactoryBean.getFilterChainDefinitionMap();
@@ -144,12 +147,16 @@ public class ShiroConfiguration {
         
         filterChainDefinitionManager.put("/customer/**", "anon");
         filterChainDefinitionManager.put("/lottery/**", "anon");
+        filterChainDefinitionManager.put("/login", "anon");
+        filterChainDefinitionManager.put("/logout", "anon");
+        filterChainDefinitionManager.put("/addoperator", "anon");
+
 
         filterChainDefinitionManager.put("/swagger-ui.html", "anon");
         filterChainDefinitionManager.put("/swagger-resources/**", "anon");
         filterChainDefinitionManager.put("/v2/api-docs", "anon");
         filterChainDefinitionManager.put("/webjars/springfox-swagger-ui/**", "anon");
-        filterChainDefinitionManager.put("/**", "authc");
+        filterChainDefinitionManager.put("/**", "loginf");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionManager);
         shiroFilterFactoryBean.setFilters(filters);
 

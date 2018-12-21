@@ -9,6 +9,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,11 +38,12 @@ public class OperatorController {
             @ApiImplicitParam(name = "name", dataType = "String", paramType = "query")
     }
     )
+    @RequiresRoles("1")
     @RequestMapping(value = "productlist", method = RequestMethod.POST)
     @ResponseBody
     public ResponseModel getProductList(
-            @RequestParam(value = "pagenum", required = false) Integer pagenum,
-            @RequestParam(value = "pagesize", required = false) Integer pagesize,
+            @RequestParam(value = "pagenum", required = false,defaultValue = "1") Integer pagenum,
+            @RequestParam(value = "pagesize", required = false,defaultValue = "10") Integer pagesize,
             @RequestParam(value = "name", required = false) String name,
             @RequestParam(value = "isvalid", required = false, defaultValue = "1") Integer isvalid,
             @RequestParam(value = "id", required = false) Integer id
@@ -56,6 +58,7 @@ public class OperatorController {
             @ApiImplicitParam(name = "id", dataType = "int", paramType = "query"),
     }
     )
+    @RequiresRoles("1")
     @RequestMapping(value = "productdetails", method = RequestMethod.POST)
     @ResponseBody
     public ResponseModel getProductDetails(@RequestParam(value = "id") Integer id){
@@ -69,6 +72,7 @@ public class OperatorController {
             @ApiImplicitParam(name = "id", dataType = "int", paramType = "query"),
     }
     )
+    @RequiresRoles("1")
     @RequestMapping(value = "productremove", method = RequestMethod.POST)
     @ResponseBody
     public ResponseModel removeProduct(@RequestParam(value = "id") Integer id){
@@ -86,6 +90,7 @@ public class OperatorController {
             @ApiImplicitParam(name = "description", dataType = "String", paramType = "query"),
     }
     )
+    @RequiresRoles("1")
     @RequestMapping(value = "productadd", method = RequestMethod.POST)
     @ResponseBody
     public ResponseModel addProduct(
@@ -111,6 +116,7 @@ public class OperatorController {
             @ApiImplicitParam(name = "description", dataType = "String", paramType = "query"),
     }
     )
+    @RequiresRoles("1")
     @RequestMapping(value = "productupdate", method = RequestMethod.POST)
     @ResponseBody
     public ResponseModel updateProduct(
@@ -133,6 +139,7 @@ public class OperatorController {
             @ApiImplicitParam(name = "name", dataType = "String", paramType = "query"),
     }
     )
+    @RequiresRoles("1")
     @RequestMapping(value = "unitlist", method = RequestMethod.POST)
     @ResponseBody
     public ResponseModel getUnitList(
@@ -152,6 +159,7 @@ public class OperatorController {
             @ApiImplicitParam(name = "id", dataType = "int", paramType = "query"),
 
     })
+    @RequiresRoles("1")
     @RequestMapping(value = "unitremove", method = RequestMethod.POST)
     @ResponseBody
     public ResponseModel removeUnit(@RequestParam(value = "id",required = false) Integer id){
@@ -172,6 +180,7 @@ public class OperatorController {
             @ApiImplicitParam(name = "name", dataType = "String", paramType = "query"),
 
     })
+    @RequiresRoles("1")
     @RequestMapping(value = "unitadd", method = RequestMethod.POST)
     @ResponseBody
     public ResponseModel addUnit(
@@ -191,9 +200,6 @@ public class OperatorController {
     }
 
 
-    //添加规格
-    //删除规格
-    //规格列表
 
 
 
