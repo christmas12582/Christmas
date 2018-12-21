@@ -54,8 +54,7 @@ pagehelper:
 logging:
   level:
     com:
-      welove:
-        demo:
+      lottery:
           dao: debug
   file: logs/spring-boot-logging.log
 
