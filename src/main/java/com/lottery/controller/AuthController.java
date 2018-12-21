@@ -14,6 +14,7 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
@@ -89,6 +90,7 @@ public class AuthController {
     @ApiOperation(value = "增加运营商", notes = "增加运营商")
     @RequestMapping(value = "addoperator" ,method = RequestMethod.POST)
     @ResponseBody
+    @RequiresRoles("1")
     public ResponseModel addoperator(
             @RequestParam(value = "phone") String phone,
             @RequestParam(value = "passowrd") String passowrd,
