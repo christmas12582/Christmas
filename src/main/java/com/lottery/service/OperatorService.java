@@ -68,4 +68,55 @@ public class OperatorService {
         return result;
     }
 
+    public  Integer updateProduct(Integer id,String name,String icon,String description,Integer isvalid){
+        Product product= new Product();
+        product.setId(id);
+        if(isvalid!=null)
+            product.setIsvalid(isvalid);
+        if(!StringUtils.isNullOrNone(icon))
+            product.setIcon(icon);
+        if (!StringUtils.isNullOrNone(name))
+            product.setName(name);
+        if(!StringUtils.isNullOrNone(description))
+            product.setDescription(description);
+        return  productMapper.updateByPrimaryKeySelective(product);
+
+    }
+
+    public List<Unit> getUnitList(Integer id,Integer productid,Integer isvalid,String name){
+        UnitExample example= new UnitExample();
+        UnitExample.Criteria criteria= example.createCriteria();
+        if (id!=null)
+            criteria.andIdEqualTo(id);
+        if(productid!=null)
+            criteria.andProductidEqualTo(productid);
+        if(isvalid!=null)
+            criteria.andIsvalidEqualTo(isvalid);
+        if(!StringUtils.isNullOrNone(name))
+            criteria.andNameEqualTo(name);
+        return unitMapper.selectByExample(example);
+    }
+
+    public int removeUnit(Integer id){
+        return unitMapper.deleteByPrimaryKey(id);
+    }
+
+    public HashMap<String,Integer> addUnit(Integer productid,Integer isvalid,Integer price,String name,Integer expired){
+        Unit unit= new Unit();
+        unit.setName(name);
+        unit.setIsvalid(isvalid);
+        unit.setProductid(productid);
+        unit.setPrice(price);
+        unit.setExpired(expired);
+        int count=unitMapper.insertSelective(unit);
+        Integer unitid=unit.getId();
+        HashMap<String,Integer> result= new HashMap<>();
+        result.put("unitid",unitid);
+        result.put("count",count);
+        return result;
+
+
+
+    }
+
 }

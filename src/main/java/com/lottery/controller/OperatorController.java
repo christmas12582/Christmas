@@ -3,6 +3,7 @@ package com.lottery.controller;
 import com.github.pagehelper.PageHelper;
 import com.lottery.common.ResponseModel;
 import com.lottery.model.Product;
+import com.lottery.model.Unit;
 import com.lottery.service.OperatorService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -36,7 +37,7 @@ public class OperatorController {
             @ApiImplicitParam(name = "name", dataType = "String", paramType = "query")
     }
     )
-    @RequestMapping(value = "list", method = RequestMethod.POST)
+    @RequestMapping(value = "productlist", method = RequestMethod.POST)
     @ResponseBody
     public ResponseModel getProductList(
             @RequestParam(value = "pagenum", required = false) Integer pagenum,
@@ -55,7 +56,7 @@ public class OperatorController {
             @ApiImplicitParam(name = "id", dataType = "int", paramType = "query"),
     }
     )
-    @RequestMapping(value = "details", method = RequestMethod.POST)
+    @RequestMapping(value = "productdetails", method = RequestMethod.POST)
     @ResponseBody
     public ResponseModel getProductDetails(@RequestParam(value = "id") Integer id){
         HashMap<String,Object> result=operatorService.getProductDetails(id);
@@ -68,7 +69,7 @@ public class OperatorController {
             @ApiImplicitParam(name = "id", dataType = "int", paramType = "query"),
     }
     )
-    @RequestMapping(value = "remove", method = RequestMethod.POST)
+    @RequestMapping(value = "productremove", method = RequestMethod.POST)
     @ResponseBody
     public ResponseModel removeProduct(@RequestParam(value = "id") Integer id){
         operatorService.removeProduct(id);
@@ -85,7 +86,7 @@ public class OperatorController {
             @ApiImplicitParam(name = "description", dataType = "String", paramType = "query"),
     }
     )
-    @RequestMapping(value = "add", method = RequestMethod.POST)
+    @RequestMapping(value = "productadd", method = RequestMethod.POST)
     @ResponseBody
     public ResponseModel addProduct(
             @RequestParam(value = "name") String name,
@@ -110,16 +111,64 @@ public class OperatorController {
             @ApiImplicitParam(name = "description", dataType = "String", paramType = "query"),
     }
     )
-    @RequestMapping(value = "update", method = RequestMethod.POST)
+    @RequestMapping(value = "productupdate", method = RequestMethod.POST)
     @ResponseBody
     public ResponseModel updateProduct(
+            @RequestParam(value = "id") Integer id,
             @RequestParam(value = "name",required = false) String name,
             @RequestParam(value = "isvalid",required = false,defaultValue = "1") Integer isvalid,
             @RequestParam(value = "icon",required = false) String icon,
             @RequestParam(value = "description",required = false) String description
     ){
-        return null;
+        Integer count = operatorService.updateProduct(id,name,icon,description,isvalid);
+        return  new ResponseModel(0L,"更新成功"+count+"条数据",null);
     }
+
+
+    @ApiOperation(value = "获取规格列表", notes = "获取规格列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "productid", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "isvalid", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "name", dataType = "String", paramType = "query"),
+    }
+    )
+    @RequestMapping(value = "unitlist", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseModel getUnitList(
+            @RequestParam(value = "id",required = false) Integer id,
+            @RequestParam(value = "productid",required = false) Integer productid,
+            @RequestParam(value = "isvalid",required = false,defaultValue = "1") Integer isvalid,
+            @RequestParam(value = "name",required = false) String name
+
+    ){
+        List<Unit> unitList= operatorService.getUnitList(id,productid,isvalid,name);
+        return new ResponseModel(unitList);
+    }
+
+
+    @ApiOperation(value = "删除规格", notes = "删除规格")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", dataType = "int", paramType = "query"),
+
+    })
+    @RequestMapping(value = "unitremove", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseModel removeUnit(@RequestParam(value = "id",required = false) Integer id){
+        Integer count=operatorService.removeUnit(id);
+        if (count>0)
+            return new ResponseModel(0L,"删除成功",null);
+        else
+            return new ResponseModel(500L,"删除失败",null);
+    }
+
+
+
+
+    //添加规格
+    //删除规格
+    //规格列表
+
 
 
 }
