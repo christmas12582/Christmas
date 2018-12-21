@@ -141,6 +141,9 @@ public class ShiroConfiguration {
         Map<String, String> filterChainDefinitionManager = shiroFilterFactoryBean.getFilterChainDefinitionMap();
         filterChainDefinitionManager.put("/file/**", "anon");
         filterChainDefinitionManager.put("/fileupload/**", "anon");
+        
+        filterChainDefinitionManager.put("/customer/**", "anon");
+        filterChainDefinitionManager.put("/lottery/**", "anon");
 
         filterChainDefinitionManager.put("/swagger-ui.html", "anon");
         filterChainDefinitionManager.put("/swagger-resources/**", "anon");
