@@ -15,6 +15,8 @@ public class Buy {
 
     private Integer lotteryid;
 
+    private Integer productid;
+
     public Integer getId() {
         return id;
     }
@@ -61,5 +63,13 @@ public class Buy {
 
     public void setLotteryid(Integer lotteryid) {
         this.lotteryid = lotteryid;
+    }
+
+    public Integer getProductid() {
+        return productid;
+    }
+
+    public void setProductid(Integer productid) {
+        this.productid = productid;
     }
 }
