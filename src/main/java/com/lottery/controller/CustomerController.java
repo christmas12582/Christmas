@@ -95,7 +95,7 @@ public class CustomerController {
 		if(userLotteryList!=null && userLotteryList.size()>=lottery.getMcount()){
 			return new ResponseModel(501l, "您的抽奖次数已经用完");
 		}
-		return new ResponseModel(200l, "用户可以参与抽奖");
+		return new ResponseModel(200l, "用户可以参与抽奖", lottery.getMcount()-(userLotteryList==null?0:userLotteryList.size()));
 	}
 	
 	/**
