@@ -52,10 +52,10 @@ public class Loginfilter extends AuthenticatingFilter {
         httpResponse.setStatus(200);
         httpResponse.setCharacterEncoding("UTF-8");
         httpResponse.setContentType("application/json; charset=utf-8");
-        httpResponse.setHeader("Access-Control-Allow-Origin", "*");
+        httpResponse.setHeader("Access-Control-Allow-Origin", "http://localhost:9527");
         httpResponse.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
         httpResponse.setHeader("Access-Control-Max-Age", "3600");
-        httpResponse.setHeader("Access-Control-Allow-Headers", "Origin,No-Cache,X-Requested-With,If-Modified-Since,Pragma,Last-Modified,Cache-Control,Expires,Content-Type,X-E4M-With");
+        httpResponse.setHeader("Access-Control-Allow-Headers", "Origin,No-Cache,X-Requested-With,If-Modified-Since,Pragma,Last-Modified,Cache-Control,Expires,Content-Type,X-E4M-With,X-Token");
         httpResponse.setHeader("Access-Control-Allow-Credentials", "true");
         PrintWriter out = null;
         try {
