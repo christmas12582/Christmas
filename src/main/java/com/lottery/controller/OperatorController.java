@@ -45,7 +45,7 @@ public class OperatorController {
             @RequestParam(value = "pagenum", required = false,defaultValue = "1") Integer pagenum,
             @RequestParam(value = "pagesize", required = false,defaultValue = "10") Integer pagesize,
             @RequestParam(value = "name", required = false) String name,
-            @RequestParam(value = "isvalid", required = false, defaultValue = "1") Integer isvalid,
+            @RequestParam(value = "isvalid", required = false) Integer isvalid,
             @RequestParam(value = "id", required = false) Integer id
     ) {
         PageHelper.startPage(pagenum, pagesize);
