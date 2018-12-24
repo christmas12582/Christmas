@@ -126,27 +126,27 @@ public class CustomerController {
 	
 	/**
 	 * 用户兑奖
-	 * @param openid
-	 * @param userlotteryId
+	 * @param openid 商家
+	 * @param prizenum 中奖码
 	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/lottery/exchange", method = RequestMethod.POST)
 	@ApiOperation(value = "用户兑换奖项", notes = "用户兑换奖项")
-	public ResponseModel exchangeLottery(String openid, Integer userlotteryId){
+	public ResponseModel exchangeLottery(String openid, String prizenum){
 		User user = userService.findUserByOpenid(openid);
 		if(user == null){
 			return new ResponseModel(404l, "用户不存在");
 		}
-		synchronized (userlotteryId) {
-			UserLottery userLottery = userLotteryService.findUserLotteryById(userlotteryId);
-			if(userLottery==null || !userLottery.getUserid().equals(user.getId())){
+		synchronized (prizenum) {
+			UserLottery userLottery = userLotteryService.findUserLotteryByPrizenum(prizenum);
+			if(userLottery==null){
 				return new ResponseModel(404l, "获奖信息不存在");
 			}
 			if(userLottery.getExchangedate()!=null){
 				return new ResponseModel(500l, "奖项已兑换");
 			}
-			userLotteryService.exchangeUserLottery(userlotteryId);
+			userLotteryService.exchangeUserLottery(userLottery.getId());
 		}
 		return new ResponseModel(200l, "兑换成功");
 	}

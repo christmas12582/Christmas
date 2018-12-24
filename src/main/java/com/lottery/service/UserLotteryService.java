@@ -109,6 +109,22 @@ public class UserLotteryService {
 	}
 	
 	/**
+	 * 查询中奖信息
+	 * @param prizenum
+	 * @return
+	 */
+	public UserLottery findUserLotteryByPrizenum(String prizenum){
+		UserLotteryExample userLotteryExample = new UserLotteryExample();
+		Criteria criteria = userLotteryExample.createCriteria();
+		criteria.andPrizenumEqualTo(prizenum);
+		List<UserLottery> userLotteryList = userLotteryMapper.selectByExample(userLotteryExample);
+		if(userLotteryList!=null && userLotteryList.size()>0){
+			return userLotteryList.get(0);
+		}
+		return null;
+	}
+	
+	/**
 	 * 兑奖
 	 * @param id
 	 */
