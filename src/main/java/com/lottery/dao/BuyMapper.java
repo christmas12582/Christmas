@@ -29,4 +29,6 @@ public interface BuyMapper {
     int updateByPrimaryKeySelective(Buy record);
 
     int updateByPrimaryKey(Buy record);
+
+    List<Buy> getnopayorexpirebuy(Integer userid);
 }

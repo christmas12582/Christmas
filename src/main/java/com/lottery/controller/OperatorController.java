@@ -50,6 +50,7 @@ public class OperatorController {
             @RequestParam(value = "id", required = false) Integer id
     ) {
         PageHelper.startPage(pagenum, pagesize);
+        PageHelper.orderBy("id desc");
         List<Product> productList = operatorService.getProductListbyCondition(id, name, isvalid);
         MapFromPageInfo<Product> mapFromPageInfo= new MapFromPageInfo<>(productList) ;
         return new ResponseModel(mapFromPageInfo);

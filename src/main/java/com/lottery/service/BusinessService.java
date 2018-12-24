@@ -2,14 +2,14 @@ package com.lottery.service;
 
 import com.lottery.dao.*;
 import com.lottery.model.*;
+import com.lottery.utils.DateHelper;
 import com.lottery.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class BusinessService {
@@ -28,10 +28,25 @@ public class BusinessService {
     @Autowired
     LotteryItemMapper lotteryItemMapper;
 
-    public List<HashMap<String,Object>> getMyProduct(Integer userid){
+    @Autowired
+    UserMapper userMapper;
+
+    public List<HashMap<String,Object>> getMyProduct(Integer userid,Integer isvalid){
+        List<Buy> buyList=new ArrayList<>();
         BuyExample buyExample= new BuyExample();
-        buyExample.createCriteria().andUseridEqualTo(userid).andExpiredateGreaterThanOrEqualTo(new Date()).andIspayEqualTo(1);
-        List<Buy> buyList=buyMapper.selectByExample(buyExample);
+        if (isvalid==null){
+            buyExample.createCriteria().andUseridEqualTo(userid);
+            buyList=buyMapper.selectByExample(buyExample);
+        }
+        else if (isvalid==1){
+            buyExample.createCriteria().andUseridEqualTo(userid)
+                    .andExpiredateGreaterThanOrEqualTo(new Date())
+                    .andIspayEqualTo(1);
+            buyList=buyMapper.selectByExample(buyExample);
+        }
+        else if(isvalid==0){
+            buyList=buyMapper.getnopayorexpirebuy(userid);
+        }
         if (buyList.size()==0)
             return null;
 
@@ -147,5 +162,94 @@ public class BusinessService {
         LotteryItemExample lotteryItemExample= new LotteryItemExample();
         lotteryItemExample.createCriteria().andLotteryidEqualTo(lotteryid);
         return lotteryItemMapper.selectByExample(lotteryItemExample);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public String buyProdct(String openid,Integer productid,Integer unitid) throws Exception {
+        User user = new User();
+        //判断是否已经有user并且是商家
+        UserExample userExample =new UserExample();
+        userExample.createCriteria().andOpenidEqualTo(openid).andIsvalidEqualTo(1).andTypeEqualTo(2);
+        List<User> userList=userMapper.selectByExample(userExample);
+        if (!userList.isEmpty())
+            user=userList.get(0);
+        else {
+            user.setType(2);
+            user.setOpenid(openid);
+            user.setIsvalid(1);
+            userMapper.insertSelective(user);
+        }
+        //判断是否已购买过
+        BuyExample buyExample= new BuyExample();
+        buyExample.createCriteria().andUseridEqualTo(user.getId())
+                .andProductidEqualTo(productid)
+                .andUnitidEqualTo(unitid)
+                .andExpiredateGreaterThanOrEqualTo(new Date());
+        List<Buy> hadbuyList=buyMapper.selectByExample(buyExample);
+        if (!hadbuyList.isEmpty())
+            throw new Exception("您已购买同样的产品，并且尚未过期，请勿重复购买");
+        buyExample.clear();
+        buyExample.createCriteria().andUseridEqualTo(user.getId())
+                .andProductidEqualTo(productid)
+                .andUnitidEqualTo(unitid)
+                .andIspayEqualTo(0);
+        List<Buy> buyListisnopayList=buyMapper.selectByExample(buyExample);
+        if (!buyListisnopayList.isEmpty())
+            throw new Exception("您已提交同类型订单，请勿重复提交");
+        UnitExample unitExample= new UnitExample();
+        unitExample.createCriteria().andIdEqualTo(unitid).andIsvalidEqualTo(1);
+        List<Unit> unitList=unitMapper.selectByExample(unitExample);
+        if (unitList.isEmpty())
+            throw new Exception("未找到有效的规格");
+        Unit unit=unitList.get(0);
+        Integer months=unit.getExpired();
+        Buy buy= new Buy();
+        buy.setBuydate(new Date());
+        buy.setExpiredate(DateHelper.addMonth(new Date(),months));
+        buy.setIspay(0);
+        buy.setProductid(productid);
+        String orderid=genertorOrderid();
+        buy.setOrdernum(orderid);
+        buy.setUnitid(unitid);
+        buy.setUserid(user.getId());
+        buyMapper.insertSelective(buy);
+        return orderid;
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void updateBuybyOrderid(String orderid) throws Exception {
+        //生成活动
+        Lottery lottery = new Lottery();
+        lottery.setIsvalid(1);
+        lottery.setMcount(100);
+        lotteryMapper.insertSelective(lottery);
+
+        BuyExample buyExample= new BuyExample();
+        buyExample.createCriteria().andOrdernumEqualTo(orderid);
+        List<Buy> buyList=buyMapper.selectByExample(buyExample);
+        if (buyList.isEmpty())
+            throw new Exception("未找到该订单");
+        Buy buy=buyList.get(0);
+        if(buy.getIspay()==1)
+            throw new Exception("该订单已经付过款了");
+        if(buy.getLotteryid()!=null)
+            throw new Exception("该订单已经生成过活动了");
+        buy.setIspay(1);
+        buy.setLotteryid(lottery.getId());
+        int count= buyMapper.updateByPrimaryKeySelective(buy);
+
+    }
+
+
+
+    private String genertorOrderid(){
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmmss");
+        String newDate=sdf.format(new Date());
+        String result="";
+        Random random=new Random();
+        for(int i=0;i<3;i++){
+            result+=random.nextInt(10);
+        }
+        return newDate+result;
     }
 }

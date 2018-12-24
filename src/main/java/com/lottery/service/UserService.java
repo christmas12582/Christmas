@@ -39,7 +39,20 @@ public class UserService {
 		}
 		return null;
 	}
-	
+
+
+
+	public User findValidUserByOpenid(String openid){
+		UserExample userExample = new UserExample();
+		Criteria criteria = userExample.createCriteria();
+		criteria.andOpenidEqualTo(openid).andIsvalidEqualTo(1);
+		List<User> userList = userMapper.selectByExample(userExample);
+		if(userList!=null && userList.size()>0){
+			return userList.get(0);
+		}
+		return null;
+	}
+
 	/**
 	 * 保存用户
 	 * @param user

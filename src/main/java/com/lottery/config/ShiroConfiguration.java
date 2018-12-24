@@ -144,6 +144,7 @@ public class ShiroConfiguration {
         Map<String, String> filterChainDefinitionManager = shiroFilterFactoryBean.getFilterChainDefinitionMap();
         filterChainDefinitionManager.put("/file/**", "anon");
         filterChainDefinitionManager.put("/fileupload/**", "anon");
+        filterChainDefinitionManager.put("/business/**", "anon");
         
         filterChainDefinitionManager.put("/customer/**", "anon");
         filterChainDefinitionManager.put("/lottery/**", "anon");

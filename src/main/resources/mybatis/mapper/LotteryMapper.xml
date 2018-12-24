@@ -104,6 +104,9 @@
       )
   </insert>
   <insert id="insertSelective" parameterType="com.lottery.model.Lottery" >
+    <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+      SELECT max(id) AS id from t_lottery
+    </selectKey>
     insert into t_lottery
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
