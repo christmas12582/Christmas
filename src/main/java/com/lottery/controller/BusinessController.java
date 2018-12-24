@@ -43,12 +43,14 @@ public class BusinessController {
     @ResponseBody
     public ResponseModel getMyProduct(@RequestParam(value = "openid") String openid){
         User user=userService.findUserByOpenid(openid);
+        if(user==null)
+            return new ResponseModel(500L,"该用户未注册",null);
         if (user.getType()!=2)
             return new ResponseModel(500L,"该用户不属于商家",null);
         Integer userid=user.getId();
         List<HashMap<String,Object>> result=businessService.getMyProduct(userid);
         if (result==null)
-            return new ResponseModel(500L,"该商家未购买任何产品");
+            return new ResponseModel(500L,"该商家未购买任何产品,或商品已过期");
         return new ResponseModel(result);
    }
 
@@ -73,6 +75,8 @@ public class BusinessController {
            @RequestParam(value = "mcount",required = false) Integer mcount
    ){
        User user=userService.findUserByOpenid(openid);
+       if(user==null)
+           return new ResponseModel(500L,"该用户未注册",null);
        if (user.getType()!=2)
            return new ResponseModel(500L,"该用户不属于商家",null);
        Integer userid=user.getId();
@@ -110,6 +114,8 @@ public class BusinessController {
     )
     {
         User user=userService.findUserByOpenid(openid);
+        if(user==null)
+            return new ResponseModel(500L,"该用户未注册",null);
         if (user.getType()!=2)
             return new ResponseModel(500L,"该用户不属于商家",null);
         Buy buy= businessService.getBuybyLotteryid(lotteryid);
@@ -151,6 +157,8 @@ public class BusinessController {
     )
     {
         User user=userService.findUserByOpenid(openid);
+        if(user==null)
+            return new ResponseModel(500L,"该用户未注册",null);
         if (user.getType()!=2)
             return new ResponseModel(500L,"该用户不属于商家",null);
         Buy buy= businessService.getBuybyLotteryid(lotteryid);
@@ -184,6 +192,8 @@ public class BusinessController {
     )
     {
         User user=userService.findUserByOpenid(openid);
+        if(user==null)
+            return new ResponseModel(500L,"该用户未注册",null);
         if (user.getType()!=2)
             return new ResponseModel(500L,"该用户不属于商家",null);
         Buy buy= businessService.getBuybyLotteryid(lotteryid);
@@ -215,6 +225,8 @@ public class BusinessController {
             @RequestParam(value = "lotteryid") Integer lotteryid
     ){
         User user=userService.findUserByOpenid(openid);
+        if(user==null)
+            return new ResponseModel(500L,"该用户未注册",null);
         if (user.getType()!=2)
             return new ResponseModel(500L,"该用户不属于商家",null);
         Buy buy= businessService.getBuybyLotteryid(lotteryid);
@@ -226,7 +238,10 @@ public class BusinessController {
     }
 
 
-
+    //查询可够商品列表
+    //查询规格商品对应的规格列表
+    //购买
+    //购买成功回调函数，新增商户，新增活动
 }
 
 

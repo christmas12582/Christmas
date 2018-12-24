@@ -30,7 +30,7 @@ public class BusinessService {
 
     public List<HashMap<String,Object>> getMyProduct(Integer userid){
         BuyExample buyExample= new BuyExample();
-        buyExample.createCriteria().andUseridEqualTo(userid).andExpiredateGreaterThanOrEqualTo(new Date());
+        buyExample.createCriteria().andUseridEqualTo(userid).andExpiredateGreaterThanOrEqualTo(new Date()).andIspayEqualTo(1);
         List<Buy> buyList=buyMapper.selectByExample(buyExample);
         if (buyList.size()==0)
             return null;
