@@ -111,6 +111,10 @@
       #{mcount,jdbcType=INTEGER}, #{weight,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.lottery.model.LotteryItem" >
+    <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+      SELECT max(id) AS id from t_lottery_item
+    </selectKey>
+
     insert into t_lottery_item
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >

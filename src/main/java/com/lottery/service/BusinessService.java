@@ -1,10 +1,8 @@
 package com.lottery.service;
 
-import com.lottery.dao.BuyMapper;
-import com.lottery.dao.LotteryMapper;
-import com.lottery.dao.ProductMapper;
-import com.lottery.dao.UnitMapper;
+import com.lottery.dao.*;
 import com.lottery.model.*;
+import com.lottery.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +24,9 @@ public class BusinessService {
 
     @Autowired
     LotteryMapper lotteryMapper;
+
+    @Autowired
+    LotteryItemMapper lotteryItemMapper;
 
     public List<HashMap<String,Object>> getMyProduct(Integer userid){
         BuyExample buyExample= new BuyExample();
@@ -73,5 +74,78 @@ public class BusinessService {
         lottery.setMcount(mcount);
         return lotteryMapper.updateByPrimaryKeySelective(lottery);
 
+    }
+
+
+    public HashMap<String,Object> addLotteryItem(Integer lotteryid,Integer orderno,String name,String icon,Integer mcount,Integer weight){
+        HashMap<String,Object> result= new HashMap<>();
+        LotteryItemExample lotteryItemExample = new LotteryItemExample();
+        lotteryItemExample.createCriteria().andLotteryidEqualTo(lotteryid).andNameEqualTo(name);
+        List<LotteryItem> lotteryItems=lotteryItemMapper.selectByExample(lotteryItemExample);
+        if (lotteryItems.size()>0){
+            result.put("result","改活动中已有该商品名，请更换名字后重试");
+            result.put("count",0);
+        }else {
+            LotteryItem lotteryItem= new LotteryItem();
+            lotteryItem.setLotteryid(lotteryid);
+            lotteryItem.setOrderno(orderno);
+            lotteryItem.setName(name);
+            lotteryItem.setIcon(icon);
+            lotteryItem.setMcount(mcount);
+            lotteryItem.setWeight(weight);
+            lotteryItem.setGcount(0);
+            int count=lotteryItemMapper.insertSelective(lotteryItem);
+            result.put("result",lotteryItem.getId());
+            result.put("count",count);
+        }
+        return result;
+    }
+
+
+    public  Integer getlotteryidByitemid(Integer itemid){
+        LotteryItem lotteryItem=lotteryItemMapper.selectByPrimaryKey(itemid);
+        return lotteryItem.getLotteryid();
+    }
+
+    public HashMap<String,Object> updateItem(Integer lotteryid,Integer itemid,Integer orderno,String name,String icon,Integer gcount,Integer mcount,Integer weight){
+        HashMap<String,Object> result= new HashMap<>();
+        LotteryItemExample lotteryItemExample = new LotteryItemExample();
+        lotteryItemExample.createCriteria().andLotteryidEqualTo(lotteryid).andNameEqualTo(name).andIdNotEqualTo(itemid);
+        List<LotteryItem> lotteryItems=lotteryItemMapper.selectByExample(lotteryItemExample);
+        if (lotteryItems.size()>0){
+            result.put("result","改活动中已有该商品名，请更换名字后重试");
+            result.put("count",0);
+        }else {
+            LotteryItem lotteryItem= new LotteryItem();
+            lotteryItem.setId(itemid);
+            if (lotteryid!=null)
+                lotteryItem.setLotteryid(lotteryid);
+            if (orderno!=null)
+                lotteryItem.setOrderno(orderno);
+            if(StringUtils.isNullOrNone(name))
+                lotteryItem.setName(name);
+            if(StringUtils.isNullOrNone(name))
+                lotteryItem.setIcon(icon);
+            if (mcount!=null)
+                lotteryItem.setMcount(mcount);
+            if (gcount!=null)
+                lotteryItem.setGcount(gcount);
+            if (weight!=null)
+            lotteryItem.setWeight(weight);
+            int count=lotteryItemMapper.updateByPrimaryKey(lotteryItem);
+            result.put("result","成功");
+            result.put("count",count);
+        }
+        return result;
+    }
+
+    public int removeItem(Integer itemid){
+        return lotteryItemMapper.deleteByPrimaryKey(itemid);
+    }
+
+    public List<LotteryItem> listitem(Integer lotteryid){
+        LotteryItemExample lotteryItemExample= new LotteryItemExample();
+        lotteryItemExample.createCriteria().andLotteryidEqualTo(lotteryid);
+        return lotteryItemMapper.selectByExample(lotteryItemExample);
     }
 }

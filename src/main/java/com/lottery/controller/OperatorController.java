@@ -1,6 +1,7 @@
 package com.lottery.controller;
 
 import com.github.pagehelper.PageHelper;
+import com.lottery.common.MapFromPageInfo;
 import com.lottery.common.ResponseModel;
 import com.lottery.model.Product;
 import com.lottery.model.Unit;
@@ -50,7 +51,8 @@ public class OperatorController {
     ) {
         PageHelper.startPage(pagenum, pagesize);
         List<Product> productList = operatorService.getProductListbyCondition(id, name, isvalid);
-        return new ResponseModel(productList);
+        MapFromPageInfo<Product> mapFromPageInfo= new MapFromPageInfo<>(productList) ;
+        return new ResponseModel(mapFromPageInfo);
     }
 
     @ApiOperation(value = "获取活动商品详情", notes = "获取活动商品详情")
@@ -195,9 +197,36 @@ public class OperatorController {
             return new ResponseModel(0L,"新增成功",result.get("unitid"));
         else
             return new ResponseModel(500L,"新增失败",null);
-
-
     }
+
+    @ApiOperation(value = "更新规格", notes = "更新规格")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "unitid", dataType = "int", paramType = "query",required = true),
+            @ApiImplicitParam(name = "productid", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "isvalid", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "expired", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "price", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "name", dataType = "String", paramType = "query"),
+
+    })
+    @RequiresRoles("1")
+    @RequestMapping(value = "unitupdate", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseModel updateUnit(
+            @RequestParam(value = "unitid") Integer unitid,
+            @RequestParam(value = "productid",required = false) Integer productid,
+            @RequestParam(value = "isvalid",required = false,defaultValue = "1") Integer isvalid,
+            @RequestParam(value = "name",required = false) String name,
+            @RequestParam(value = "price",required = false) Integer price,
+            @RequestParam(value = "expired",required = false) Integer expired
+    ){
+        Integer result=operatorService.updateUnit(unitid,productid,isvalid,price,name,expired);
+        if(result>0)
+            return new ResponseModel(0L,"更新成功",null);
+        else
+            return new ResponseModel(500L,"更新失败",null);
+    }
+
 
 
 

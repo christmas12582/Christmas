@@ -114,8 +114,23 @@ public class OperatorService {
         result.put("unitid",unitid);
         result.put("count",count);
         return result;
+    }
 
 
+    public int updateUnit(Integer unitid,Integer productid,Integer isvalid,Integer price,String name,Integer expired){
+        Unit unit= new Unit();
+        unit.setId(unitid);
+        if (StringUtils.isNullOrNone(name))
+            unit.setName(name);
+        if (isvalid!=null)
+            unit.setIsvalid(isvalid);
+        if(productid!=null)
+            unit.setProductid(productid);
+        if (price!=null)
+            unit.setPrice(price);
+        if(expired!=null)
+            unit.setExpired(expired);
+        return unitMapper.updateByPrimaryKeySelective(unit);
 
     }
 
