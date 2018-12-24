@@ -13,6 +13,10 @@ public class UserLottery {
 
     private Date exchangedate;
 
+    private Integer lotteryid;
+
+    private String prizenum;
+
     public Integer getId() {
         return id;
     }
@@ -51,5 +55,21 @@ public class UserLottery {
 
     public void setExchangedate(Date exchangedate) {
         this.exchangedate = exchangedate;
+    }
+
+    public Integer getLotteryid() {
+        return lotteryid;
+    }
+
+    public void setLotteryid(Integer lotteryid) {
+        this.lotteryid = lotteryid;
+    }
+
+    public String getPrizenum() {
+        return prizenum;
+    }
+
+    public void setPrizenum(String prizenum) {
+        this.prizenum = prizenum == null ? null : prizenum.trim();
     }
 }

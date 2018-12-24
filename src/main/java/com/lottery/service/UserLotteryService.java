@@ -5,6 +5,7 @@ package com.lottery.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,12 +88,14 @@ public class UserLotteryService {
 			}
 			lotteryItem.setGcount(lotteryItem.getGcount()+1);
 			lotteryService.saveLotteryItem(lotteryItem);
+			UserLottery userLottery = new UserLottery();
+			userLottery.setLotterydate(new Date());
+			userLottery.setUserid(userId);
+			userLottery.setLotteryitemid(lotteryItemId);
+			userLottery.setLotteryid(lotteryItem.getLotteryid());
+			userLottery.setPrizenum(generatePrizenum(userId));
+			userLotteryMapper.insert(userLottery);
 		}
-		UserLottery userLottery = new UserLottery();
-		userLottery.setLotterydate(new Date());
-		userLottery.setUserid(userId);
-		userLottery.setLotteryitemid(lotteryItemId);
-		userLotteryMapper.insert(userLottery);
 		return message;
 	}
 	
@@ -116,5 +119,22 @@ public class UserLotteryService {
 		userLottery.setExchangedate(new Date());
 		userLotteryMapper.updateByPrimaryKeySelective(userLottery);
 	}
+	
+	/**
+	 * 生成中奖号
+	 * @param userId
+	 * @return
+	 */
+	private String generatePrizenum(Integer userId) {
+        String date = String.valueOf(new Date().getTime());
+        String user = String.valueOf(userId);
+        int length = 18 - date.length() - user.length();
+        String random = "";
+        for(int i = 0; i < length; ++i) {
+            Random r = new Random();
+            random = random + String.valueOf(r.nextInt(10));
+        }
+        return date+random+user;
+    }
 	
 }

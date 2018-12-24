@@ -404,6 +404,136 @@ public class UserLotteryExample {
             addCriterion("exchangedate not between", value1, value2, "exchangedate");
             return (Criteria) this;
         }
+
+        public Criteria andLotteryidIsNull() {
+            addCriterion("lotteryid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLotteryidIsNotNull() {
+            addCriterion("lotteryid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLotteryidEqualTo(Integer value) {
+            addCriterion("lotteryid =", value, "lotteryid");
+            return (Criteria) this;
+        }
+
+        public Criteria andLotteryidNotEqualTo(Integer value) {
+            addCriterion("lotteryid <>", value, "lotteryid");
+            return (Criteria) this;
+        }
+
+        public Criteria andLotteryidGreaterThan(Integer value) {
+            addCriterion("lotteryid >", value, "lotteryid");
+            return (Criteria) this;
+        }
+
+        public Criteria andLotteryidGreaterThanOrEqualTo(Integer value) {
+            addCriterion("lotteryid >=", value, "lotteryid");
+            return (Criteria) this;
+        }
+
+        public Criteria andLotteryidLessThan(Integer value) {
+            addCriterion("lotteryid <", value, "lotteryid");
+            return (Criteria) this;
+        }
+
+        public Criteria andLotteryidLessThanOrEqualTo(Integer value) {
+            addCriterion("lotteryid <=", value, "lotteryid");
+            return (Criteria) this;
+        }
+
+        public Criteria andLotteryidIn(List<Integer> values) {
+            addCriterion("lotteryid in", values, "lotteryid");
+            return (Criteria) this;
+        }
+
+        public Criteria andLotteryidNotIn(List<Integer> values) {
+            addCriterion("lotteryid not in", values, "lotteryid");
+            return (Criteria) this;
+        }
+
+        public Criteria andLotteryidBetween(Integer value1, Integer value2) {
+            addCriterion("lotteryid between", value1, value2, "lotteryid");
+            return (Criteria) this;
+        }
+
+        public Criteria andLotteryidNotBetween(Integer value1, Integer value2) {
+            addCriterion("lotteryid not between", value1, value2, "lotteryid");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrizenumIsNull() {
+            addCriterion("prizenum is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrizenumIsNotNull() {
+            addCriterion("prizenum is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrizenumEqualTo(String value) {
+            addCriterion("prizenum =", value, "prizenum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrizenumNotEqualTo(String value) {
+            addCriterion("prizenum <>", value, "prizenum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrizenumGreaterThan(String value) {
+            addCriterion("prizenum >", value, "prizenum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrizenumGreaterThanOrEqualTo(String value) {
+            addCriterion("prizenum >=", value, "prizenum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrizenumLessThan(String value) {
+            addCriterion("prizenum <", value, "prizenum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrizenumLessThanOrEqualTo(String value) {
+            addCriterion("prizenum <=", value, "prizenum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrizenumLike(String value) {
+            addCriterion("prizenum like", value, "prizenum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrizenumNotLike(String value) {
+            addCriterion("prizenum not like", value, "prizenum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrizenumIn(List<String> values) {
+            addCriterion("prizenum in", values, "prizenum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrizenumNotIn(List<String> values) {
+            addCriterion("prizenum not in", values, "prizenum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrizenumBetween(String value1, String value2) {
+            addCriterion("prizenum between", value1, value2, "prizenum");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrizenumNotBetween(String value1, String value2) {
+            addCriterion("prizenum not between", value1, value2, "prizenum");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
