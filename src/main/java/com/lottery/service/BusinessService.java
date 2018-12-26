@@ -125,8 +125,14 @@ public class BusinessService {
     public HashMap<String,Object> updateItem(Integer lotteryid,Integer itemid,Integer orderno,String name,String icon,Integer gcount,Integer mcount,Integer weight){
         HashMap<String,Object> result= new HashMap<>();
         LotteryItemExample lotteryItemExample = new LotteryItemExample();
-        lotteryItemExample.createCriteria().andLotteryidEqualTo(lotteryid).andNameEqualTo(name).andIdNotEqualTo(itemid);
-        List<LotteryItem> lotteryItems=lotteryItemMapper.selectByExample(lotteryItemExample);
+        List<LotteryItem> lotteryItems=new ArrayList<>();
+        if (!StringUtils.isNullOrNone(name)){
+            lotteryItemExample.createCriteria().andLotteryidEqualTo(lotteryid).andNameEqualTo(name).andIdNotEqualTo(itemid);
+            lotteryItems=lotteryItemMapper.selectByExample(lotteryItemExample);
+        }else
+            lotteryItems.clear();
+
+
         if (lotteryItems.size()>0){
             result.put("result","改活动中已有该商品名，请更换名字后重试");
             result.put("count",0);
@@ -137,9 +143,9 @@ public class BusinessService {
                 lotteryItem.setLotteryid(lotteryid);
             if (orderno!=null)
                 lotteryItem.setOrderno(orderno);
-            if(StringUtils.isNullOrNone(name))
+            if(!StringUtils.isNullOrNone(name))
                 lotteryItem.setName(name);
-            if(StringUtils.isNullOrNone(name))
+            if(!StringUtils.isNullOrNone(icon))
                 lotteryItem.setIcon(icon);
             if (mcount!=null)
                 lotteryItem.setMcount(mcount);
@@ -165,7 +171,8 @@ public class BusinessService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public String buyProdct(String openid,Integer productid,Integer unitid) throws Exception {
+    public HashMap<String,Object> buyProdct(String openid,Integer productid,Integer unitid) throws Exception {
+        HashMap<String,Object> result=new HashMap<>();
         User user = new User();
         //判断是否已经有user并且是商家
         UserExample userExample =new UserExample();
@@ -203,6 +210,7 @@ public class BusinessService {
             throw new Exception("未找到有效的规格");
         Unit unit=unitList.get(0);
         Integer months=unit.getExpired();
+        Integer price=unit.getPrice();
         Buy buy= new Buy();
         buy.setBuydate(new Date());
         buy.setExpiredate(DateHelper.addMonth(new Date(),months));
@@ -213,7 +221,10 @@ public class BusinessService {
         buy.setUnitid(unitid);
         buy.setUserid(user.getId());
         buyMapper.insertSelective(buy);
-        return orderid;
+        result.put("orderid",orderid);
+        result.put("price",price);
+
+        return result;
     }
 
     @Transactional(rollbackFor = Exception.class)

@@ -207,7 +207,7 @@ public class BusinessController {
 
 
     //商家查询活动商品列表
-    @ApiOperation(value = "删除活动商品", notes = "删除活动商品")
+    @ApiOperation(value = "活动奖项列表", notes = "活动奖项列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pagenum", dataType = "int", paramType = "query", required = true),
             @ApiImplicitParam(name = "pagesize", dataType = "int", paramType = "query", required = true),
@@ -232,6 +232,7 @@ public class BusinessController {
         if (!buy.getUserid().equals(user.getId()))
             return new ResponseModel(500L, "该活动不属于该用户", null);
         PageHelper.startPage(pagenum, pagesize);
+        PageHelper.orderBy("orderno asc");
         List<LotteryItem> lotteryItems = businessService.listitem(lotteryid);
         return new ResponseModel(new MapFromPageInfo<>(lotteryItems));
     }
@@ -288,7 +289,7 @@ public class BusinessController {
             @RequestParam(value = "productid") Integer productid,
             @RequestParam(value = "unitid") Integer unitid) {
         try {
-            String result = businessService.buyProdct(openid, productid, unitid);
+            HashMap<String,Object> result = businessService.buyProdct(openid, productid, unitid);
             return new ResponseModel(result);
         }catch (Exception e){
             e.printStackTrace();
