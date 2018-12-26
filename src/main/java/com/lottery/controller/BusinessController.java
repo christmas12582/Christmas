@@ -280,16 +280,19 @@ public class BusinessController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "openid", dataType = "string", paramType = "query",required = true),
             @ApiImplicitParam(name = "productid", dataType = "int", paramType = "query",required = true),
-            @ApiImplicitParam(name = "unitid", dataType = "int", paramType = "query",required = true)
+            @ApiImplicitParam(name = "unitid", dataType = "int", paramType = "query",required = true),
+            @ApiImplicitParam(name = "shareid", dataType = "int", paramType = "query")
     })
     @RequestMapping(value = "buy", method = RequestMethod.POST)
     @ResponseBody
     public ResponseModel buyProduct(
             @RequestParam(value = "openid") String openid,
             @RequestParam(value = "productid") Integer productid,
-            @RequestParam(value = "unitid") Integer unitid) {
+            @RequestParam(value = "unitid") Integer unitid,
+            @RequestParam(value = "shareid",required = false) Integer shareid
+            ) {
         try {
-            HashMap<String,Object> result = businessService.buyProdct(openid, productid, unitid);
+            HashMap<String,Object> result = businessService.buyProdct(openid, productid, unitid,shareid);
             return new ResponseModel(result);
         }catch (Exception e){
             e.printStackTrace();
@@ -315,6 +318,10 @@ public class BusinessController {
            return new ResponseModel(500L,e.getMessage(),null);
        }
     }
+
+
+    //我的分销记录
+
 
 }
 

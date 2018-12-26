@@ -6,6 +6,12 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.PutMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.HttpClientConnectionManager;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -130,6 +136,44 @@ public class HttpClientUtil {
         return response;
     }
 
+
+
+
+    public static String doPostwithxml(String url,String params){
+        String response = "";
+        logger.info("==================================doPost=={},{}",url,params);
+        HttpClient httpClient = new HttpClient();
+        httpClient.getParams().setParameter(HttpMethodParams.HTTP_CONTENT_CHARSET, ContentEncoding);
+        PostMethod postMethod= new PostMethod(url);
+//        postMethod.addRequestHeader("Content-Type", "application/json" );
+
+        postMethod.setRequestBody(params);
+
+        try {
+
+            int statusCode = httpClient.executeMethod(postMethod);
+            logger.info("==================================doPost=={}",statusCode);
+            if (statusCode != HttpStatus.SC_OK&&statusCode != HttpStatus.SC_CREATED&&statusCode != HttpStatus.SC_NO_CONTENT) {
+                logger.error("Method failed : "+postMethod.getStatusLine() );
+                return response;
+            }
+            byte[] responseBody=postMethod.getResponseBody();
+            response = new String(responseBody,ContentEncoding);
+            logger.info("----------response:" + response);
+        } catch (HttpException e) {
+            // 发生致命的异常，可能是协议不对或者返回的内容有问题
+            logger.error("请检查输入的URL!");
+            e.printStackTrace();
+        } catch (IOException e) {
+            // 发生网络异常
+            logger.error("发生网络异常!");
+            e.printStackTrace();
+        } finally {
+            /* 6 .释放连接 */
+            postMethod.releaseConnection();
+        }
+        return response;
+    }
 
     public static String doDelete(String url)  {
         logger.info("=================================doDelete=={}",url);

@@ -171,7 +171,7 @@ public class BusinessService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public HashMap<String,Object> buyProdct(String openid,Integer productid,Integer unitid) throws Exception {
+    public HashMap<String,Object> buyProdct(String openid,Integer productid,Integer unitid,Integer shareid) throws Exception {
         HashMap<String,Object> result=new HashMap<>();
         User user = new User();
         //判断是否已经有user并且是商家
@@ -220,6 +220,7 @@ public class BusinessService {
         buy.setOrdernum(orderid);
         buy.setUnitid(unitid);
         buy.setUserid(user.getId());
+        buy.setShareid(shareid);
         buyMapper.insertSelective(buy);
         result.put("orderid",orderid);
         result.put("price",price);
