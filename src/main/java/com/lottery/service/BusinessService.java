@@ -30,6 +30,9 @@ public class BusinessService {
 
     @Autowired
     UserMapper userMapper;
+    
+    @Autowired
+    private WechatService wechatService;
 
     public List<HashMap<String,Object>> getMyProduct(Integer userid,Integer isvalid){
         List<Buy> buyList=new ArrayList<>();
@@ -222,7 +225,11 @@ public class BusinessService {
         buy.setUserid(user.getId());
         buy.setShareid(shareid);
         buyMapper.insertSelective(buy);
-        result.put("orderid",orderid);
+        String prepayId = wechatService.preOrder(buy);
+        if(StringUtils.isNullOrNone(prepayId)){
+        	throw new Exception("下单失败");
+        }
+        result.put("prepayId",prepayId);
         result.put("price",price);
 
         return result;

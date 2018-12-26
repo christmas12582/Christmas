@@ -65,5 +65,11 @@ file:
 
 locationpath: D:/upload/
 
-
+wechat:
+  appid: xx
+  mechid: xx
+  key: xx
+  payip: 118.24.207.16
+  notifyUrl: http://aiyuanmqz.com/business/buycallback
+  unifiedorderUrl: https://api.mch.weixin.qq.com/pay/unifiedorder
 
