@@ -322,6 +322,24 @@ public class BusinessController {
 
     //我的分销记录
 
+    @ApiOperation(value = "查询我的分销记录（购买之后有效）", notes = "查询我的分销记录（购买之后有效）")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "openid", dataType = "string", paramType = "query")
+    })
+    @RequestMapping(value = "mydistribution", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseModel getmydistributionList(
+            @RequestParam(value = "openid") String openid){
+
+
+        User user = userService.findUserByOpenid(openid);
+        if (user == null)
+            return new ResponseModel(500L, "该用户未注册", null);
+        if (user.getType() != 2)
+            return new ResponseModel(500L, "该用户不属于商家", null);
+       List<Buy> distributionList= businessService.getMyDistribution(user.getId());
+       return new ResponseModel(distributionList);
+    }
 
 }
 
