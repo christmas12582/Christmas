@@ -7,6 +7,8 @@ import com.lottery.model.*;
 import com.lottery.service.BusinessService;
 import com.lottery.service.OperatorService;
 import com.lottery.service.UserService;
+import com.lottery.utils.StringUtils;
+import com.lottery.utils.WebUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -18,6 +20,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -307,15 +312,36 @@ public class BusinessController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "orderid", dataType = "string", paramType = "query",required = true),
     })
-    @RequestMapping(value = "buycallback", method = RequestMethod.POST)
+    @RequestMapping(value = "buycallback")
     @ResponseBody
-    public ResponseModel buyProduct( @RequestParam(value = "orderid")String orderid){
-       try {
+    public void buyProduct(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String orderid="";
+        String request_string=WebUtils.getBodyString(request);
+        String returnCode = StringUtils.getValueFromXml(request_string, "return_code");
+        if(!"SUCCESS".equals(returnCode)){
+            String responsestring="<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";;
+            response.getWriter().write(responsestring);
+        }
+        String resultCode = StringUtils.getValueFromXml(request_string, "result_code");
+        if(!"SUCCESS".equals(resultCode)){
+            String responsestring="<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
+            response.getWriter().write(responsestring);
+        }
+        orderid= StringUtils.getValueFromXml(request_string, "out_trade_no");
+        if (StringUtils.isNullOrNone(orderid)){
+            String responsestring="<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[未收到订单号]]></return_msg></xml>";;
+            response.getWriter().write(responsestring);
+        }
+
+
+        try {
            businessService.updateBuybyOrderid(orderid);
-           return new ResponseModel(0L,"成功",null);
+            String responsestring="<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";;
+            response.getWriter().write(responsestring);
        }catch (Exception e){
            e.printStackTrace();
-           return new ResponseModel(500L,e.getMessage(),null);
+            String responsestring="<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";;
+            response.getWriter().write(responsestring);
        }
     }
 
