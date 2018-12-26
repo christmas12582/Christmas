@@ -103,21 +103,21 @@ public class WechatService {
 		Iterator<Entry<String, Object>> iterator = paramMap.entrySet().iterator();
 		while(iterator.hasNext()){
 			Entry<String, Object> entry = iterator.next();
-			buffer.append(keyValueXml(entry.getKey(), entry.getValue()));
+			buffer.append(StringUtils.keyValueXml(entry.getKey(), entry.getValue()));
 		}
 		try{
-			String response = HttpClientUtil.doPostwithxml(unifiedorderUrl, keyValueXml("xml", buffer.substring(0)));
-			String returnCode = getValueFromXml(response, "return_code");
+			String response = HttpClientUtil.doPostwithxml(unifiedorderUrl, StringUtils.keyValueXml("xml", buffer.substring(0)));
+			String returnCode = StringUtils.getValueFromXml(response, "return_code");
 			if(!"SUCCESS".equals(returnCode)){
-				logger.error("userid--"+user.getId()+"--phone--"+user.getPhone()+"--微信统一下单失败--return_code--"+returnCode+"--return_msg--"+getValueFromXml(response,"return_msg"));
+				logger.error("userid--"+user.getId()+"--phone--"+user.getPhone()+"--微信统一下单失败--return_code--"+returnCode+"--return_msg--"+StringUtils.getValueFromXml(response,"return_msg"));
 				return null;
 			}
-			String resultCode = getValueFromXml(response, "result_code");
+			String resultCode = StringUtils.getValueFromXml(response, "result_code");
 			if(!"SUCCESS".equals(resultCode)){
-				logger.error("userid--"+user.getId()+"--phone--"+user.getPhone()+"--微信统一下单失败--result_code--"+resultCode+"--err_code--"+getValueFromXml(response,"err_code")+"--err_code_des--"+getValueFromXml(response,"err_code_des"));
+				logger.error("userid--"+user.getId()+"--phone--"+user.getPhone()+"--微信统一下单失败--result_code--"+resultCode+"--err_code--"+StringUtils.getValueFromXml(response,"err_code")+"--err_code_des--"+StringUtils.getValueFromXml(response,"err_code_des"));
 				return null;
 			}
-			return getValueFromXml(response, "prepay_id");
+			return StringUtils.getValueFromXml(response, "prepay_id");
 		}catch (Exception e) {
 			logger.error("userid--"+user.getId()+"--phone--"+user.getPhone()+"--微信统一下单失败--exception--"+e.getMessage());
 			e.printStackTrace();
@@ -125,19 +125,7 @@ public class WechatService {
 		return null;
 	}
 	
-	/**
-	 * 键值对转xml字符串
-	 * @param key
-	 * @param value
-	 * @return
-	 */
-	private String keyValueXml(String key, Object value){
-		if(value != null){
-			return "<"+key+">"+value.toString()+"</"+key+">";
-		}else {
-			return "<"+key+"></"+key+">";
-		}
-	}
+	
 	
 	/**
 	 * 参数签名
@@ -160,30 +148,4 @@ public class WechatService {
 		return Md5Crypt.md5Crypt(param.getBytes()).toUpperCase();
 	}
 	
-	/**
-	 * 获取xml中key对应的value
-	 * @param xml
-	 * @param key
-	 * @return
-	 */
-	private String getValueFromXml(String xml, String key){
-		if(StringUtils.isNullOrNone(xml)){
-			return null;
-		}
-		String startkey = "<"+key+"><![CDATA[";
-		int index = xml.indexOf(startkey);
-		if(index == -1){
-			return null;
-		}
-		int startValue = index + startkey.length();
-		String endKey = "]]></"+key+">";
-		index = xml.indexOf(endKey);
-		if(index == -1){
-			return null;
-		}
-		if(startValue>index){
-			return null;
-		}
-		return xml.substring(startValue, index);
-	}
 }

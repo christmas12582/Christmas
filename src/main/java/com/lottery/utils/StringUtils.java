@@ -271,6 +271,45 @@ public class StringUtils {
     }
 
     
-
+    /**
+	 * 键值对转xml字符串
+	 * @param key
+	 * @param value
+	 * @return
+	 */
+    public static String keyValueXml(String key, Object value){
+		if(value != null){
+			return "<"+key+">"+value.toString()+"</"+key+">";
+		}else {
+			return "<"+key+"></"+key+">";
+		}
+	}
+	
+	/**
+	 * 获取xml中key对应的value
+	 * @param xml
+	 * @param key
+	 * @return
+	 */
+    public static String getValueFromXml(String xml, String key){
+		if(StringUtils.isNullOrNone(xml)){
+			return null;
+		}
+		String startkey = "<"+key+"><![CDATA[";
+		int index = xml.indexOf(startkey);
+		if(index == -1){
+			return null;
+		}
+		int startValue = index + startkey.length();
+		String endKey = "]]></"+key+">";
+		index = xml.indexOf(endKey);
+		if(index == -1){
+			return null;
+		}
+		if(startValue>index){
+			return null;
+		}
+		return xml.substring(startValue, index);
+	}
 
 }
