@@ -99,12 +99,18 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.lottery.model.Share" >
+  	<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+      SELECT max(id) AS id from t_share
+    </selectKey>
     insert into t_share (id, sharetime, businessid, 
       userid)
     values (#{id,jdbcType=INTEGER}, #{sharetime,jdbcType=TIMESTAMP}, #{businessid,jdbcType=INTEGER}, 
       #{userid,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.lottery.model.Share" >
+  	<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+      SELECT max(id) AS id from t_share
+    </selectKey>
     insert into t_share
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >

@@ -1,5 +1,6 @@
 package com.lottery.controller;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,11 +14,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.github.pagehelper.PageHelper;
 import com.lottery.common.MapFromPageInfo;
 import com.lottery.common.ResponseModel;
+import com.lottery.model.Buy;
 import com.lottery.model.Lottery;
 import com.lottery.model.LotteryItem;
+import com.lottery.model.Share;
 import com.lottery.model.User;
 import com.lottery.model.UserLottery;
+import com.lottery.service.BusinessService;
 import com.lottery.service.LotteryService;
+import com.lottery.service.ShareService;
 import com.lottery.service.UserLotteryService;
 import com.lottery.service.UserService;
 import com.lottery.utils.JsonUtils;
@@ -39,6 +44,12 @@ public class CustomerController {
 	
 	@Autowired
 	private UserLotteryService userLotteryService;
+	
+	@Autowired
+	private BusinessService businessService;
+	
+	@Autowired
+	private ShareService shareService;
 	
 	/**
 	 * 保存用户信息
@@ -199,5 +210,28 @@ public class CustomerController {
 		List<UserLottery> userLotteryList = userLotteryService.findUserLotteryListByUserId(user.getId());
 		MapFromPageInfo<UserLottery> pageInfo = new MapFromPageInfo<UserLottery>(userLotteryList);
 		return new ResponseModel(200l, "查询成功", pageInfo);
+	}
+	
+	/**
+	 * 分享活动
+	 * @param openid
+	 * @param lotteryId
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/lottery/share", method = RequestMethod.POST)
+	@ApiOperation(value = "用户分享抽奖活动", notes = "用户分享抽奖活动")
+	public ResponseModel share(String openid, Integer lotteryId){
+		User user = userService.findUserByOpenid(openid);
+		if(user == null){
+			return new ResponseModel(404l, "用户不存在");
+		}
+		Buy buy = businessService.getBuybyLotteryid(lotteryId);
+		Share share = new Share();
+		share.setBusinessid(buy.getUserid());
+		share.setUserid(user.getId());
+		share.setSharetime(new Date());
+		Integer shareId = shareService.saveShare(share);
+		return new ResponseModel(200l, "分享成功", shareId);
 	}
 }
