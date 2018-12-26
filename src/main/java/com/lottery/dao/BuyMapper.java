@@ -3,6 +3,7 @@ package com.lottery.dao;
 import com.lottery.model.Buy;
 import com.lottery.model.BuyExample;
 import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
@@ -31,4 +32,6 @@ public interface BuyMapper {
     int updateByPrimaryKey(Buy record);
 
     List<Buy> getnopayorexpirebuy(Integer userid);
+
+
 }

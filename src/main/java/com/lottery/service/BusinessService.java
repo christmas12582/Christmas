@@ -31,6 +31,9 @@ public class BusinessService {
     @Autowired
     UserMapper userMapper;
 
+    @Autowired
+    ShareMapper shareMapper;
+
     public List<HashMap<String,Object>> getMyProduct(Integer userid,Integer isvalid){
         List<Buy> buyList=new ArrayList<>();
         BuyExample buyExample= new BuyExample();
@@ -220,7 +223,10 @@ public class BusinessService {
         buy.setOrdernum(orderid);
         buy.setUnitid(unitid);
         buy.setUserid(user.getId());
+        Share share=shareMapper.selectByPrimaryKey(shareid);
+        if (share!=null&&new Date().getTime()-DateHelper.addMonth(share.getSharetime(),1).getTime()<=0)
         buy.setShareid(shareid);
+
         buyMapper.insertSelective(buy);
         result.put("orderid",orderid);
         result.put("price",price);
@@ -250,6 +256,22 @@ public class BusinessService {
         buy.setLotteryid(lottery.getId());
         int count= buyMapper.updateByPrimaryKeySelective(buy);
 
+    }
+
+    public List<Buy> getMyDistribution(Integer businessid){
+        List<Buy> buyList=new ArrayList<>();
+        ShareExample shareExample= new ShareExample();
+        shareExample.createCriteria().andBusinessidEqualTo(businessid);
+        List<Share> shareList=shareMapper.selectByExample(shareExample);
+        for(Share share:shareList){
+            Integer shareid=share.getId();
+            BuyExample buyExample = new BuyExample();
+            buyExample.createCriteria().andShareidEqualTo(shareid).andIspayEqualTo(1);
+            List<Buy> buys=buyMapper.selectByExample(buyExample);
+            buyList.addAll(buys);
+        }
+
+        return buyList;
     }
 
 

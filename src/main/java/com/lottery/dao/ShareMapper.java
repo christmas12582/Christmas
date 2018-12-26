@@ -4,7 +4,9 @@ import com.lottery.model.Share;
 import com.lottery.model.ShareExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Component;
 
+@Component
 public interface ShareMapper {
     int countByExample(ShareExample example);
 
