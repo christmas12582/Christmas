@@ -321,16 +321,19 @@ public class BusinessController {
         if(!"SUCCESS".equals(returnCode)){
             String responsestring="<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";;
             response.getWriter().write(responsestring);
+            return;
         }
         String resultCode = StringUtils.getValueFromXml(request_string, "result_code");
         if(!"SUCCESS".equals(resultCode)){
             String responsestring="<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
             response.getWriter().write(responsestring);
+            return;
         }
         orderid= StringUtils.getValueFromXml(request_string, "out_trade_no");
         if (StringUtils.isNullOrNone(orderid)){
             String responsestring="<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[未收到订单号]]></return_msg></xml>";;
             response.getWriter().write(responsestring);
+            return;
         }
 
 
@@ -338,10 +341,12 @@ public class BusinessController {
            businessService.updateBuybyOrderid(orderid);
             String responsestring="<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";;
             response.getWriter().write(responsestring);
+            return;
        }catch (Exception e){
            e.printStackTrace();
             String responsestring="<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";;
             response.getWriter().write(responsestring);
+            return;
        }
     }
 
