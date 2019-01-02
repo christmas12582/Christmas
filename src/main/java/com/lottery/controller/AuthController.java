@@ -4,6 +4,8 @@ package com.lottery.controller;
 import com.lottery.common.ResponseModel;
 import com.lottery.model.User;
 import com.lottery.service.UserService;
+import com.lottery.utils.HttpClientUtil;
+import com.lottery.utils.JsonUtils;
 import com.lottery.utils.MySecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -26,7 +28,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
+import java.net.URL;
 import java.util.Deque;
+import java.util.HashMap;
 
 @Controller
 @Api("登录认证")
@@ -104,6 +108,25 @@ public class AuthController {
         user.setPhone(phone);
         userService.saveUser(user);
         return new ResponseModel(0L,"新增运营商成功",null);
+    }
+
+
+
+    @ApiOperation(value = "获取微信信息", notes = "获取微信信息")
+    @RequestMapping(value = "getseesion" ,method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseModel getSeesion(
+            @RequestParam(value = "appid") String appid,
+            @RequestParam(value = "secret") String secret,
+            @RequestParam(value = "js_code") String js_code
+
+
+    ){
+        String url="https://api.weixin.qq.com/sns/jscode2session?";
+        url+="appid="+appid+"&secret="+secret+"&js_code="+js_code+"&grant_type=authorization_code";
+        String response= HttpClientUtil.doGet(url);
+        HashMap<String,Object> response_map= JsonUtils.toObject(response,HashMap.class);
+        return new ResponseModel(0L,"获取微信信息成功",response_map);
     }
 
 }
