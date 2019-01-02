@@ -150,6 +150,7 @@ public class ShiroConfiguration {
         filterChainDefinitionManager.put("/lottery/**", "anon");
         filterChainDefinitionManager.put("/login", "anon");
         filterChainDefinitionManager.put("/logout", "anon");
+        filterChainDefinitionManager.put("/getseesion", "anon");
 
 
         filterChainDefinitionManager.put("/swagger-ui.html", "anon");
