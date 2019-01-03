@@ -187,11 +187,11 @@ public class OperatorService {
         CashExample.Criteria criteria= cashExample.createCriteria();
         if (isexchange!=null)
             criteria.andIsexchangeEqualTo(isexchange);
-        if (StringUtils.isNullOrNone(begintime)){
+        if (!StringUtils.isNullOrNone(begintime)){
             Date begintime_date=sdf.parse(begintime);
             criteria.andCreatetimeGreaterThanOrEqualTo(begintime_date);
         }
-        if (StringUtils.isNullOrNone(endtime)){
+        if (!StringUtils.isNullOrNone(endtime)){
             Date endtime_date=sdf.parse(endtime);
             criteria.andCreatetimeLessThanOrEqualTo(endtime_date);
         }
