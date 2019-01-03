@@ -255,6 +255,7 @@ public class OperatorController {
             @RequestParam(value = "isvalid",required = false) Integer isvalid
     ){
         PageHelper.startPage(pagenum,pagesize);
+        PageHelper.orderBy("id asc");
         List<User> userList= operatorService.getDistributeList(phone,openid,isvalid);
          return new ResponseModel(0L,"获取分销商列表成功", new MapFromPageInfo<>(userList));
     }
@@ -285,8 +286,8 @@ public class OperatorController {
             @ApiImplicitParam(name = "pagenum", dataType = "int", paramType = "query"),
             @ApiImplicitParam(name = "pagesize", dataType = "int", paramType = "query"),
             @ApiImplicitParam(name = "isexchange", dataType = "int", paramType = "query"),
-            @ApiImplicitParam(name = "begintime", dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "endtime", dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "begintime", dataType = "String", paramType = "query",value = "yyyy-MM-dd HH:mm:ss"),
+            @ApiImplicitParam(name = "endtime", dataType = "String", paramType = "query",value = "yyyy-MM-dd HH:mm:ss"),
     })
     @RequiresRoles("1")
     @RequestMapping(value = "cashlist", method = RequestMethod.POST)
@@ -299,6 +300,7 @@ public class OperatorController {
             @RequestParam(value = "endtime",required = false) String endtime
     ) throws ParseException {
         PageHelper.startPage(pagenum,pagesize);
+        PageHelper.orderBy("createtime desc");
         List<Cash> cashList=operatorService.cashList(isexchange,begintime,endtime);
         return new ResponseModel(0L,"获取提现申请列表列表成功", new MapFromPageInfo<>(cashList));
     }

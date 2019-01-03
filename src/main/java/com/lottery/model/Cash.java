@@ -1,5 +1,8 @@
 package com.lottery.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 public class Cash {
@@ -7,6 +10,7 @@ public class Cash {
 
     private Integer createid;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date createtime;
 
     private Integer isexchange;

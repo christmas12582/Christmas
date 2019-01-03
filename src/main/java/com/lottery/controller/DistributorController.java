@@ -85,6 +85,7 @@ public class DistributorController {
             return new ResponseModel(500L,"您尚未成为分销商");
         Integer shareid=user.getId();
         PageHelper.startPage(pagenum,pagesize);
+        PageHelper.orderBy("buydate desc");
         List<Buy> buyList= distributorService.mydistribute(shareid);
         return new ResponseModel(0L,"获取分销记录成功，(包含未付款的)",new MapFromPageInfo<>(buyList));
     }
@@ -113,7 +114,7 @@ public class DistributorController {
     //我发起的提现申请
     @RequestMapping(value = "mygetcashlist",method = RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "发起提现申请", notes = "发起提现申请")
+    @ApiOperation(value = "我发起的提现申请", notes = "我发起的提现申请")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "openid", dataType = "string", paramType = "query",required = true),
             @ApiImplicitParam(name = "isexchange", dataType = "int", paramType = "query",value = "筛选条件（是否已提现）"),
@@ -130,6 +131,7 @@ public class DistributorController {
         if (user==null)
             return new ResponseModel(500L,"您尚未成为分销商");
         PageHelper.startPage(pagenum,pagesize);
+        PageHelper.orderBy("createtime desc");
         List<Cash> cashList=distributorService.myGetCashList(user.getId(),isexchange);
         return new ResponseModel(0L,"获取我的提现记录成功",new MapFromPageInfo<>(cashList));
     }
