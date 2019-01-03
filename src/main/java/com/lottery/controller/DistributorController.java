@@ -55,7 +55,7 @@ public class DistributorController {
      * 我的分销
      */
 
-    @RequestMapping(value = "IWantToDistribute",method = RequestMethod.POST)
+    @RequestMapping(value = "myDistribute",method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "我的分销记录", notes = "我的分销记录")
     @ApiImplicitParams({
@@ -66,8 +66,8 @@ public class DistributorController {
         if (user==null)
             return new ResponseModel(500L,"您尚未成为分销商");
 
-return null;
 
+return null;
     }
 
 
