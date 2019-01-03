@@ -17,6 +17,8 @@ public class User {
 
     private Integer money;
 
+    private Integer shareid;
+
     public Integer getId() {
         return id;
     }
@@ -79,5 +81,13 @@ public class User {
 
     public void setMoney(Integer money) {
         this.money = money;
+    }
+
+    public Integer getShareid() {
+        return shareid;
+    }
+
+    public void setShareid(Integer shareid) {
+        this.shareid = shareid;
     }
 }

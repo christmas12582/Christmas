@@ -613,6 +613,66 @@ public class UserExample {
             addCriterion("money not between", value1, value2, "money");
             return (Criteria) this;
         }
+
+        public Criteria andShareidIsNull() {
+            addCriterion("shareid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andShareidIsNotNull() {
+            addCriterion("shareid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andShareidEqualTo(Integer value) {
+            addCriterion("shareid =", value, "shareid");
+            return (Criteria) this;
+        }
+
+        public Criteria andShareidNotEqualTo(Integer value) {
+            addCriterion("shareid <>", value, "shareid");
+            return (Criteria) this;
+        }
+
+        public Criteria andShareidGreaterThan(Integer value) {
+            addCriterion("shareid >", value, "shareid");
+            return (Criteria) this;
+        }
+
+        public Criteria andShareidGreaterThanOrEqualTo(Integer value) {
+            addCriterion("shareid >=", value, "shareid");
+            return (Criteria) this;
+        }
+
+        public Criteria andShareidLessThan(Integer value) {
+            addCriterion("shareid <", value, "shareid");
+            return (Criteria) this;
+        }
+
+        public Criteria andShareidLessThanOrEqualTo(Integer value) {
+            addCriterion("shareid <=", value, "shareid");
+            return (Criteria) this;
+        }
+
+        public Criteria andShareidIn(List<Integer> values) {
+            addCriterion("shareid in", values, "shareid");
+            return (Criteria) this;
+        }
+
+        public Criteria andShareidNotIn(List<Integer> values) {
+            addCriterion("shareid not in", values, "shareid");
+            return (Criteria) this;
+        }
+
+        public Criteria andShareidBetween(Integer value1, Integer value2) {
+            addCriterion("shareid between", value1, value2, "shareid");
+            return (Criteria) this;
+        }
+
+        public Criteria andShareidNotBetween(Integer value1, Integer value2) {
+            addCriterion("shareid not between", value1, value2, "shareid");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
