@@ -1,6 +1,5 @@
 package com.lottery.controller;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,15 +13,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.github.pagehelper.PageHelper;
 import com.lottery.common.MapFromPageInfo;
 import com.lottery.common.ResponseModel;
-import com.lottery.model.Buy;
 import com.lottery.model.Lottery;
 import com.lottery.model.LotteryItem;
-import com.lottery.model.Share;
 import com.lottery.model.User;
 import com.lottery.model.UserLottery;
-import com.lottery.service.BusinessService;
 import com.lottery.service.LotteryService;
-import com.lottery.service.ShareService;
 import com.lottery.service.UserLotteryService;
 import com.lottery.service.UserService;
 import com.lottery.utils.JsonUtils;
@@ -44,12 +39,6 @@ public class CustomerController {
 	
 	@Autowired
 	private UserLotteryService userLotteryService;
-	
-	@Autowired
-	private BusinessService businessService;
-	
-	@Autowired
-	private ShareService shareService;
 	
 	/**
 	 * 保存用户信息
@@ -113,20 +102,21 @@ public class CustomerController {
 	 * 保存中奖记录
 	 * @param openid
 	 * @param lotteryItemId
+	 * @param shareNum
 	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/lottery/save", method = RequestMethod.POST)
 	@ApiOperation(value = "保存用户抽奖结果", notes = "保存用户抽奖结果")
-	public ResponseModel saveLottery(String openid, Integer lotteryItemId){
+	public ResponseModel saveLottery(String openid, Integer lotteryItemId, String shareNum){
 		User user = userService.findUserByOpenidAndType(openid, 3);
 		if(user == null){
 			return new ResponseModel(500l, "用户不存在");
 		}
 		try{
-			String message = userLotteryService.lottery(user.getId(), lotteryItemId);
-			if("success".equals(message)){
-				return new ResponseModel(200l, "用户参与抽奖成功");
+			String message = userLotteryService.lottery(user.getId(), lotteryItemId, shareNum);
+			if(!StringUtils.isNullOrNone(message) && message.startsWith("success:")){
+				return new ResponseModel(200l, "用户参与抽奖成功", message.split(":")[1]);
 			}else{
 				return new ResponseModel(501l, message);
 			}
@@ -215,23 +205,17 @@ public class CustomerController {
 	/**
 	 * 分享活动
 	 * @param openid
-	 * @param lotteryId
+	 * @param userLotteryId
 	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/lottery/share", method = RequestMethod.POST)
 	@ApiOperation(value = "用户分享抽奖活动", notes = "用户分享抽奖活动")
-	public ResponseModel share(String openid, Integer lotteryId){
+	public ResponseModel share(String openid, Integer userLotteryId){
 		User user = userService.findUserByOpenidAndType(openid, 3);
 		if(user == null){
 			return new ResponseModel(404l, "用户不存在");
 		}
-		Buy buy = businessService.getBuybyLotteryid(lotteryId);
-		Share share = new Share();
-		share.setBusinessid(buy.getUserid());
-		share.setUserid(user.getId());
-		share.setSharetime(new Date());
-		Integer shareId = shareService.saveShare(share);
-		return new ResponseModel(200l, "分享成功", shareId);
+		return new ResponseModel(200l, "分享成功", userLotteryService.share(user.getId(), userLotteryId));
 	}
 }

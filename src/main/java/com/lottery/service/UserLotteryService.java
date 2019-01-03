@@ -19,6 +19,7 @@ import com.lottery.model.LotteryItem;
 import com.lottery.model.UserLottery;
 import com.lottery.model.UserLotteryExample;
 import com.lottery.model.UserLotteryExample.Criteria;
+import com.lottery.utils.StringUtils;
 
 /**
  * @author ws_yu
@@ -61,10 +62,11 @@ public class UserLotteryService {
 	 * 中奖
 	 * @param userId
 	 * @param lotteryItemId
+	 * @param shareNum
 	 * @return
 	 */
 	@Transactional
-	public String lottery(Integer userId, Integer lotteryItemId){
+	public String lottery(Integer userId, Integer lotteryItemId, String shareNum){
 		String message = "success";
 		synchronized(this){
 			LotteryItem lotteryItem = lotteryService.findLotteryItemById(lotteryItemId);
@@ -74,6 +76,13 @@ public class UserLotteryService {
 			Lottery lottery = lotteryService.findLotteryById(lotteryItem.getLotteryid());
 			if(lottery==null || lottery.getIsvalid()==0){
 				throw new RuntimeException("抽奖活动不存在或已失效");
+			}
+			if(!StringUtils.isNullOrNone(shareNum)){
+				UserLottery shareUserLottery = findUserLotteryByShareNum(shareNum);
+				if(shareUserLottery!=null && shareUserLottery.getPrizenum()==null){
+					shareUserLottery.setPrizenum(generatePrizenum(shareUserLottery.getUserid()));
+					userLotteryMapper.updateByPrimaryKey(shareUserLottery);
+				}
 			}
 			if(lotteryItem.getGcount()>=lotteryItem.getMcount()){
 				message = "奖项["+lotteryItem.getName()+"]已抽空，抽奖失败";
@@ -93,8 +102,11 @@ public class UserLotteryService {
 			userLottery.setUserid(userId);
 			userLottery.setLotteryitemid(lotteryItemId);
 			userLottery.setLotteryid(lotteryItem.getLotteryid());
-			userLottery.setPrizenum(generatePrizenum(userId));
+			if(lottery.getForceshare()==null || lottery.getForceshare()==0){
+				userLottery.setPrizenum(generatePrizenum(userId));
+			}
 			userLotteryMapper.insert(userLottery);
+			message = message + ":" + userLottery.getId();
 		}
 		return message;
 	}
@@ -152,5 +164,46 @@ public class UserLotteryService {
         }
         return date+random+user;
     }
+	
+	/**
+	 * 生成分享编号
+	 * @param userId
+	 * @return
+	 */
+	private String generateSharenum(Integer userId) {
+        String date = String.valueOf(new Date().getTime());
+        String user = String.valueOf(userId);
+        return date+"s"+user;
+    }
+	
+	/**
+	 * 分享中奖结果
+	 * @param userId
+	 * @param userLotteryId
+	 * @return
+	 */
+	@Transactional
+	public String share(Integer userId, Integer userLotteryId){
+		UserLottery userLottery = userLotteryMapper.selectByPrimaryKey(userLotteryId);
+		userLottery.setSharenum(generateSharenum(userId));
+		userLotteryMapper.updateByPrimaryKeySelective(userLottery);
+		return userLottery.getSharenum();
+	}
+	
+	/**
+	 * 根据分享号查询中奖信息
+	 * @param shareNum
+	 * @return
+	 */
+	public UserLottery findUserLotteryByShareNum(String shareNum){
+		UserLotteryExample userLotteryExample = new UserLotteryExample();
+		Criteria criteria = userLotteryExample.createCriteria();
+		criteria.andSharenumEqualTo(shareNum);
+		List<UserLottery> userLotteryList = userLotteryMapper.selectByExample(userLotteryExample);
+		if(userLotteryList!=null && userLotteryList.size()>0){
+			return userLotteryList.get(0);
+		}
+		return null;
+	}
 	
 }

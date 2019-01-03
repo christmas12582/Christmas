@@ -9,6 +9,7 @@
     <result column="exchangedate" property="exchangedate" jdbcType="TIMESTAMP" />
     <result column="lotteryid" property="lotteryid" jdbcType="INTEGER" />
     <result column="prizenum" property="prizenum" jdbcType="VARCHAR" />
+    <result column="sharenum" property="sharenum" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -69,7 +70,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, lotterydate, lotteryitemid, userid, exchangedate, lotteryid, prizenum
+    id, lotterydate, lotteryitemid, userid, exchangedate, lotteryid, prizenum, sharenum
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.lottery.model.UserLotteryExample" >
     select
@@ -104,10 +105,10 @@
   <insert id="insert" parameterType="com.lottery.model.UserLottery" >
     insert into t_user_lottery (id, lotterydate, lotteryitemid, 
       userid, exchangedate, lotteryid, 
-      prizenum)
+      prizenum, sharenum)
     values (#{id,jdbcType=INTEGER}, #{lotterydate,jdbcType=TIMESTAMP}, #{lotteryitemid,jdbcType=INTEGER}, 
       #{userid,jdbcType=INTEGER}, #{exchangedate,jdbcType=TIMESTAMP}, #{lotteryid,jdbcType=INTEGER}, 
-      #{prizenum,jdbcType=VARCHAR})
+      #{prizenum,jdbcType=VARCHAR}, #{sharenum,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.lottery.model.UserLottery" >
     insert into t_user_lottery
@@ -133,6 +134,9 @@
       <if test="prizenum != null" >
         prizenum,
       </if>
+      <if test="sharenum != null" >
+        sharenum,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -155,6 +159,9 @@
       </if>
       <if test="prizenum != null" >
         #{prizenum,jdbcType=VARCHAR},
+      </if>
+      <if test="sharenum != null" >
+        #{sharenum,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -188,6 +195,9 @@
       <if test="record.prizenum != null" >
         prizenum = #{record.prizenum,jdbcType=VARCHAR},
       </if>
+      <if test="record.sharenum != null" >
+        sharenum = #{record.sharenum,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -201,7 +211,8 @@
       userid = #{record.userid,jdbcType=INTEGER},
       exchangedate = #{record.exchangedate,jdbcType=TIMESTAMP},
       lotteryid = #{record.lotteryid,jdbcType=INTEGER},
-      prizenum = #{record.prizenum,jdbcType=VARCHAR}
+      prizenum = #{record.prizenum,jdbcType=VARCHAR},
+      sharenum = #{record.sharenum,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -227,6 +238,9 @@
       <if test="prizenum != null" >
         prizenum = #{prizenum,jdbcType=VARCHAR},
       </if>
+      <if test="sharenum != null" >
+        sharenum = #{sharenum,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -237,7 +251,8 @@
       userid = #{userid,jdbcType=INTEGER},
       exchangedate = #{exchangedate,jdbcType=TIMESTAMP},
       lotteryid = #{lotteryid,jdbcType=INTEGER},
-      prizenum = #{prizenum,jdbcType=VARCHAR}
+      prizenum = #{prizenum,jdbcType=VARCHAR},
+      sharenum = #{sharenum,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByUserIdAndLotteryId" resultMap="BaseResultMap" >
