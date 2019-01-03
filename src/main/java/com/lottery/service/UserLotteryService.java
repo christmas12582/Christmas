@@ -3,8 +3,6 @@
  */
 package com.lottery.service;
 
-import static org.mockito.Mockito.verify;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -79,6 +77,13 @@ public class UserLotteryService {
 			if(lottery==null || lottery.getIsvalid()==0){
 				throw new RuntimeException("抽奖活动不存在或已失效");
 			}
+			if(!StringUtils.isNullOrNone(shareNum)){
+				UserLottery shareUserLottery = findUserLotteryByShareNum(shareNum);
+				if(shareUserLottery!=null && shareUserLottery.getPrizenum()==null){
+					shareUserLottery.setPrizenum(generatePrizenum(shareUserLottery.getUserid()));
+					userLotteryMapper.updateByPrimaryKey(shareUserLottery);
+				}
+			}
 			if(lotteryItem.getGcount()>=lotteryItem.getMcount()){
 				message = "奖项["+lotteryItem.getName()+"]已抽空，抽奖失败";
 				logger.info("用户["+userId+"]在参与活动["+lottery.getId()+"]时，"+message);
@@ -102,13 +107,6 @@ public class UserLotteryService {
 			}
 			userLotteryMapper.insert(userLottery);
 			message = message + ":" + userLottery.getId();
-			if(!StringUtils.isNullOrNone(shareNum)){
-				UserLottery shareUserLottery = findUserLotteryByShareNum(shareNum);
-				if(shareUserLottery!=null && shareUserLottery.getPrizenum()==null){
-					shareUserLottery.setPrizenum(generatePrizenum(shareUserLottery.getUserid()));
-					userLotteryMapper.updateByPrimaryKey(shareUserLottery);
-				}
-			}
 		}
 		return message;
 	}
