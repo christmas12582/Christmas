@@ -29,13 +29,13 @@ public class UserService {
 	 * @param openid
 	 * @return
 	 */
-	public User findUserByOpenid(String openid){
+	public List<User> findUserByOpenid(String openid){
 		UserExample userExample = new UserExample();
 		Criteria criteria = userExample.createCriteria();
 		criteria.andOpenidEqualTo(openid);
 		List<User> userList = userMapper.selectByExample(userExample);
 		if(userList!=null && userList.size()>0){
-			return userList.get(0);
+			return userList;
 		}
 		return null;
 	}

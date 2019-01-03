@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -51,12 +52,17 @@ public class BusinessController {
     @ResponseBody
     public ResponseModel getMyProduct(@RequestParam(value = "openid") String openid,
                                       @RequestParam(value = "isvalid",required = false) Integer isvalid) {
-        User user = userService.findUserByOpenid(openid);
-        if (user == null)
+        List<User> userlist = userService.findUserByOpenid(openid);
+        if (userlist == null)
             return new ResponseModel(500L, "该用户未注册", null);
-        if (user.getType() != 2)
+        List<User> bussinessUserList=new ArrayList<>();
+        for(User item:userlist){
+            if (item.getType() == 2)
+                bussinessUserList.add(item);
+        }
+        if (bussinessUserList.isEmpty())
             return new ResponseModel(500L, "该用户不属于商家", null);
-        Integer userid = user.getId();
+        Integer userid = bussinessUserList.get(0).getId();
         List<HashMap<String, Object>> result = businessService.getMyProduct(userid,isvalid);
         return new ResponseModel(result);
     }
@@ -66,11 +72,12 @@ public class BusinessController {
 
     //商家设置活动是否有效
 
-    @ApiOperation(value = "设置抽奖活动是否有效及设置用户可以参加的次数", notes = "设置抽奖活动是否有效及设置用户可以参加的次数")
+    @ApiOperation(value = "设置抽奖活动是否有效及设置用户可以参加的次数，设置是否需要强制分享或分享次数限制", notes = "设置抽奖活动是否有效及设置用户可以参加的次数，设置是否需要强制分享或分享次数限制")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "openid", dataType = "String", paramType = "query", required = true),
             @ApiImplicitParam(name = "lotteryid", dataType = "int", paramType = "query", required = true),
             @ApiImplicitParam(name = "isvalid", dataType = "int", paramType = "query", required = true),
+            @ApiImplicitParam(name = "forceshare", dataType = "int", paramType = "query",value = "是否强制分享，默认为1"),
             @ApiImplicitParam(name = "mcount", dataType = "int", paramType = "query", value = "如果传入此参数则同步更新用户最大抽奖次数")
     })
     @RequestMapping(value = "updatelottery", method = RequestMethod.POST)
@@ -79,18 +86,24 @@ public class BusinessController {
             @RequestParam(value = "openid") String openid,
             @RequestParam(value = "lotteryid") Integer lotteryid,
             @RequestParam(value = "isvalid") Integer isvalid,
+            @RequestParam(value = "forceshare",defaultValue = "1") Integer forceshare,
             @RequestParam(value = "mcount", required = false) Integer mcount
     ) {
-        User user = userService.findUserByOpenid(openid);
-        if (user == null)
+        List<User> userlist = userService.findUserByOpenid(openid);
+        if (userlist == null)
             return new ResponseModel(500L, "该用户未注册", null);
-        if (user.getType() != 2)
+        List<User> bussinessUserList=new ArrayList<>();
+        for(User item:userlist){
+            if (item.getType() == 2)
+                bussinessUserList.add(item);
+        }
+        if (bussinessUserList.isEmpty())
             return new ResponseModel(500L, "该用户不属于商家", null);
-        Integer userid = user.getId();
+
         Buy buy = businessService.getBuybyLotteryid(lotteryid);
-        if (!buy.getUserid().equals(userid))
+        if (!buy.getUserid().equals(bussinessUserList.get(0).getId()))
             return new ResponseModel(500L, "该活动不属于该用户", null);
-        int count = businessService.updateLotteryValid(lotteryid, isvalid, mcount);
+        int count = businessService.updateLotteryValid(lotteryid, isvalid, mcount,forceshare);
         if (count > 0)
             return new ResponseModel(0L, "设置成功", null);
         else
@@ -119,13 +132,19 @@ public class BusinessController {
             @RequestParam(value = "mcount") Integer mcount,
             @RequestParam(value = "weight") Integer weight
     ) {
-        User user = userService.findUserByOpenid(openid);
-        if (user == null)
+        List<User> userlist = userService.findUserByOpenid(openid);
+        if (userlist == null)
             return new ResponseModel(500L, "该用户未注册", null);
-        if (user.getType() != 2)
+        List<User> bussinessUserList=new ArrayList<>();
+        for(User item:userlist){
+            if (item.getType() == 2)
+                bussinessUserList.add(item);
+        }
+        if (bussinessUserList.isEmpty())
             return new ResponseModel(500L, "该用户不属于商家", null);
+
         Buy buy = businessService.getBuybyLotteryid(lotteryid);
-        if (!buy.getUserid().equals(user.getId()))
+        if (!buy.getUserid().equals(bussinessUserList.get(0).getId()))
             return new ResponseModel(500L, "该活动不属于该用户", null);
         HashMap<String, Object> result = businessService.addLotteryItem(lotteryid, orderno, name, icon, mcount, weight);
         if ((Integer) result.get("count") > 0) {
@@ -161,16 +180,20 @@ public class BusinessController {
             @RequestParam(value = "gcount", required = false) Integer gcount,
             @RequestParam(value = "weight", required = false) Integer weight
     ) {
-        User user = userService.findUserByOpenid(openid);
-        if (user == null)
+        List<User> userlist = userService.findUserByOpenid(openid);
+        if (userlist == null)
             return new ResponseModel(500L, "该用户未注册", null);
-        if (user.getType() != 2)
+        List<User> bussinessUserList=new ArrayList<>();
+        for(User item:userlist){
+            if (item.getType() == 2)
+                bussinessUserList.add(item);
+        }
+        if (bussinessUserList.isEmpty())
             return new ResponseModel(500L, "该用户不属于商家", null);
+
         Buy buy = businessService.getBuybyLotteryid(lotteryid);
-        if (!buy.getUserid().equals(user.getId()))
+        if (!buy.getUserid().equals(bussinessUserList.get(0).getId()))
             return new ResponseModel(500L, "该活动不属于该用户", null);
-        if (!businessService.getlotteryidByitemid(itemid).equals(lotteryid))
-            return new ResponseModel(500L, "该商品不属于该活动", null);
         HashMap<String, Object> result = businessService.updateItem(lotteryid, itemid, orderno, name, icon, gcount, mcount, weight);
         if ((Integer) result.get("count") > 0)
             return new ResponseModel(0L, "更新成功", null);
@@ -195,16 +218,20 @@ public class BusinessController {
             @RequestParam(value = "lotteryid") Integer lotteryid,
             @RequestParam(value = "itemid") Integer itemid
     ) {
-        User user = userService.findUserByOpenid(openid);
-        if (user == null)
+        List<User> userlist = userService.findUserByOpenid(openid);
+        if (userlist == null)
             return new ResponseModel(500L, "该用户未注册", null);
-        if (user.getType() != 2)
+        List<User> bussinessUserList=new ArrayList<>();
+        for(User item:userlist){
+            if (item.getType() == 2)
+                bussinessUserList.add(item);
+        }
+        if (bussinessUserList.isEmpty())
             return new ResponseModel(500L, "该用户不属于商家", null);
+
         Buy buy = businessService.getBuybyLotteryid(lotteryid);
-        if (!buy.getUserid().equals(user.getId()))
+        if (!buy.getUserid().equals(bussinessUserList.get(0).getId()))
             return new ResponseModel(500L, "该活动不属于该用户", null);
-        if (!businessService.getlotteryidByitemid(itemid).equals(lotteryid))
-            return new ResponseModel(500L, "该商品不属于该活动", null);
         Integer count = businessService.removeItem(itemid);
         return new ResponseModel(0L, "成功删除" + count + "条数据", null);
 
@@ -228,13 +255,19 @@ public class BusinessController {
             @RequestParam(value = "openid") String openid,
             @RequestParam(value = "lotteryid") Integer lotteryid
     ) {
-        User user = userService.findUserByOpenid(openid);
-        if (user == null)
+        List<User> userlist = userService.findUserByOpenid(openid);
+        if (userlist == null)
             return new ResponseModel(500L, "该用户未注册", null);
-        if (user.getType() != 2)
+        List<User> bussinessUserList=new ArrayList<>();
+        for(User item:userlist){
+            if (item.getType() == 2)
+                bussinessUserList.add(item);
+        }
+        if (bussinessUserList.isEmpty())
             return new ResponseModel(500L, "该用户不属于商家", null);
+
         Buy buy = businessService.getBuybyLotteryid(lotteryid);
-        if (!buy.getUserid().equals(user.getId()))
+        if (!buy.getUserid().equals(bussinessUserList.get(0).getId()))
             return new ResponseModel(500L, "该活动不属于该用户", null);
         PageHelper.startPage(pagenum, pagesize);
         PageHelper.orderBy("orderno asc");
@@ -352,7 +385,6 @@ public class BusinessController {
 
 
     //我的分销记录
-
     @ApiOperation(value = "查询我的分销记录（购买之后有效）", notes = "查询我的分销记录（购买之后有效）")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "openid", dataType = "string", paramType = "query")
@@ -361,16 +393,23 @@ public class BusinessController {
     @ResponseBody
     public ResponseModel getmydistributionList(
             @RequestParam(value = "openid") String openid){
-
-
-        User user = userService.findUserByOpenid(openid);
-        if (user == null)
+        List<User> userlist = userService.findUserByOpenid(openid);
+        if (userlist == null)
             return new ResponseModel(500L, "该用户未注册", null);
-        if (user.getType() != 2)
+        List<User> bussinessUserList=new ArrayList<>();
+        for(User item:userlist){
+            if (item.getType() == 2)
+                bussinessUserList.add(item);
+        }
+        if (bussinessUserList.isEmpty())
             return new ResponseModel(500L, "该用户不属于商家", null);
-       List<Buy> distributionList= businessService.getMyDistribution(user.getId());
+       List<Buy> distributionList= businessService.getMyDistribution(bussinessUserList.get(0).getId());
        return new ResponseModel(distributionList);
     }
+
+
+
+
 
 }
 
