@@ -283,6 +283,126 @@ public class LotteryExample {
             addCriterion("mcount not between", value1, value2, "mcount");
             return (Criteria) this;
         }
+
+        public Criteria andForceshareIsNull() {
+            addCriterion("forceshare is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andForceshareIsNotNull() {
+            addCriterion("forceshare is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andForceshareEqualTo(Integer value) {
+            addCriterion("forceshare =", value, "forceshare");
+            return (Criteria) this;
+        }
+
+        public Criteria andForceshareNotEqualTo(Integer value) {
+            addCriterion("forceshare <>", value, "forceshare");
+            return (Criteria) this;
+        }
+
+        public Criteria andForceshareGreaterThan(Integer value) {
+            addCriterion("forceshare >", value, "forceshare");
+            return (Criteria) this;
+        }
+
+        public Criteria andForceshareGreaterThanOrEqualTo(Integer value) {
+            addCriterion("forceshare >=", value, "forceshare");
+            return (Criteria) this;
+        }
+
+        public Criteria andForceshareLessThan(Integer value) {
+            addCriterion("forceshare <", value, "forceshare");
+            return (Criteria) this;
+        }
+
+        public Criteria andForceshareLessThanOrEqualTo(Integer value) {
+            addCriterion("forceshare <=", value, "forceshare");
+            return (Criteria) this;
+        }
+
+        public Criteria andForceshareIn(List<Integer> values) {
+            addCriterion("forceshare in", values, "forceshare");
+            return (Criteria) this;
+        }
+
+        public Criteria andForceshareNotIn(List<Integer> values) {
+            addCriterion("forceshare not in", values, "forceshare");
+            return (Criteria) this;
+        }
+
+        public Criteria andForceshareBetween(Integer value1, Integer value2) {
+            addCriterion("forceshare between", value1, value2, "forceshare");
+            return (Criteria) this;
+        }
+
+        public Criteria andForceshareNotBetween(Integer value1, Integer value2) {
+            addCriterion("forceshare not between", value1, value2, "forceshare");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewcountIsNull() {
+            addCriterion("viewcount is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewcountIsNotNull() {
+            addCriterion("viewcount is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewcountEqualTo(Integer value) {
+            addCriterion("viewcount =", value, "viewcount");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewcountNotEqualTo(Integer value) {
+            addCriterion("viewcount <>", value, "viewcount");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewcountGreaterThan(Integer value) {
+            addCriterion("viewcount >", value, "viewcount");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewcountGreaterThanOrEqualTo(Integer value) {
+            addCriterion("viewcount >=", value, "viewcount");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewcountLessThan(Integer value) {
+            addCriterion("viewcount <", value, "viewcount");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewcountLessThanOrEqualTo(Integer value) {
+            addCriterion("viewcount <=", value, "viewcount");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewcountIn(List<Integer> values) {
+            addCriterion("viewcount in", values, "viewcount");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewcountNotIn(List<Integer> values) {
+            addCriterion("viewcount not in", values, "viewcount");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewcountBetween(Integer value1, Integer value2) {
+            addCriterion("viewcount between", value1, value2, "viewcount");
+            return (Criteria) this;
+        }
+
+        public Criteria andViewcountNotBetween(Integer value1, Integer value2) {
+            addCriterion("viewcount not between", value1, value2, "viewcount");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {
