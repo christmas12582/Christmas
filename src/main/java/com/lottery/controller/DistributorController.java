@@ -1,7 +1,10 @@
 package com.lottery.controller;
 
+import com.github.pagehelper.PageHelper;
+import com.lottery.common.MapFromPageInfo;
 import com.lottery.common.ResponseModel;
 import com.lottery.model.Buy;
+import com.lottery.model.Cash;
 import com.lottery.model.User;
 import com.lottery.service.DistributorService;
 import com.lottery.service.UserService;
@@ -9,6 +12,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import javafx.geometry.Pos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -67,16 +71,69 @@ public class DistributorController {
     @ResponseBody
     @ApiOperation(value = "我的分销记录", notes = "我的分销记录")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "openid", dataType = "string", paramType = "query")
+            @ApiImplicitParam(name = "openid", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "pagenum", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "pagesize", dataType = "int", paramType = "query")
     })
-    public ResponseModel myDistribute(@RequestParam(value ="openid")String openid){
+    public ResponseModel myDistribute(
+            @RequestParam(value ="openid")String openid,
+            @RequestParam(value = "pagenum", required = false, defaultValue = "1") Integer pagenum,
+            @RequestParam(value = "pagesize", required = false, defaultValue = "10") Integer pagesize
+    ){
         User user = userService.findUserByOpenidAndType(openid,4);
         if (user==null)
             return new ResponseModel(500L,"您尚未成为分销商");
         Integer shareid=user.getId();
+        PageHelper.startPage(pagenum,pagesize);
         List<Buy> buyList= distributorService.mydistribute(shareid);
-        return new ResponseModel(0L,"获取分销记录成功，(包含为付款的)",buyList);
+        return new ResponseModel(0L,"获取分销记录成功，(包含未付款的)",new MapFromPageInfo<>(buyList));
     }
+
+    //发起提现
+    @RequestMapping(value = "getcash",method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "发起提现申请", notes = "发起提现申请")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "openid", dataType = "string", paramType = "query",required = true),
+            @ApiImplicitParam(name = "money", dataType = "int", paramType = "query",value = "提现金额（分）",required = true)
+    })
+    public ResponseModel getCash(
+            @RequestParam(value ="openid")String openid,
+            @RequestParam(value ="money")Integer money
+    ){
+        User user = userService.findUserByOpenidAndType(openid,4);
+        if (user==null)
+            return new ResponseModel(500L,"您尚未成为分销商");
+        if(user.getMoney()<money)
+            return new ResponseModel(500L,"你的提现金额超过限额");
+        distributorService.getcash(user.getId(),money);
+            return new ResponseModel(0L,"提现申请发起成功，请联系运营商兑换现金");
+    }
+
+    //我发起的提现申请
+    @RequestMapping(value = "mygetcashlist",method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "发起提现申请", notes = "发起提现申请")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "openid", dataType = "string", paramType = "query",required = true),
+            @ApiImplicitParam(name = "isexchange", dataType = "int", paramType = "query",value = "筛选条件（是否已提现）"),
+            @ApiImplicitParam(name = "pagenum", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "pagesize", dataType = "int", paramType = "query")
+    })
+    public ResponseModel myGetcashList(
+            @RequestParam(value ="openid")String openid,
+            @RequestParam(value ="isexchange",required = false)Integer isexchange,
+            @RequestParam(value = "pagenum", required = false, defaultValue = "1") Integer pagenum,
+            @RequestParam(value = "pagesize", required = false, defaultValue = "10") Integer pagesize
+    ){
+        User user = userService.findUserByOpenidAndType(openid,4);
+        if (user==null)
+            return new ResponseModel(500L,"您尚未成为分销商");
+        PageHelper.startPage(pagenum,pagesize);
+        List<Cash> cashList=distributorService.myGetCashList(user.getId(),isexchange);
+        return new ResponseModel(0L,"获取我的提现记录成功",new MapFromPageInfo<>(cashList));
+    }
+
 
 
 

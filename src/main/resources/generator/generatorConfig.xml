@@ -38,7 +38,8 @@
         <!--<table tableName="t_lottery_item" domainObjectName="LotteryItem"></table>-->
         <!--<table tableName="t_product" domainObjectName="Product"></table>-->
         <!--<table tableName="t_unit" domainObjectName="Unit"></table>-->
-        <table tableName="t_user" domainObjectName="User"></table>
+        <!--<table tableName="t_user" domainObjectName="User"></table>-->
+        <table tableName="t_cash" domainObjectName="Cash"></table>
         <!--<table tableName="t_user_lottery" domainObjectName="UserLottery"></table>-->
 
     </context>

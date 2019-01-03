@@ -67,8 +67,8 @@ locationpath: D:/upload/
 
 wechat:
   appid: wx18526bcd31d54c1f
-  mechid: xx
-  key: xx
+  mechid: 1522692361
+  key: jiangfengqingxiaochengxu12345678
   payip: 118.24.207.16
   notifyUrl: https://aiyuanmqz.com/business/buycallback
   unifiedorderUrl: https://api.mch.weixin.qq.com/pay/unifiedorder

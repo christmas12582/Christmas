@@ -4,12 +4,15 @@ import com.lottery.dao.*;
 import com.lottery.model.*;
 import com.lottery.utils.DateHelper;
 import com.lottery.utils.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+
 
 @Service
 public class BusinessService {
@@ -36,6 +39,8 @@ public class BusinessService {
 
     @Autowired
     ShareMapper shareMapper;
+
+    Logger logger= LoggerFactory.getLogger(BusinessService.class);
 
     public List<HashMap<String,Object>> getMyProduct(Integer userid,Integer isvalid){
         List<Buy> buyList=new ArrayList<>();
@@ -264,6 +269,41 @@ public class BusinessService {
         buy.setIspay(1);
         buy.setLotteryid(lottery.getId());
         int count= buyMapper.updateByPrimaryKeySelective(buy);
+        //若有shareid则增加提成
+        Integer shareid=buy.getShareid();
+        Integer unitid=buy.getUnitid();
+        if(shareid!=null&&unitid!=null){
+            User user=userMapper.selectByPrimaryKey(shareid);
+            Unit unit=unitMapper.selectByPrimaryKey(unitid);
+            if(user!=null&&unit!=null){
+                Integer ratio=user.getRatio();
+                Integer price=unit.getPrice();
+                Integer money=ratio*price/100;
+                Integer oldmoney=user.getMoney();
+                if (oldmoney==null)
+                    oldmoney=0;
+                Integer newmoney=oldmoney+money;
+                user.setMoney(newmoney);
+                userMapper.updateByPrimaryKeySelective(user);
+                logger.info("订单号："+orderid+"为userid："+shareid+"增加了"+newmoney+"（分）的分销提成");
+            }else
+                logger.info("未找到shareid或unitid为对应的记录，不予分销提成");
+        }else
+            logger.info("buy中的shareid或unitid为null，不予分销提成");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     }

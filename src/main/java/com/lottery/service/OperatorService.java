@@ -1,16 +1,21 @@
 package com.lottery.service;
 
+import com.lottery.dao.CashMapper;
 import com.lottery.dao.ProductMapper;
 import com.lottery.dao.UnitMapper;
 import com.lottery.dao.UserMapper;
 import com.lottery.model.*;
 import com.lottery.utils.StringUtils;
+import org.apache.ibatis.javassist.expr.Cast;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -26,6 +31,8 @@ public class OperatorService {
     @Autowired
     UserMapper userMapper;
 
+    @Autowired
+    CashMapper cashMapper;
 
     public List<Product>  getProductListbyCondition(Integer id,String name, Integer isvalid){
         ProductExample example = new ProductExample();
@@ -173,5 +180,45 @@ public class OperatorService {
             return result;
         }
     }
+
+    public List<Cash> cashList(Integer isexchange,String begintime,String endtime) throws ParseException {
+        SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        CashExample cashExample= new CashExample();
+        CashExample.Criteria criteria= cashExample.createCriteria();
+        if (isexchange!=null)
+            criteria.andIsexchangeEqualTo(isexchange);
+        if (StringUtils.isNullOrNone(begintime)){
+            Date begintime_date=sdf.parse(begintime);
+            criteria.andCreatetimeGreaterThanOrEqualTo(begintime_date);
+        }
+        if (StringUtils.isNullOrNone(endtime)){
+            Date endtime_date=sdf.parse(endtime);
+            criteria.andCreatetimeLessThanOrEqualTo(endtime_date);
+        }
+        return cashMapper.selectByExample(cashExample);
+    }
+
+    public HashMap<String,Object> setCashExchange(Integer cashid,Integer isexchange){
+        HashMap<String,Object> result= new HashMap<>();
+        Cash cash=cashMapper.selectByPrimaryKey(cashid);
+        if (cash==null){
+            result.put("code",500L);
+            result.put("msg","未找到提现申请");
+        }
+        cash.setIsexchange(isexchange);
+        Integer count=cashMapper.updateByPrimaryKeySelective(cash);
+        if (count==null||count==0){
+            result.put("msg","提现失败，未找到该主键");
+            result.put("code",500L);
+            return result;
+        }
+        else{
+            result.put("msg","提现申请更新成功");
+            result.put("code",0L);
+            return result;
+        }
+
+    }
+
 
 }

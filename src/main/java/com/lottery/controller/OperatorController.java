@@ -3,6 +3,7 @@ package com.lottery.controller;
 import com.github.pagehelper.PageHelper;
 import com.lottery.common.MapFromPageInfo;
 import com.lottery.common.ResponseModel;
+import com.lottery.model.Cash;
 import com.lottery.model.Product;
 import com.lottery.model.Unit;
 import com.lottery.model.User;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -276,6 +278,52 @@ public class OperatorController {
 
     }
 
+
+    //提现申请列表
+    @ApiOperation(value = "提现申请列表", notes = "提现申请列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pagenum", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "pagesize", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "isexchange", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "begintime", dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "endtime", dataType = "String", paramType = "query"),
+    })
+    @RequiresRoles("1")
+    @RequestMapping(value = "cashlist", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseModel myCashList(
+            @RequestParam(value = "pagenum", required = false,defaultValue = "1") Integer pagenum,
+            @RequestParam(value = "pagesize", required = false,defaultValue = "10") Integer pagesize,
+            @RequestParam(value = "isexchange",required = false) Integer isexchange,
+            @RequestParam(value = "begintime",required = false) String begintime,
+            @RequestParam(value = "endtime",required = false) String endtime
+    ) throws ParseException {
+        PageHelper.startPage(pagenum,pagesize);
+        List<Cash> cashList=operatorService.cashList(isexchange,begintime,endtime);
+        return new ResponseModel(0L,"获取提现申请列表列表成功", new MapFromPageInfo<>(cashList));
+    }
+
+
+
+
+    //提现
+    @ApiOperation(value = "提现", notes = "提现")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "cashid", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "isexchange", dataType = "int", paramType = "query")
+    })
+    @RequiresRoles("1")
+    @RequestMapping(value = "setcashexchange", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseModel setCashExchange(
+            @RequestParam(value = "cashid") Integer cashid,
+            @RequestParam(value = "isexchange") Integer isexchange
+
+    ){
+        HashMap<String,Object> result=operatorService.setCashExchange(cashid,isexchange);
+        Long code= (Long) result.get("code");
+        return new ResponseModel(code,result.get("msg").toString(), null);
+    }
 
 
 
