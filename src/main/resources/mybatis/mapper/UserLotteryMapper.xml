@@ -103,6 +103,9 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.lottery.model.UserLottery" >
+  	<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+      SELECT max(id) AS id from t_user_lottery
+    </selectKey>
     insert into t_user_lottery (id, lotterydate, lotteryitemid, 
       userid, exchangedate, lotteryid, 
       prizenum, sharenum)
