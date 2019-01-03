@@ -203,6 +203,8 @@ public class OperatorService {
                     useridlist.add(user.getId());
                 }
                 criteria.andCreateidIn(useridlist);
+            }else {
+              return new ArrayList<>();
             }
         }
         if (isexchange!=null)
