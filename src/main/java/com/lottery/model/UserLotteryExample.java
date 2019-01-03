@@ -534,6 +534,76 @@ public class UserLotteryExample {
             addCriterion("prizenum not between", value1, value2, "prizenum");
             return (Criteria) this;
         }
+
+        public Criteria andSharenumIsNull() {
+            addCriterion("sharenum is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSharenumIsNotNull() {
+            addCriterion("sharenum is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSharenumEqualTo(String value) {
+            addCriterion("sharenum =", value, "sharenum");
+            return (Criteria) this;
+        }
+
+        public Criteria andSharenumNotEqualTo(String value) {
+            addCriterion("sharenum <>", value, "sharenum");
+            return (Criteria) this;
+        }
+
+        public Criteria andSharenumGreaterThan(String value) {
+            addCriterion("sharenum >", value, "sharenum");
+            return (Criteria) this;
+        }
+
+        public Criteria andSharenumGreaterThanOrEqualTo(String value) {
+            addCriterion("sharenum >=", value, "sharenum");
+            return (Criteria) this;
+        }
+
+        public Criteria andSharenumLessThan(String value) {
+            addCriterion("sharenum <", value, "sharenum");
+            return (Criteria) this;
+        }
+
+        public Criteria andSharenumLessThanOrEqualTo(String value) {
+            addCriterion("sharenum <=", value, "sharenum");
+            return (Criteria) this;
+        }
+
+        public Criteria andSharenumLike(String value) {
+            addCriterion("sharenum like", value, "sharenum");
+            return (Criteria) this;
+        }
+
+        public Criteria andSharenumNotLike(String value) {
+            addCriterion("sharenum not like", value, "sharenum");
+            return (Criteria) this;
+        }
+
+        public Criteria andSharenumIn(List<String> values) {
+            addCriterion("sharenum in", values, "sharenum");
+            return (Criteria) this;
+        }
+
+        public Criteria andSharenumNotIn(List<String> values) {
+            addCriterion("sharenum not in", values, "sharenum");
+            return (Criteria) this;
+        }
+
+        public Criteria andSharenumBetween(String value1, String value2) {
+            addCriterion("sharenum between", value1, value2, "sharenum");
+            return (Criteria) this;
+        }
+
+        public Criteria andSharenumNotBetween(String value1, String value2) {
+            addCriterion("sharenum not between", value1, value2, "sharenum");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

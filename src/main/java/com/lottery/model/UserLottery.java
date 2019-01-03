@@ -17,6 +17,8 @@ public class UserLottery {
 
     private String prizenum;
 
+    private String sharenum;
+
     public Integer getId() {
         return id;
     }
@@ -71,5 +73,13 @@ public class UserLottery {
 
     public void setPrizenum(String prizenum) {
         this.prizenum = prizenum == null ? null : prizenum.trim();
+    }
+
+    public String getSharenum() {
+        return sharenum;
+    }
+
+    public void setSharenum(String sharenum) {
+        this.sharenum = sharenum == null ? null : sharenum.trim();
     }
 }
