@@ -8,6 +8,8 @@
     <result column="type" property="type" jdbcType="INTEGER" />
     <result column="openid" property="openid" jdbcType="VARCHAR" />
     <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="ratio" property="ratio" jdbcType="INTEGER" />
+    <result column="money" property="money" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -68,7 +70,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, phone, isvalid, type, openid, password
+    id, phone, isvalid, type, openid, password, ratio, money
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.lottery.model.UserExample" >
     select
@@ -102,11 +104,11 @@
   </delete>
   <insert id="insert" parameterType="com.lottery.model.User" >
     insert into t_user (id, phone, isvalid, 
-      type, openid, password
-      )
+      type, openid, password, 
+      ratio, money)
     values (#{id,jdbcType=INTEGER}, #{phone,jdbcType=VARCHAR}, #{isvalid,jdbcType=INTEGER}, 
-      #{type,jdbcType=INTEGER}, #{openid,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}
-      )
+      #{type,jdbcType=INTEGER}, #{openid,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{ratio,jdbcType=INTEGER}, #{money,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.lottery.model.User" >
     <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
@@ -132,6 +134,12 @@
       <if test="password != null" >
         password,
       </if>
+      <if test="ratio != null" >
+        ratio,
+      </if>
+      <if test="money != null" >
+        money,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -151,6 +159,12 @@
       </if>
       <if test="password != null" >
         #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="ratio != null" >
+        #{ratio,jdbcType=INTEGER},
+      </if>
+      <if test="money != null" >
+        #{money,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -181,6 +195,12 @@
       <if test="record.password != null" >
         password = #{record.password,jdbcType=VARCHAR},
       </if>
+      <if test="record.ratio != null" >
+        ratio = #{record.ratio,jdbcType=INTEGER},
+      </if>
+      <if test="record.money != null" >
+        money = #{record.money,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -193,7 +213,9 @@
       isvalid = #{record.isvalid,jdbcType=INTEGER},
       type = #{record.type,jdbcType=INTEGER},
       openid = #{record.openid,jdbcType=VARCHAR},
-      password = #{record.password,jdbcType=VARCHAR}
+      password = #{record.password,jdbcType=VARCHAR},
+      ratio = #{record.ratio,jdbcType=INTEGER},
+      money = #{record.money,jdbcType=INTEGER}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -216,6 +238,12 @@
       <if test="password != null" >
         password = #{password,jdbcType=VARCHAR},
       </if>
+      <if test="ratio != null" >
+        ratio = #{ratio,jdbcType=INTEGER},
+      </if>
+      <if test="money != null" >
+        money = #{money,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -225,7 +253,9 @@
       isvalid = #{isvalid,jdbcType=INTEGER},
       type = #{type,jdbcType=INTEGER},
       openid = #{openid,jdbcType=VARCHAR},
-      password = #{password,jdbcType=VARCHAR}
+      password = #{password,jdbcType=VARCHAR},
+      ratio = #{ratio,jdbcType=INTEGER},
+      money = #{money,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

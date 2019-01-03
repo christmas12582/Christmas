@@ -34,11 +34,11 @@
 
         <!--<table tableName="t_buy" domainObjectName="Buy"></table>-->
         <!--<table tableName="t_share" domainObjectName="Share"></table>-->
-        <table tableName="t_lottery" domainObjectName="Lottery"></table>
+        <!--<table tableName="t_lottery" domainObjectName="Lottery"></table>-->
         <!--<table tableName="t_lottery_item" domainObjectName="LotteryItem"></table>-->
         <!--<table tableName="t_product" domainObjectName="Product"></table>-->
         <!--<table tableName="t_unit" domainObjectName="Unit"></table>-->
-        <!--<table tableName="t_user" domainObjectName="User"></table>-->
+        <table tableName="t_user" domainObjectName="User"></table>
         <!--<table tableName="t_user_lottery" domainObjectName="UserLottery"></table>-->
 
     </context>

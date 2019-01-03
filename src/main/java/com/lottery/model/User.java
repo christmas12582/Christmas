@@ -13,6 +13,10 @@ public class User {
 
     private String password;
 
+    private Integer ratio;
+
+    private Integer money;
+
     public Integer getId() {
         return id;
     }
@@ -59,5 +63,21 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password == null ? null : password.trim();
+    }
+
+    public Integer getRatio() {
+        return ratio;
+    }
+
+    public void setRatio(Integer ratio) {
+        this.ratio = ratio;
+    }
+
+    public Integer getMoney() {
+        return money;
+    }
+
+    public void setMoney(Integer money) {
+        this.money = money;
     }
 }
