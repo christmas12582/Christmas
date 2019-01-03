@@ -72,7 +72,7 @@ public class CustomerController {
 				}
 			}
 		}
-		User user = userService.findUserByOpenid(openid);
+		User user = userService.findUserByOpenidAndType(openid, 3);
 		if(user==null){
 			user = new User();
 			user.setIsvalid(1);
@@ -94,7 +94,7 @@ public class CustomerController {
 	@RequestMapping(value = "/lottery/qualify", method = RequestMethod.GET)
 	@ApiOperation(value = "用户参与抽奖资格检查", notes = "用户是否可以参与抽奖")
 	public ResponseModel canLottery(String openid, Integer lotteryId){
-		User user = userService.findUserByOpenid(openid);
+		User user = userService.findUserByOpenidAndType(openid, 3);
 		if(user==null || StringUtils.isNullOrNone(user.getPhone())){
 			return new ResponseModel(500l, "请先保存手机号码");
 		}
@@ -119,7 +119,7 @@ public class CustomerController {
 	@RequestMapping(value = "/lottery/save", method = RequestMethod.POST)
 	@ApiOperation(value = "保存用户抽奖结果", notes = "保存用户抽奖结果")
 	public ResponseModel saveLottery(String openid, Integer lotteryItemId){
-		User user = userService.findUserByOpenid(openid);
+		User user = userService.findUserByOpenidAndType(openid, 3);
 		if(user == null){
 			return new ResponseModel(500l, "用户不存在");
 		}
@@ -145,7 +145,7 @@ public class CustomerController {
 	@RequestMapping(value = "/lottery/exchange", method = RequestMethod.POST)
 	@ApiOperation(value = "用户兑换奖项", notes = "用户兑换奖项")
 	public ResponseModel exchangeLottery(String openid, String prizenum){
-		User user = userService.findUserByOpenid(openid);
+		User user = userService.findUserByOpenidAndType(openid, 3);
 		if(user == null){
 			return new ResponseModel(404l, "用户不存在");
 		}
@@ -172,7 +172,7 @@ public class CustomerController {
 	@RequestMapping(value = "/lottery/get", method = RequestMethod.GET)
 	@ApiOperation(value = "用户查询获奖", notes = "获奖详情")
 	public ResponseModel getUserLottery(String openid, Integer userlotteryId){
-		User user = userService.findUserByOpenid(openid);
+		User user = userService.findUserByOpenidAndType(openid, 3);
 		if(user == null){
 			return new ResponseModel(404l, "用户不存在");
 		}
@@ -201,7 +201,7 @@ public class CustomerController {
 	@RequestMapping(value = "/lottery/page", method = RequestMethod.GET)
 	@ApiOperation(value = "用户查询获奖列表", notes = "用户查询获奖列表")
 	public ResponseModel getUserLotteryPage(String openid, Integer page, Integer pageSize){
-		User user = userService.findUserByOpenid(openid);
+		User user = userService.findUserByOpenidAndType(openid, 3);
 		if(user == null){
 			return new ResponseModel(404l, "没有查询到中奖信息");
 		}
@@ -222,7 +222,7 @@ public class CustomerController {
 	@RequestMapping(value = "/lottery/share", method = RequestMethod.POST)
 	@ApiOperation(value = "用户分享抽奖活动", notes = "用户分享抽奖活动")
 	public ResponseModel share(String openid, Integer lotteryId){
-		User user = userService.findUserByOpenid(openid);
+		User user = userService.findUserByOpenidAndType(openid, 3);
 		if(user == null){
 			return new ResponseModel(404l, "用户不存在");
 		}
