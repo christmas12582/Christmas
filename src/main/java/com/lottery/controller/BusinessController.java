@@ -319,7 +319,7 @@ public class BusinessController {
             @ApiImplicitParam(name = "openid", dataType = "string", paramType = "query",required = true),
             @ApiImplicitParam(name = "productid", dataType = "int", paramType = "query",required = true),
             @ApiImplicitParam(name = "unitid", dataType = "int", paramType = "query",required = true),
-            @ApiImplicitParam(name = "shareid", dataType = "int", paramType = "query")
+            @ApiImplicitParam(name = "shareid", dataType = "int", paramType = "query",value = "如果是通过分销购买的请传入该值")
     })
     @RequestMapping(value = "buy", method = RequestMethod.POST)
     @ResponseBody
