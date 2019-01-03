@@ -3,10 +3,7 @@ package com.lottery.controller;
 import com.github.pagehelper.PageHelper;
 import com.lottery.common.MapFromPageInfo;
 import com.lottery.common.ResponseModel;
-import com.lottery.model.Buy;
-import com.lottery.model.Cash;
-import com.lottery.model.Product;
-import com.lottery.model.User;
+import com.lottery.model.*;
 import com.lottery.service.BusinessService;
 import com.lottery.service.DistributorService;
 import com.lottery.service.UserService;
@@ -94,6 +91,11 @@ public class DistributorController {
             if(buy.getProductid()!=null){
                 Product product=businessService.getProductByid(buy.getProductid());
                 buy.setProduct(product);
+            }
+            if (buy.getUnitid()!=null){
+                Unit unit =businessService.getUnitByid(buy.getUnitid());
+                buy.setUnit(unit);
+
             }
         }
         return new ResponseModel(0L,"获取分销记录成功，(包含未付款的)",new MapFromPageInfo<>(buyList));

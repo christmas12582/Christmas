@@ -13,6 +13,16 @@ public class Buy {
 
     private Product product;
 
+    private Unit unit;
+
+    public Unit getUnit() {
+        return unit;
+    }
+
+    public void setUnit(Unit unit) {
+        this.unit = unit;
+    }
+
     public Product getProduct() {
         return product;
     }

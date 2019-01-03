@@ -327,4 +327,8 @@ public class BusinessService {
     public Product getProductByid(Integer id){
        return productMapper.selectByPrimaryKey(id);
     }
+
+    public Unit getUnitByid(Integer id){
+        return unitMapper.selectByPrimaryKey(id);
+    }
 }
