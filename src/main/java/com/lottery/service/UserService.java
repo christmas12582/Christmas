@@ -105,5 +105,9 @@ public class UserService {
 		List<User> userList = userMapper.selectByExample(userExample);
 		return userList;
 	}
+
+	public User getUserByid(Integer userid){
+		return userMapper.selectByPrimaryKey(userid);
+	}
 	
 }

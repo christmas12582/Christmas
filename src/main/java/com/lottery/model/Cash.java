@@ -3,6 +3,7 @@ package com.lottery.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.beans.Transient;
 import java.util.Date;
 
 public class Cash {
@@ -16,6 +17,27 @@ public class Cash {
     private Integer isexchange;
 
     private Integer money;
+
+
+    private String openid;
+
+    private String phone;
+
+    public String getOpenid() {
+        return openid;
+    }
+
+    public void setOpenid(String openid) {
+        this.openid = openid;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
     public Integer getId() {
         return id;

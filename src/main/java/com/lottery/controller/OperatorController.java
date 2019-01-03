@@ -32,6 +32,8 @@ import java.util.List;
 public class OperatorController {
     @Autowired
     OperatorService operatorService;
+    @Autowired
+    UserService userService;
 
 
 
@@ -288,6 +290,8 @@ public class OperatorController {
             @ApiImplicitParam(name = "isexchange", dataType = "int", paramType = "query"),
             @ApiImplicitParam(name = "begintime", dataType = "String", paramType = "query",value = "yyyy-MM-dd HH:mm:ss"),
             @ApiImplicitParam(name = "endtime", dataType = "String", paramType = "query",value = "yyyy-MM-dd HH:mm:ss"),
+            @ApiImplicitParam(name = "phone", dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "openid", dataType = "String", paramType = "query"),
     })
     @RequiresRoles("1")
     @RequestMapping(value = "cashlist", method = RequestMethod.POST)
@@ -297,11 +301,19 @@ public class OperatorController {
             @RequestParam(value = "pagesize", required = false,defaultValue = "10") Integer pagesize,
             @RequestParam(value = "isexchange",required = false) Integer isexchange,
             @RequestParam(value = "begintime",required = false) String begintime,
-            @RequestParam(value = "endtime",required = false) String endtime
+            @RequestParam(value = "endtime",required = false) String endtime,
+            @RequestParam(value = "phone",required = false) String phone,
+            @RequestParam(value = "openid",required = false) String openid
     ) throws ParseException {
-        PageHelper.startPage(pagenum,pagesize);
-        PageHelper.orderBy("createtime desc");
-        List<Cash> cashList=operatorService.cashList(isexchange,begintime,endtime);
+
+        List<Cash> cashList=operatorService.cashList( pagenum,pagesize,phone , openid,isexchange,begintime,endtime);
+        for(Cash cash:cashList){
+            User user=userService.getUserByid(cash.getCreateid());
+            if (user!=null) {
+                cash.setOpenid(user.getOpenid());
+                cash.setPhone(user.getPhone());
+            }
+        }
         return new ResponseModel(0L,"获取提现申请列表列表成功", new MapFromPageInfo<>(cashList));
     }
 

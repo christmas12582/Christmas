@@ -1,5 +1,6 @@
 package com.lottery.service;
 
+import com.github.pagehelper.PageHelper;
 import com.lottery.dao.CashMapper;
 import com.lottery.dao.ProductMapper;
 import com.lottery.dao.UnitMapper;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +35,8 @@ public class OperatorService {
 
     @Autowired
     CashMapper cashMapper;
+
+
 
     public List<Product>  getProductListbyCondition(Integer id,String name, Integer isvalid){
         ProductExample example = new ProductExample();
@@ -181,10 +185,26 @@ public class OperatorService {
         }
     }
 
-    public List<Cash> cashList(Integer isexchange,String begintime,String endtime) throws ParseException {
+    public List<Cash> cashList(Integer pagenum,Integer pagesize,String phone, String openid,Integer isexchange,String begintime,String endtime) throws ParseException {
         SimpleDateFormat sdf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         CashExample cashExample= new CashExample();
-        CashExample.Criteria criteria= cashExample.createCriteria();
+        CashExample.Criteria criteria = cashExample.createCriteria();
+        if (!StringUtils.isNullOrNone(phone)||!StringUtils.isNullOrNone(openid)) {
+            UserExample userExample = new UserExample();
+            UserExample.Criteria usercriteria = userExample.createCriteria();
+            if (!StringUtils.isNullOrNone(phone))
+                usercriteria.andPhoneEqualTo(phone);
+            if (!StringUtils.isNullOrNone(openid))
+                usercriteria.andOpenidEqualTo(openid);
+            List<User> userList = userMapper.selectByExample(userExample);
+            if (!userList.isEmpty()) {
+                List<Integer> useridlist = new ArrayList<>();
+                for (User user : userList) {
+                    useridlist.add(user.getId());
+                }
+                criteria.andCreateidIn(useridlist);
+            }
+        }
         if (isexchange!=null)
             criteria.andIsexchangeEqualTo(isexchange);
         if (!StringUtils.isNullOrNone(begintime)){
@@ -195,6 +215,8 @@ public class OperatorService {
             Date endtime_date=sdf.parse(endtime);
             criteria.andCreatetimeLessThanOrEqualTo(endtime_date);
         }
+        PageHelper.startPage(pagenum,pagesize);
+        PageHelper.orderBy("createtime desc");
         return cashMapper.selectByExample(cashExample);
     }
 

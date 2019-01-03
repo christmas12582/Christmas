@@ -35,8 +35,6 @@ public class ShiroRealm extends AuthorizingRealm {
         rolestr.add(usertype.toString());
         simpleAuthorizationInfo.setRoles(rolestr);
         return simpleAuthorizationInfo;
-
-
     }
 
     @Override
