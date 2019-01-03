@@ -371,9 +371,10 @@ public class BusinessController {
 
 
         try {
-           businessService.updateBuybyOrderid(orderid);
+            businessService.updateBuybyOrderid(orderid);
             String responsestring="<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";;
             response.getWriter().write(responsestring);
+            //付款成功之后判断是否是通过分销进行购买，若是则增加分销记录
             return;
        }catch (Exception e){
            e.printStackTrace();
@@ -384,28 +385,28 @@ public class BusinessController {
     }
 
 
-    //我的分销记录
-    @ApiOperation(value = "查询我的分销记录（购买之后有效）", notes = "查询我的分销记录（购买之后有效）")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "openid", dataType = "string", paramType = "query")
-    })
-    @RequestMapping(value = "mydistribution", method = RequestMethod.POST)
-    @ResponseBody
-    public ResponseModel getmydistributionList(
-            @RequestParam(value = "openid") String openid){
-        List<User> userlist = userService.findUserByOpenid(openid);
-        if (userlist == null)
-            return new ResponseModel(500L, "该用户未注册", null);
-        List<User> bussinessUserList=new ArrayList<>();
-        for(User item:userlist){
-            if (item.getType() == 2)
-                bussinessUserList.add(item);
-        }
-        if (bussinessUserList.isEmpty())
-            return new ResponseModel(500L, "该用户不属于商家", null);
-       List<Buy> distributionList= businessService.getMyDistribution(bussinessUserList.get(0).getId());
-       return new ResponseModel(distributionList);
-    }
+//    //我的分销记录
+//    @ApiOperation(value = "查询我的分销记录（购买之后有效）", notes = "查询我的分销记录（购买之后有效）")
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(name = "openid", dataType = "string", paramType = "query")
+//    })
+//    @RequestMapping(value = "mydistribution", method = RequestMethod.POST)
+//    @ResponseBody
+//    public ResponseModel getmydistributionList(
+//            @RequestParam(value = "openid") String openid){
+//        List<User> userlist = userService.findUserByOpenid(openid);
+//        if (userlist == null)
+//            return new ResponseModel(500L, "该用户未注册", null);
+//        List<User> bussinessUserList=new ArrayList<>();
+//        for(User item:userlist){
+//            if (item.getType() == 2)
+//                bussinessUserList.add(item);
+//        }
+//        if (bussinessUserList.isEmpty())
+//            return new ResponseModel(500L, "该用户不属于商家", null);
+//       List<Buy> distributionList= businessService.getMyDistribution(bussinessUserList.get(0).getId());
+//       return new ResponseModel(distributionList);
+//    }
 
 
 

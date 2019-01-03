@@ -227,9 +227,9 @@ public class BusinessService {
         buy.setOrdernum(orderid);
         buy.setUnitid(unitid);
         buy.setUserid(user.getId());
-        Share share=shareMapper.selectByPrimaryKey(shareid);
-        if (share!=null&&new Date().getTime()-DateHelper.addMonth(share.getSharetime(),1).getTime()<=0)
-        buy.setShareid(shareid);
+//        Share share=shareMapper.selectByPrimaryKey(shareid);
+//        if (share!=null&&new Date().getTime()-DateHelper.addMonth(share.getSharetime(),1).getTime()<=0)
+//        buy.setShareid(shareid);
 
         buyMapper.insertSelective(buy);
         String prepayId = wechatService.preOrder(buy);
@@ -264,6 +264,7 @@ public class BusinessService {
         buy.setIspay(1);
         buy.setLotteryid(lottery.getId());
         int count= buyMapper.updateByPrimaryKeySelective(buy);
+
 
     }
 

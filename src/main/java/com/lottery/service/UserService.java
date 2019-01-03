@@ -83,7 +83,16 @@ public class UserService {
 			userMapper.updateByPrimaryKeySelective(user);
 		}
 	}
-	
+
+	/**
+	 * 保存用户并且返回插入的user
+	 * @param user
+	 */
+	public User adduser(User user){
+		userMapper.insertSelective(user);
+		return user;
+	}
+
 	/**
 	 * 根据手机号码查询用户列表
 	 * @param phone
