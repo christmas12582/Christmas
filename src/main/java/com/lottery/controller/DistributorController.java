@@ -1,7 +1,9 @@
 package com.lottery.controller;
 
 import com.lottery.common.ResponseModel;
+import com.lottery.model.Buy;
 import com.lottery.model.User;
+import com.lottery.service.DistributorService;
 import com.lottery.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
+
 @Controller()
 @RequestMapping(value = "distributor")
 @Api("分销商")
@@ -24,6 +28,10 @@ public class DistributorController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    DistributorService distributorService;
+
 
 
     /**
@@ -55,7 +63,7 @@ public class DistributorController {
      * 我的分销
      */
 
-    @RequestMapping(value = "myDistribute",method = RequestMethod.POST)
+    @RequestMapping(value = "mydistribute",method = RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "我的分销记录", notes = "我的分销记录")
     @ApiImplicitParams({
@@ -65,9 +73,9 @@ public class DistributorController {
         User user = userService.findUserByOpenidAndType(openid,4);
         if (user==null)
             return new ResponseModel(500L,"您尚未成为分销商");
-
-
-return null;
+        Integer shareid=user.getId();
+        List<Buy> buyList= distributorService.mydistribute(shareid);
+        return new ResponseModel(0L,"获取分销记录成功，(包含为付款的)",buyList);
     }
 
 

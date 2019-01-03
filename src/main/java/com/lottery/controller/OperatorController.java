@@ -5,7 +5,9 @@ import com.lottery.common.MapFromPageInfo;
 import com.lottery.common.ResponseModel;
 import com.lottery.model.Product;
 import com.lottery.model.Unit;
+import com.lottery.model.User;
 import com.lottery.service.OperatorService;
+import com.lottery.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -28,6 +30,8 @@ import java.util.List;
 public class OperatorController {
     @Autowired
     OperatorService operatorService;
+
+
 
 
     @ApiOperation(value = "获取活动列表", notes = "获取活动列表")
@@ -228,7 +232,32 @@ public class OperatorController {
             return new ResponseModel(500L,"更新失败",null);
     }
 
+    //分销商列表
 
+    @ApiOperation(value = "获取分销商列表", notes = "获取分销商列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pagenum", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "pagesize", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "phone", dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "openid", dataType = "String", paramType = "query"),
+            @ApiImplicitParam(name = "isvalid", dataType = "int", paramType = "query"),
+    })
+    @RequiresRoles("1")
+    @RequestMapping(value = "getdistributelist", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseModel getDistributeList(
+            @RequestParam(value = "pagenum", required = false,defaultValue = "1") Integer pagenum,
+            @RequestParam(value = "pagesize", required = false,defaultValue = "10") Integer pagesize,
+            @RequestParam(value = "phone",required = false) String phone,
+            @RequestParam(value = "openid",required = false) String openid,
+            @RequestParam(value = "isvalid",required = false) Integer isvalid
+    ){
+        PageHelper.startPage(pagenum,pagesize);
+        List<User> userList= operatorService.getDistributeList(phone,openid,isvalid);
+         return new ResponseModel(0L,"获取分销商列表成功", new MapFromPageInfo<>(userList));
+    }
+
+    //设置分销商提成比例
 
 
 

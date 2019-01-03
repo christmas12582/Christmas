@@ -2,10 +2,8 @@ package com.lottery.service;
 
 import com.lottery.dao.ProductMapper;
 import com.lottery.dao.UnitMapper;
-import com.lottery.model.Product;
-import com.lottery.model.ProductExample;
-import com.lottery.model.Unit;
-import com.lottery.model.UnitExample;
+import com.lottery.dao.UserMapper;
+import com.lottery.model.*;
 import com.lottery.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +21,10 @@ public class OperatorService {
 
     @Autowired
     UnitMapper unitMapper;
+
+    @Autowired
+    UserMapper userMapper;
+
 
     public List<Product>  getProductListbyCondition(Integer id,String name, Integer isvalid){
         ProductExample example = new ProductExample();
@@ -132,6 +134,19 @@ public class OperatorService {
             unit.setExpired(expired);
         return unitMapper.updateByPrimaryKeySelective(unit);
 
+    }
+
+    public List<User> getDistributeList(String phone,String openid,Integer isvalid){
+        UserExample userExample=new UserExample();
+        UserExample.Criteria criteria=userExample.createCriteria();
+        criteria.andTypeEqualTo(4);
+        if (!StringUtils.isNullOrNone(phone))
+            criteria.andPhoneEqualTo(phone);
+        if(!StringUtils.isNullOrNone(openid))
+            criteria.andOpenidEqualTo(openid);
+        if (isvalid!=null)
+            criteria.andIsvalidEqualTo(isvalid);
+        return userMapper.selectByExample(userExample);
     }
 
 }
