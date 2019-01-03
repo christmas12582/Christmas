@@ -196,6 +196,7 @@ public class BusinessService {
             user.setType(2);
             user.setOpenid(openid);
             user.setIsvalid(1);
+            user.setShareid(shareid);
             userMapper.insertSelective(user);
         }
         //判断是否已购买过
@@ -234,7 +235,7 @@ public class BusinessService {
         buy.setUserid(user.getId());
 //        Share share=shareMapper.selectByPrimaryKey(shareid);
 //        if (share!=null&&new Date().getTime()-DateHelper.addMonth(share.getSharetime(),1).getTime()<=0)
-        buy.setShareid(shareid);
+        buy.setShareid(user.getShareid());
 
         buyMapper.insertSelective(buy);
         String prepayId = wechatService.preOrder(buy);
