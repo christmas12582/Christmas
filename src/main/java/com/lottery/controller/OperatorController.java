@@ -260,8 +260,8 @@ public class OperatorController {
     //设置分销商提成比例
     @ApiOperation(value = "设置提成比例", notes = "设置提成比例")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "userid", dataType = "int", paramType = "userid"),
-            @ApiImplicitParam(name = "ratio", dataType = "int", paramType = "ratio"),
+            @ApiImplicitParam(name = "userid", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "ratio", dataType = "int", paramType = "query"),
     })
     @RequiresRoles("1")
     @RequestMapping(value = "setratio", method = RequestMethod.POST)
