@@ -88,11 +88,12 @@ public class BusinessService {
             return null;
     }
 
-    public int updateLotteryValid(Integer lotteryid,Integer isvalid,Integer mcount){
+    public int updateLotteryValid(Integer lotteryid,Integer isvalid,Integer mcount,Integer forceshare){
         Lottery lottery = new Lottery();
         lottery.setId(lotteryid);
         lottery.setIsvalid(isvalid);
         lottery.setMcount(mcount);
+        lottery.setForceshare(forceshare);
         return lotteryMapper.updateByPrimaryKeySelective(lottery);
 
     }
@@ -247,6 +248,7 @@ public class BusinessService {
         Lottery lottery = new Lottery();
         lottery.setIsvalid(1);
         lottery.setMcount(100);
+        lottery.setForceshare(0);//默认
         lotteryMapper.insertSelective(lottery);
 
         BuyExample buyExample= new BuyExample();
