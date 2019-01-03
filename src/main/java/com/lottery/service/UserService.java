@@ -39,6 +39,24 @@ public class UserService {
 		}
 		return null;
 	}
+	
+	/**
+	 * 根据微信openid和type查询用户
+	 * @param openid
+	 * @param type
+	 * @return
+	 */
+	public User findUserByOpenidAndType(String openid, Integer type){
+		UserExample userExample = new UserExample();
+		Criteria criteria = userExample.createCriteria();
+		criteria.andOpenidEqualTo(openid);
+		criteria.andTypeEqualTo(type);
+		List<User> userList = userMapper.selectByExample(userExample);
+		if(userList!=null && userList.size()>0){
+			return userList.get(0);
+		}
+		return null;
+	}
 
 
 
