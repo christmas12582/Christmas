@@ -91,8 +91,10 @@ public class DistributorController {
         PageHelper.orderBy("buydate desc");
         List<Buy> buyList= distributorService.mydistribute(shareid);
         for(Buy buy:buyList){
-            Product product=businessService.getProductByid(buy.getProductid());
-            buy.setProduct(product);
+            if(buy.getProductid()!=null){
+                Product product=businessService.getProductByid(buy.getProductid());
+                buy.setProduct(product);
+            }
         }
         return new ResponseModel(0L,"获取分销记录成功，(包含未付款的)",new MapFromPageInfo<>(buyList));
     }
