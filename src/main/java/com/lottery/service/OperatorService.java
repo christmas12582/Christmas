@@ -150,11 +150,28 @@ public class OperatorService {
         return userMapper.selectByExample(userExample);
     }
 
-    public  Integer setRatio(Integer userid,Integer ratio){
-        User user= new User();
-        user.setId(userid);
+    public  HashMap<String,Object> setRatio(Integer userid,Integer ratio){
+        HashMap<String,Object> result= new HashMap<>();
+        User user= userMapper.selectByPrimaryKey(userid);
+        if (user==null)
+            return null;
+        if (user.getType()!=4){
+            result.put("msg","该用户不是分销商");
+            result.put("code",500L);
+            return result;
+        }
         user.setRatio(ratio);
-        return userMapper.updateByPrimaryKeySelective(user);
+        Integer count= userMapper.updateByPrimaryKeySelective(user);
+        if (count==null||count==0){
+            result.put("msg","设置失败，未找到该主键");
+            result.put("code",500L);
+            return result;
+        }
+        else{
+            result.put("msg","设置成功");
+            result.put("code",0L);
+            return result;
+        }
     }
 
 }

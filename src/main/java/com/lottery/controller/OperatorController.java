@@ -270,11 +270,9 @@ public class OperatorController {
             @RequestParam(value = "userid") Integer userid,
             @RequestParam(value = "ratio") Integer ratio
     ){
-        Integer count=operatorService.setRatio(userid,ratio);
-        if (count==null||count==0)
-            return new ResponseModel(0L,"设置失败", null);
-        else
-            return new ResponseModel(0L,"设置成功", null);
+        HashMap<String,Object> result=operatorService.setRatio(userid,ratio);
+        Long code= (Long) result.get("code");
+        return new ResponseModel(code,result.get("msg").toString(), null);
 
     }
 
