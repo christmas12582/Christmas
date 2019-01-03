@@ -1,10 +1,13 @@
 package com.lottery.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class Share {
     private Integer id;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date sharetime;
 
     private Integer businessid;

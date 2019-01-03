@@ -293,20 +293,6 @@ public class BusinessService {
             logger.info("buy中的shareid或unitid为null，不予分销提成");
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
     public List<Buy> getMyDistribution(Integer businessid){
@@ -336,5 +322,9 @@ public class BusinessService {
             result+=random.nextInt(10);
         }
         return newDate+result;
+    }
+
+    public Product getProductByid(Integer id){
+       return productMapper.selectByPrimaryKey(id);
     }
 }

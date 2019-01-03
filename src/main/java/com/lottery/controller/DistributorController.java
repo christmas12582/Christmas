@@ -5,7 +5,9 @@ import com.lottery.common.MapFromPageInfo;
 import com.lottery.common.ResponseModel;
 import com.lottery.model.Buy;
 import com.lottery.model.Cash;
+import com.lottery.model.Product;
 import com.lottery.model.User;
+import com.lottery.service.BusinessService;
 import com.lottery.service.DistributorService;
 import com.lottery.service.UserService;
 import io.swagger.annotations.Api;
@@ -36,7 +38,8 @@ public class DistributorController {
     @Autowired
     DistributorService distributorService;
 
-
+    @Autowired
+    BusinessService businessService;
 
     /**
      * 成为分销商
@@ -87,6 +90,10 @@ public class DistributorController {
         PageHelper.startPage(pagenum,pagesize);
         PageHelper.orderBy("buydate desc");
         List<Buy> buyList= distributorService.mydistribute(shareid);
+        for(Buy buy:buyList){
+            Product product=businessService.getProductByid(buy.getProductid());
+            buy.setProduct(product);
+        }
         return new ResponseModel(0L,"获取分销记录成功，(包含未付款的)",new MapFromPageInfo<>(buyList));
     }
 

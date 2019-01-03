@@ -1,5 +1,7 @@
 package com.lottery.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class Buy {
@@ -9,8 +11,20 @@ public class Buy {
 
     private Integer unitid;
 
+    private Product product;
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date buydate;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date expiredate;
 
     private Integer lotteryid;
