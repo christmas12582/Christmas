@@ -258,6 +258,25 @@ public class OperatorController {
     }
 
     //设置分销商提成比例
+    @ApiOperation(value = "设置提成比例", notes = "设置提成比例")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userid", dataType = "int", paramType = "userid"),
+            @ApiImplicitParam(name = "ratio", dataType = "int", paramType = "ratio"),
+    })
+    @RequiresRoles("1")
+    @RequestMapping(value = "setratio", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseModel setRatio(
+            @RequestParam(value = "userid") Integer userid,
+            @RequestParam(value = "ratio") Integer ratio
+    ){
+        Integer count=operatorService.setRatio(userid,ratio);
+        if (count==null||count==0)
+            return new ResponseModel(0L,"设置失败", null);
+        else
+            return new ResponseModel(0L,"设置成功", null);
+
+    }
 
 
 

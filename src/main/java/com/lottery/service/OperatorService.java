@@ -6,6 +6,7 @@ import com.lottery.dao.UserMapper;
 import com.lottery.model.*;
 import com.lottery.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -147,6 +148,13 @@ public class OperatorService {
         if (isvalid!=null)
             criteria.andIsvalidEqualTo(isvalid);
         return userMapper.selectByExample(userExample);
+    }
+
+    public  Integer setRatio(Integer userid,Integer ratio){
+        User user= new User();
+        user.setId(userid);
+        user.setRatio(ratio);
+        return userMapper.updateByPrimaryKeySelective(user);
     }
 
 }
