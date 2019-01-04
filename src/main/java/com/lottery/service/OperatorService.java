@@ -230,8 +230,16 @@ public class OperatorService {
             result.put("msg","未找到提现申请");
         }
         cash.setIsexchange(isexchange);
-        Integer count=cashMapper.updateByPrimaryKeySelective(cash);
-        if (count==null||count==0){
+        Integer money=cash.getMoney();
+        Integer createid=cash.getCreateid();
+        User user=userMapper.selectByPrimaryKey(createid);
+        Integer oldmoney=user.getMoney();
+        Integer newmoney=oldmoney-money;
+        user.setMoney(newmoney);
+
+        int count1=userMapper.updateByPrimaryKey(user);
+        int count=cashMapper.updateByPrimaryKeySelective(cash);
+        if (count==0||count1==0){
             result.put("msg","提现失败，未找到该主键");
             result.put("code",500L);
             return result;
