@@ -235,13 +235,13 @@ public class CustomerController {
 		if(StringUtils.isNullOrNone(userLottery.getPrizenum())){
 			return;
 		}
-		String wxacode = wechatService.createWXACode(accessToken, userLottery.getPrizenum(), page);
+		byte[] wxacode = wechatService.createWXACode(accessToken, userLottery.getPrizenum(), page);
 		if(StringUtils.isNullOrNone(wxacode)){
 			return;
 		}
-		response.setContentType("image/png");
+		response.setContentType("image/jpeg");
 		ServletOutputStream outputStream = response.getOutputStream();
-		outputStream.write(wxacode.getBytes("UTF-8"));
+		outputStream.write(wxacode);
 		outputStream.flush();
 		outputStream.close();
 	}

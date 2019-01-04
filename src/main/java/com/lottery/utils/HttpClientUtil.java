@@ -212,6 +212,38 @@ public class HttpClientUtil {
     }
 
 
+    public static byte[] doPostForByte(String url,HashMap<String,Object> paramsmap){
+        String params= JsonUtils.toJson(paramsmap);
+        logger.info("==================================doPost=={},{}",url,params);
+        HttpClient httpClient = new HttpClient();
+        httpClient.getParams().setParameter(HttpMethodParams.HTTP_CONTENT_CHARSET, ContentEncoding);
+        PostMethod postMethod= new PostMethod(url);
+        postMethod.addRequestHeader("Content-Type", "application/json" );
 
+        postMethod.setRequestBody(params);
+
+        try {
+
+            int statusCode = httpClient.executeMethod(postMethod);
+            logger.info("==================================doPost=={}",statusCode);
+            if (statusCode != HttpStatus.SC_OK&&statusCode != HttpStatus.SC_CREATED&&statusCode != HttpStatus.SC_NO_CONTENT) {
+                logger.error("Method failed : "+postMethod.getStatusLine() );
+                return null;
+            }
+            return postMethod.getResponseBody();
+        } catch (HttpException e) {
+            // 发生致命的异常，可能是协议不对或者返回的内容有问题
+            logger.error("请检查输入的URL!");
+            e.printStackTrace();
+        } catch (IOException e) {
+            // 发生网络异常
+            logger.error("发生网络异常!");
+            e.printStackTrace();
+        } finally {
+            /* 6 .释放连接 */
+            postMethod.releaseConnection();
+        }
+        return null;
+    }
 
 }

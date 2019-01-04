@@ -200,7 +200,7 @@ public class WechatService {
 	 * @param page
 	 * @return
 	 */
-	public String createWXACode(String accessToken, String scene, String page){
+	public byte[] createWXACode(String accessToken, String scene, String page){
 		HashMap<String,Object> paramsmap = new HashMap<String, Object>();
 		paramsmap.put("scene", scene);
 		if(!StringUtils.isNullOrNone(page)){
@@ -208,9 +208,9 @@ public class WechatService {
 		}
 		StringBuffer buffer = new StringBuffer("https://api.weixin.qq.com/wxa/getwxacodeunlimit");
 		buffer.append("?access_token=").append(accessToken);
-		String response = HttpClientUtil.doPost(buffer.substring(0), paramsmap);
+		byte[] response = HttpClientUtil.doPostForByte(buffer.substring(0), paramsmap);
 		try{
-			JsonUtils.toObject(response,HashMap.class);
+			JsonUtils.toObject(new String(response, "UTF-8"), HashMap.class);
 			logger.info("获取小程序码错误---"+response);
 			response = null;
 		}catch (Exception e) {
