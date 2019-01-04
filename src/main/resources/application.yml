@@ -18,7 +18,7 @@ spring:
           filters: stat
           driver-class-name: com.mysql.jdbc.Driver
           #基本属性
-          url: jdbc:mysql://59.110.240.36:3306/lottery?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=false
+          url: jdbc:mysql://118.24.207.16:3306/lottery?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=false
           username: root
           password: root_
           #配置初始化大小/最小/最大
@@ -67,7 +67,7 @@ locationpath: D:/upload/
 
 wechat:
   appid: wx18526bcd31d54c1f
-  mechid: 1522692361
+  mechid: 103596355
   key: jiangfengqingxiaochengxu12345678
   payip: 118.24.207.16
   notifyUrl: https://aiyuanmqz.com/business/buycallback
