@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -206,10 +205,12 @@ public class CustomerController {
 	
 	/**
 	 * 获取兑奖二维码
-	 * @param request
+	 * @param openid
+	 * @param userlotteryId
+	 * @param page
 	 * @param response
-	 * @throws IOException 
-	 * @throws UnsupportedEncodingException 
+	 * @throws UnsupportedEncodingException
+	 * @throws IOException
 	 */
 	@RequestMapping(value = "/acode", method = RequestMethod.GET)
 	@ApiOperation(value = "获取兑奖二维码", notes = "获取兑奖二维码")
@@ -218,12 +219,12 @@ public class CustomerController {
         @ApiImplicitParam(name = "userLotteryId", dataType = "int", paramType = "query", required = true),
         @ApiImplicitParam(name = "page", dataType = "String", paramType = "query")
 	})
-	public void createWXACode(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException, IOException{
-		User user = userService.findUserByOpenidAndType(request.getParameter("openid"), 3);
+	public void createWXACode(String openid, Integer userLotteryId, String page, HttpServletResponse response) throws UnsupportedEncodingException, IOException{
+		User user = userService.findUserByOpenidAndType(openid, 3);
 		if(user==null){
 			return;
 		}
-		UserLottery userLottery = userLotteryService.findUserLotteryById(Integer.valueOf(request.getParameter("userLotteryId")));
+		UserLottery userLottery = userLotteryService.findUserLotteryById(userLotteryId);
 		if(userLottery==null || !userLottery.getUserid().equals(user.getId())){
 			return;
 		}
@@ -234,7 +235,7 @@ public class CustomerController {
 		if(StringUtils.isNullOrNone(userLottery.getPrizenum())){
 			return;
 		}
-		String wxacode = wechatService.createWXACode(accessToken, userLottery.getPrizenum(), request.getParameter("page"));
+		String wxacode = wechatService.createWXACode(accessToken, userLottery.getPrizenum(), page);
 		if(StringUtils.isNullOrNone(wxacode)){
 			return;
 		}
