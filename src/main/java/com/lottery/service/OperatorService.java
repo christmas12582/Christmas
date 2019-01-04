@@ -222,6 +222,7 @@ public class OperatorService {
         return cashMapper.selectByExample(cashExample);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public HashMap<String,Object> setCashExchange(Integer cashid,Integer isexchange){
         HashMap<String,Object> result= new HashMap<>();
         Cash cash=cashMapper.selectByPrimaryKey(cashid);
