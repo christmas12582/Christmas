@@ -87,12 +87,6 @@ public class WechatService {
 	private String secret;
 	
 	/**
-	 * 小程序唯一凭证密钥，即 AppSecret，获取方式同 appid
-	 */
-	@Value("${wechat.page}")
-	private String page;
-	
-	/**
 	 * 商户端调用凭证
 	 */
 	private String accessToken;
@@ -203,9 +197,10 @@ public class WechatService {
 	 * 生成小程序码
 	 * @param accessToken
 	 * @param scene
+	 * @param page
 	 * @return
 	 */
-	public String createWXACode(String accessToken, String scene){
+	public String createWXACode(String accessToken, String scene, String page){
 		HashMap<String,Object> paramsmap = new HashMap<String, Object>();
 		paramsmap.put("scene", scene);
 		if(!StringUtils.isNullOrNone(page)){

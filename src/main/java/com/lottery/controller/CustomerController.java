@@ -215,7 +215,8 @@ public class CustomerController {
 	@ApiOperation(value = "获取兑奖二维码", notes = "获取兑奖二维码")
 	@ApiImplicitParams({
         @ApiImplicitParam(name = "openid", dataType = "String", paramType = "query", required = true),
-        @ApiImplicitParam(name = "userLotteryId", dataType = "int", paramType = "query", required = true)
+        @ApiImplicitParam(name = "userLotteryId", dataType = "int", paramType = "query", required = true),
+        @ApiImplicitParam(name = "page", dataType = "String", paramType = "query")
 	})
 	public void createWXACode(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException, IOException{
 		User user = userService.findUserByOpenidAndType(request.getParameter("openid"), 3);
@@ -233,7 +234,7 @@ public class CustomerController {
 		if(StringUtils.isNullOrNone(userLottery.getPrizenum())){
 			return;
 		}
-		String wxacode = wechatService.createWXACode(accessToken, userLottery.getPrizenum());
+		String wxacode = wechatService.createWXACode(accessToken, userLottery.getPrizenum(), request.getParameter("page"));
 		if(StringUtils.isNullOrNone(wxacode)){
 			return;
 		}
