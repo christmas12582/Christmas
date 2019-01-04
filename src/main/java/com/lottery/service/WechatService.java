@@ -4,7 +4,9 @@
 package com.lottery.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -24,6 +26,7 @@ import com.lottery.model.Buy;
 import com.lottery.model.Unit;
 import com.lottery.model.User;
 import com.lottery.utils.HttpClientUtil;
+import com.lottery.utils.JsonUtils;
 import com.lottery.utils.StringUtils;
 
 /**
@@ -44,38 +47,60 @@ public class WechatService {
 	/**
 	 * 小程序ID
 	 */
-	@Value(value = "wechat.appid")
+	@Value("${wechat.appid}")
 	private String appid;
 	
 	/**
 	 * 商户号
 	 */
-	@Value(value = "wechat.mechid")
+	@Value("${wechat.mechid}")
 	private String mechid;
 	
 	/**
 	 * 服务器ip
 	 */
-	@Value(value = "wechat.payip")
+	@Value("${wechat.payip}")
 	private String payip;
 	
 	/**
 	 * 回调url
 	 */
-	@Value(value = "wechat.notifyUrl")
+	@Value("${wechat.notifyUrl}")
 	private String notifyUrl;
 	
 	/**
 	 * 统一下单url
 	 */
-	@Value(value = "wechat.unifiedorderUrl")
+	@Value("${wechat.unifiedorderUrl}")
 	private String unifiedorderUrl;
 	
 	/**
 	 * 商户平台设置的密钥key
 	 */
-	@Value(value = "wechat.key")
+	@Value("${wechat.key}")
 	private String key;
+	
+	/**
+	 * 小程序唯一凭证密钥，即 AppSecret，获取方式同 appid
+	 */
+	@Value("${wechat.secret}")
+	private String secret;
+	
+	/**
+	 * 小程序唯一凭证密钥，即 AppSecret，获取方式同 appid
+	 */
+	@Value("${wechat.page}")
+	private String page;
+	
+	/**
+	 * 商户端调用凭证
+	 */
+	private String accessToken;
+	
+	/**
+	 * 商户端调用凭证过期时间
+	 */
+	private Date accessTokenExpired;
 	
 	/**
 	 * 微信统一下单
@@ -148,4 +173,54 @@ public class WechatService {
 		return Md5Crypt.md5Crypt(param.getBytes()).toUpperCase();
 	}
 	
+	/**
+	 * 获取access_token
+	 * @return
+	 */
+	public String fetchAccessToken(){
+		if(!StringUtils.isNullOrNone(accessToken) && accessTokenExpired!=null && accessTokenExpired.after(new Date())){
+			return accessToken;
+		}else{
+			Calendar calendar = Calendar.getInstance();
+			StringBuffer buffer = new StringBuffer("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential");
+			buffer.append("&appid=").append(appid).append("&secret=").append(secret);
+			String response = HttpClientUtil.doGet(buffer.substring(0));
+			HashMap<String,Object> response_map= JsonUtils.toObject(response,HashMap.class);
+			if(response_map.containsKey("access_token")){
+				accessToken = String.valueOf(response_map.get("access_token"));
+				int expires_in = Integer.parseInt(String.valueOf(response_map.get("expires_in")));
+				calendar.add(Calendar.SECOND, expires_in);
+				accessTokenExpired = calendar.getTime();
+			}else{
+				logger.info("获取access_token错误---"+response_map.get("errmsg"));
+				accessToken = null;
+			}
+			return accessToken;
+		}
+	}
+	
+	/**
+	 * 生成小程序码
+	 * @param accessToken
+	 * @param scene
+	 * @return
+	 */
+	public String createWXACode(String accessToken, String scene){
+		HashMap<String,Object> paramsmap = new HashMap<String, Object>();
+		paramsmap.put("scene", scene);
+		if(!StringUtils.isNullOrNone(page)){
+			paramsmap.put("page", page);
+		}
+		StringBuffer buffer = new StringBuffer("https://api.weixin.qq.com/wxa/getwxacodeunlimit");
+		buffer.append("?access_token=").append(accessToken);
+		String response = HttpClientUtil.doPost(buffer.substring(0), paramsmap);
+		try{
+			JsonUtils.toObject(response,HashMap.class);
+			logger.info("获取小程序码错误---"+response);
+			response = null;
+		}catch (Exception e) {
+			
+		}
+		return response;
+	}
 }

@@ -72,4 +72,6 @@ wechat:
   payip: 118.24.207.16
   notifyUrl: https://aiyuanmqz.com/business/buycallback
   unifiedorderUrl: https://api.mch.weixin.qq.com/pay/unifiedorder
+  secret: ffadd8817f1014de60e754f2a85099fd
+  page: xx
 

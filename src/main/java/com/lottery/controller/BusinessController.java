@@ -6,6 +6,7 @@ import com.lottery.common.ResponseModel;
 import com.lottery.model.*;
 import com.lottery.service.BusinessService;
 import com.lottery.service.OperatorService;
+import com.lottery.service.UserLotteryService;
 import com.lottery.service.UserService;
 import com.lottery.utils.StringUtils;
 import com.lottery.utils.WebUtils;
@@ -41,6 +42,9 @@ public class BusinessController {
 
     @Autowired
     OperatorService operatorService;
+    
+    @Autowired
+	private UserLotteryService userLotteryService;
 
     //商家获取已购买的活动
     @ApiOperation(value = "商家获取已购买的活动产品", notes = "商家获取已购买的活动产品")
@@ -410,6 +414,32 @@ public class BusinessController {
 //    }
 
 
+    /**
+	 * 用户兑奖
+	 * @param openid 商家
+	 * @param prizenum 中奖码
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/lottery/exchange", method = RequestMethod.POST)
+	@ApiOperation(value = "用户兑换奖项", notes = "用户兑换奖项")
+	public ResponseModel exchangeLottery(String openid, String prizenum){
+		User user = userService.findUserByOpenidAndType(openid, 2);
+		if(user == null){
+			return new ResponseModel(404l, "用户不存在");
+		}
+		synchronized (prizenum) {
+			UserLottery userLottery = userLotteryService.findUserLotteryByPrizenum(prizenum);
+			if(userLottery==null){
+				return new ResponseModel(404l, "获奖信息不存在");
+			}
+			if(userLottery.getExchangedate()!=null){
+				return new ResponseModel(500l, "奖项已兑换");
+			}
+			userLotteryService.exchangeUserLottery(userLottery.getId());
+		}
+		return new ResponseModel(0l, "兑换成功");
+	}
 
 
 

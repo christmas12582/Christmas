@@ -1,8 +1,14 @@
 package com.lottery.controller;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,10 +26,13 @@ import com.lottery.model.UserLottery;
 import com.lottery.service.LotteryService;
 import com.lottery.service.UserLotteryService;
 import com.lottery.service.UserService;
+import com.lottery.service.WechatService;
 import com.lottery.utils.JsonUtils;
 import com.lottery.utils.StringUtils;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
 @Controller
@@ -39,6 +48,9 @@ public class CustomerController {
 	
 	@Autowired
 	private UserLotteryService userLotteryService;
+	
+	@Autowired
+	private WechatService wechatService;
 	
 	/**
 	 * 保存用户信息
@@ -126,33 +138,6 @@ public class CustomerController {
 	}
 	
 	/**
-	 * 用户兑奖
-	 * @param openid 商家
-	 * @param prizenum 中奖码
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping(value = "/lottery/exchange", method = RequestMethod.POST)
-	@ApiOperation(value = "用户兑换奖项", notes = "用户兑换奖项")
-	public ResponseModel exchangeLottery(String openid, String prizenum){
-		User user = userService.findUserByOpenidAndType(openid, 3);
-		if(user == null){
-			return new ResponseModel(404l, "用户不存在");
-		}
-		synchronized (prizenum) {
-			UserLottery userLottery = userLotteryService.findUserLotteryByPrizenum(prizenum);
-			if(userLottery==null){
-				return new ResponseModel(404l, "获奖信息不存在");
-			}
-			if(userLottery.getExchangedate()!=null){
-				return new ResponseModel(500l, "奖项已兑换");
-			}
-			userLotteryService.exchangeUserLottery(userLottery.getId());
-		}
-		return new ResponseModel(200l, "兑换成功");
-	}
-	
-	/**
 	 * 查询中奖详情
 	 * @param openid
 	 * @param userlotteryId
@@ -217,5 +202,45 @@ public class CustomerController {
 			return new ResponseModel(404l, "用户不存在");
 		}
 		return new ResponseModel(200l, "分享成功", userLotteryService.share(user.getId(), userLotteryId));
+	}
+	
+	/**
+	 * 获取兑奖二维码
+	 * @param request
+	 * @param response
+	 * @throws IOException 
+	 * @throws UnsupportedEncodingException 
+	 */
+	@RequestMapping(value = "/acode", method = RequestMethod.GET)
+	@ApiOperation(value = "获取兑奖二维码", notes = "获取兑奖二维码")
+	@ApiImplicitParams({
+        @ApiImplicitParam(name = "openid", dataType = "String", paramType = "query", required = true),
+        @ApiImplicitParam(name = "userLotteryId", dataType = "int", paramType = "query", required = true)
+	})
+	public void createWXACode(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException, IOException{
+		User user = userService.findUserByOpenidAndType(request.getParameter("openid"), 3);
+		if(user==null){
+			return;
+		}
+		UserLottery userLottery = userLotteryService.findUserLotteryById(Integer.valueOf(request.getParameter("userLotteryId")));
+		if(userLottery==null || !userLottery.getUserid().equals(user.getId())){
+			return;
+		}
+		String accessToken = wechatService.fetchAccessToken();
+		if(StringUtils.isNullOrNone(accessToken)){
+			return;
+		}
+		if(StringUtils.isNullOrNone(userLottery.getPrizenum())){
+			return;
+		}
+		String wxacode = wechatService.createWXACode(accessToken, userLottery.getPrizenum());
+		if(StringUtils.isNullOrNone(wxacode)){
+			return;
+		}
+		response.setContentType("image/png");
+		ServletOutputStream outputStream = response.getOutputStream();
+		outputStream.write(wxacode.getBytes("UTF-8"));
+		outputStream.flush();
+		outputStream.close();
 	}
 }
