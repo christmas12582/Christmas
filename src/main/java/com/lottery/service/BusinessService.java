@@ -240,7 +240,7 @@ public class BusinessService {
         buyMapper.insertSelective(buy);
         String prepayId = wechatService.preOrder(buy);
         if(StringUtils.isNullOrNone(prepayId)){
-        	throw new Exception("下单失败");
+        	throw new Exception("下单失败，微信统一下单请求失败，请在log中查看原因");
         }
         result.put("prepayId",prepayId);
         result.put("price",price);
