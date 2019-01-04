@@ -294,7 +294,7 @@ public class BusinessController {
             @RequestParam(value = "isvalid", required = false) Integer isvalid
     ) {
         PageHelper.startPage(pagenum, pagesize);
-        PageHelper.orderBy("is asc");
+        PageHelper.orderBy("id asc");
         List<Product> productList = operatorService.getProductListbyCondition(null, name, isvalid);
         MapFromPageInfo<Product> mapFromPageInfo = new MapFromPageInfo<>(productList);
         return new ResponseModel(mapFromPageInfo);
