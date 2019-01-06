@@ -3,6 +3,7 @@
  */
 package com.lottery.controller;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.lottery.common.ResponseModel;
+import com.lottery.model.Buy;
 import com.lottery.model.Lottery;
 import com.lottery.model.LotteryItem;
+import com.lottery.service.BusinessService;
 import com.lottery.service.LotteryService;
 import com.lottery.utils.JsonUtils;
 
@@ -33,6 +36,9 @@ public class LotteryController {
 	
 	@Autowired
 	private LotteryService lotteryService;
+	
+	@Autowired
+	private BusinessService businessService;
 
 	/**
 	 * 查询抽奖活动（含所有奖项）
@@ -45,7 +51,11 @@ public class LotteryController {
 	public ResponseModel fget(Integer lotteryId){
 		Lottery lottery = lotteryService.findLotteryById(lotteryId);
 		if(lottery==null){
-			return new ResponseModel(500l, "抽奖活动不存在");
+			return new ResponseModel(404l, "抽奖活动不存在");
+		}
+		Buy buy = businessService.getBuybyLotteryid(lotteryId);
+		if(buy==null || new Date().after(buy.getExpiredate())){
+			return new ResponseModel(500l, "抽奖活动已过期");
 		}
 		Map<String, Object> data = JsonUtils.toObject(JsonUtils.toJson(lottery), HashMap.class);
 		List<LotteryItem> lotteryItemList = lotteryService.findLotteryItemListByLotteryId(lotteryId);
@@ -66,7 +76,11 @@ public class LotteryController {
 	public ResponseModel get(Integer lotteryId){
 		Lottery lottery = lotteryService.findLotteryById(lotteryId);
 		if(lottery==null){
-			return new ResponseModel(500l, "抽奖活动不存在");
+			return new ResponseModel(404l, "抽奖活动不存在");
+		}
+		Buy buy = businessService.getBuybyLotteryid(lotteryId);
+		if(buy==null || new Date().after(buy.getExpiredate())){
+			return new ResponseModel(500l, "抽奖活动已过期");
 		}
 		Map<String, Object> data = JsonUtils.toObject(JsonUtils.toJson(lottery), HashMap.class);
 		List<LotteryItem> lotteryItemList = lotteryService.findValiableLotteryItemListByLotteryId(lotteryId);
