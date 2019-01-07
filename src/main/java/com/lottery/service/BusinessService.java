@@ -253,8 +253,8 @@ public class BusinessService {
             	throw new Exception("微信支付错误");
             }
             buy.setPrepayid(prepayId);
-            buyMapper.updateByPrimaryKeySelective(buy);
         }
+        buyMapper.updateByPrimaryKeySelective(buy);
         result.put("appId", appid);
         result.put("package","prepay_id="+buy.getPrepayid());
         result.put("timeStamp", System.currentTimeMillis());
