@@ -190,20 +190,26 @@ public class BusinessService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public HashMap<String,Object> buyProdct(String openid,Integer productid,Integer unitid,Integer shareid) throws Exception {
+    public HashMap<String,Object> buyProdct(String openid,Integer productid,Integer unitid,Integer shareid,String name,String address) throws Exception {
         HashMap<String,Object> result=new HashMap<>();
         User user = new User();
         //判断是否已经有user并且是商家
         UserExample userExample =new UserExample();
         userExample.createCriteria().andOpenidEqualTo(openid).andIsvalidEqualTo(1).andTypeEqualTo(2);
         List<User> userList=userMapper.selectByExample(userExample);
-        if (!userList.isEmpty())
+        if (!userList.isEmpty()){
             user=userList.get(0);
+            user.setName(name);
+            user.setAddress(address);
+            userMapper.updateByPrimaryKeySelective(user);
+        }
         else {
             user.setType(2);
             user.setOpenid(openid);
             user.setIsvalid(1);
             user.setShareid(shareid);
+            user.setAddress(address);
+            user.setName(name);
             userMapper.insertSelective(user);
         }
         //判断是否已购买过

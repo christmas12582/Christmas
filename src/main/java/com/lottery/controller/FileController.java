@@ -49,7 +49,8 @@ public class FileController {
         ServletContext servletContext = webApplicationContext.getServletContext();
         String projectPath = servletContext.getContextPath();
         String contextpath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+projectPath;
-
+        if (request.getServerPort()==443)
+            contextpath=contextpath.replace("http://","https://");
 
         List<String> videoSuffixList = Arrays.asList(video.split(","));
         List<String> imageSuffixList = Arrays.asList(image.split(","));

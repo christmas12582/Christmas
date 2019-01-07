@@ -41,6 +41,7 @@
         <table tableName="t_user" domainObjectName="User"></table>
         <!--<table tableName="t_cash" domainObjectName="Cash"></table>-->
         <!--<table tableName="t_user_lottery" domainObjectName="UserLottery"></table>-->
+        
 
     </context>
 </generatorConfiguration>

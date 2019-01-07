@@ -332,10 +332,12 @@ public class BusinessController {
             @RequestParam(value = "openid") String openid,
             @RequestParam(value = "productid") Integer productid,
             @RequestParam(value = "unitid") Integer unitid,
+            @RequestParam(value = "name") String name,
+            @RequestParam(value = "address") String address,
             @RequestParam(value = "shareid",required = false) Integer shareid
             ) {
         try {
-            HashMap<String,Object> result = businessService.buyProdct(openid, productid, unitid,shareid);
+            HashMap<String,Object> result = businessService.buyProdct(openid, productid, unitid,shareid,name,address);
             return new ResponseModel(result);
         }catch (Exception e){
             e.printStackTrace();
