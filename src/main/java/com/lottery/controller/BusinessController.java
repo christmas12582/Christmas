@@ -322,6 +322,8 @@ public class BusinessController {
     @ApiOperation(value = "购买商品，会在后台新增一个商户账号", notes = "购买商品，，会在后台新增一个商户账号")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "openid", dataType = "string", paramType = "query",required = true),
+            @ApiImplicitParam(name = "name", dataType = "string", paramType = "query",required = true),
+            @ApiImplicitParam(name = "address", dataType = "string", paramType = "query",required = true),
             @ApiImplicitParam(name = "productid", dataType = "int", paramType = "query",required = true),
             @ApiImplicitParam(name = "unitid", dataType = "int", paramType = "query",required = true),
             @ApiImplicitParam(name = "shareid", dataType = "int", paramType = "query",value = "如果是通过分销购买的请传入该值")
