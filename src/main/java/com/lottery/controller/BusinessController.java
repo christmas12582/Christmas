@@ -323,6 +323,7 @@ public class BusinessController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "openid", dataType = "string", paramType = "query",required = true),
             @ApiImplicitParam(name = "name", dataType = "string", paramType = "query",required = true),
+            @ApiImplicitParam(name = "phone", dataType = "string", paramType = "query",required = true),
             @ApiImplicitParam(name = "address", dataType = "string", paramType = "query",required = true),
             @ApiImplicitParam(name = "productid", dataType = "int", paramType = "query",required = true),
             @ApiImplicitParam(name = "unitid", dataType = "int", paramType = "query",required = true),
@@ -335,11 +336,12 @@ public class BusinessController {
             @RequestParam(value = "productid") Integer productid,
             @RequestParam(value = "unitid") Integer unitid,
             @RequestParam(value = "name") String name,
+            @RequestParam(value = "phone") String phone,
             @RequestParam(value = "address") String address,
             @RequestParam(value = "shareid",required = false) Integer shareid
             ) {
         try {
-            HashMap<String,Object> result = businessService.buyProdct(openid, productid, unitid,shareid,name,address);
+            HashMap<String,Object> result = businessService.buyProdct(openid, productid, unitid,shareid,name,address,phone);
             return new ResponseModel(result);
         }catch (Exception e){
             e.printStackTrace();

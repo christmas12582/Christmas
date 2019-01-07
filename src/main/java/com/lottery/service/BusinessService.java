@@ -190,7 +190,7 @@ public class BusinessService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public HashMap<String,Object> buyProdct(String openid,Integer productid,Integer unitid,Integer shareid,String name,String address) throws Exception {
+    public HashMap<String,Object> buyProdct(String openid,Integer productid,Integer unitid,Integer shareid,String name,String address,String phone) throws Exception {
         HashMap<String,Object> result=new HashMap<>();
         User user = new User();
         //判断是否已经有user并且是商家
@@ -201,6 +201,7 @@ public class BusinessService {
             user=userList.get(0);
             user.setName(name);
             user.setAddress(address);
+            user.setPhone(phone);
             userMapper.updateByPrimaryKeySelective(user);
         }
         else {
@@ -209,6 +210,7 @@ public class BusinessService {
             user.setIsvalid(1);
             user.setShareid(shareid);
             user.setAddress(address);
+            user.setPhone(phone);
             user.setName(name);
             userMapper.insertSelective(user);
         }
