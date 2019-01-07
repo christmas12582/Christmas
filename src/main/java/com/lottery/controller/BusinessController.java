@@ -55,7 +55,7 @@ public class BusinessController {
     @RequestMapping(value = "getmyproduct", method = RequestMethod.POST)
     @ResponseBody
     public ResponseModel getMyProduct(@RequestParam(value = "openid") String openid,
-                                      @RequestParam(value = "isvalid",required = false) Integer isvalid) {
+                                      @RequestParam(value = "isvalid",required = false,defaultValue = "1") Integer isvalid) {
         List<User> userlist = userService.findUserByOpenid(openid);
         if (userlist == null)
             return new ResponseModel(500L, "该用户未注册", null);

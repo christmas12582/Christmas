@@ -81,6 +81,7 @@ public class BusinessService {
             myproductdetail.put("lotteryid",lottery);
             myproductdetail.put("product",product);
             myproductdetail.put("unit",unit);
+            myproductdetail.put("buy",buy);
             reuslt.add(myproductdetail);
         }
         return reuslt;
