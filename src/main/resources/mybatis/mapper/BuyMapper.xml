@@ -12,6 +12,7 @@
     <result column="ordernum" property="ordernum" jdbcType="VARCHAR" />
     <result column="ispay" property="ispay" jdbcType="INTEGER" />
     <result column="shareid" property="shareid" jdbcType="INTEGER" />
+    <result column="prepayid" property="prepayid" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -72,7 +73,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, userid, unitid, buydate, expiredate, lotteryid, productid, ordernum, ispay, shareid
+    id, userid, unitid, buydate, expiredate, lotteryid, productid, ordernum, ispay, shareid, prepayid
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.lottery.model.BuyExample" >
     select
@@ -108,11 +109,11 @@
     insert into t_buy (id, userid, unitid, 
       buydate, expiredate, lotteryid, 
       productid, ordernum, ispay, 
-      shareid)
+      shareid, prepayid)
     values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, #{unitid,jdbcType=INTEGER}, 
       #{buydate,jdbcType=TIMESTAMP}, #{expiredate,jdbcType=TIMESTAMP}, #{lotteryid,jdbcType=INTEGER}, 
       #{productid,jdbcType=INTEGER}, #{ordernum,jdbcType=VARCHAR}, #{ispay,jdbcType=INTEGER}, 
-      #{shareid,jdbcType=INTEGER})
+      #{shareid,jdbcType=INTEGER}, #{prepayid,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.lottery.model.Buy" >
     <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
@@ -150,6 +151,9 @@
       <if test="shareid != null" >
         shareid,
       </if>
+      <if test="prepayid != null" >
+        prepayid,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -181,6 +185,9 @@
       </if>
       <if test="shareid != null" >
         #{shareid,jdbcType=INTEGER},
+      </if>
+      <if test="prepayid != null" >
+        #{prepayid,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -223,6 +230,9 @@
       <if test="record.shareid != null" >
         shareid = #{record.shareid,jdbcType=INTEGER},
       </if>
+      <if test="record.prepayid != null" >
+        prepayid = #{record.prepayid,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -239,7 +249,8 @@
       productid = #{record.productid,jdbcType=INTEGER},
       ordernum = #{record.ordernum,jdbcType=VARCHAR},
       ispay = #{record.ispay,jdbcType=INTEGER},
-      shareid = #{record.shareid,jdbcType=INTEGER}
+      shareid = #{record.shareid,jdbcType=INTEGER},
+      prepayid = #{record.prepayid,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -274,6 +285,9 @@
       <if test="shareid != null" >
         shareid = #{shareid,jdbcType=INTEGER},
       </if>
+      <if test="prepayid != null" >
+        prepayid = #{prepayid,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -287,7 +301,8 @@
       productid = #{productid,jdbcType=INTEGER},
       ordernum = #{ordernum,jdbcType=VARCHAR},
       ispay = #{ispay,jdbcType=INTEGER},
-      shareid = #{shareid,jdbcType=INTEGER}
+      shareid = #{shareid,jdbcType=INTEGER},
+      prepayid = #{prepayid,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 

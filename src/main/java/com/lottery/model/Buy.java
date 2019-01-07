@@ -46,6 +46,8 @@ public class Buy {
     private Integer ispay;
 
     private Integer shareid;
+    
+    private String prepayid;
 
     public Integer getId() {
         return id;
@@ -126,4 +128,12 @@ public class Buy {
     public void setShareid(Integer shareid) {
         this.shareid = shareid;
     }
+
+	public String getPrepayid() {
+		return prepayid;
+	}
+
+	public void setPrepayid(String prepayid) {
+		this.prepayid = prepayid;
+	}
 }

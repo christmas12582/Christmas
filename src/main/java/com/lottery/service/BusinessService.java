@@ -7,6 +7,7 @@ import com.lottery.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +40,12 @@ public class BusinessService {
 
     @Autowired
     ShareMapper shareMapper;
+    
+    /**
+	 * 小程序ID
+	 */
+	@Value("${wechat.appid}")
+	private String appid;
 
     Logger logger= LoggerFactory.getLogger(BusinessService.class);
 
@@ -213,9 +220,8 @@ public class BusinessService {
                 .andProductidEqualTo(productid)
                 .andUnitidEqualTo(unitid)
                 .andIspayEqualTo(0);
+        Buy buy = null;
         List<Buy> buyListisnopayList=buyMapper.selectByExample(buyExample);
-        if (!buyListisnopayList.isEmpty())
-            throw new Exception("您已提交同类型订单，请勿重复提交");
         UnitExample unitExample= new UnitExample();
         unitExample.createCriteria().andIdEqualTo(unitid).andIsvalidEqualTo(1);
         List<Unit> unitList=unitMapper.selectByExample(unitExample);
@@ -223,28 +229,39 @@ public class BusinessService {
             throw new Exception("未找到有效的规格");
         Unit unit=unitList.get(0);
         Integer months=unit.getExpired();
-        Integer price=unit.getPrice();
-        Buy buy= new Buy();
-        buy.setBuydate(new Date());
-        buy.setExpiredate(DateHelper.addMonth(new Date(),months));
-        buy.setIspay(0);
-        buy.setProductid(productid);
-        String orderid=genertorOrderid();
-        buy.setOrdernum(orderid);
-        buy.setUnitid(unitid);
-        buy.setUserid(user.getId());
-//        Share share=shareMapper.selectByPrimaryKey(shareid);
-//        if (share!=null&&new Date().getTime()-DateHelper.addMonth(share.getSharetime(),1).getTime()<=0)
-        buy.setShareid(user.getShareid());
-
-        buyMapper.insertSelective(buy);
-        String prepayId = wechatService.preOrder(buy);
-        if(StringUtils.isNullOrNone(prepayId)){
-        	throw new Exception("下单失败，微信统一下单请求失败，请在log中查看原因");
+        if (!buyListisnopayList.isEmpty()){
+            buy = buyListisnopayList.get(0);
+            buy.setExpiredate(DateHelper.addMonth(new Date(),months));
+        }else{
+	        buy= new Buy();
+	        buy.setBuydate(new Date());
+	        buy.setExpiredate(DateHelper.addMonth(new Date(),months));
+	        buy.setIspay(0);
+	        buy.setProductid(productid);
+	        String orderid=genertorOrderid();
+	        buy.setOrdernum(orderid);
+	        buy.setUnitid(unitid);
+	        buy.setUserid(user.getId());
+	//        Share share=shareMapper.selectByPrimaryKey(shareid);
+	//        if (share!=null&&new Date().getTime()-DateHelper.addMonth(share.getSharetime(),1).getTime()<=0)
+	        buy.setShareid(user.getShareid());
+	        buyMapper.insertSelective(buy);
         }
-        result.put("prepayId",prepayId);
-        result.put("price",price);
-
+        if(StringUtils.isNullOrNone(buy.getPrepayid())){
+        	String prepayId = wechatService.preOrder(buy);
+            if(StringUtils.isNullOrNone(prepayId)){
+            	throw new Exception("微信支付错误");
+            }
+            buy.setPrepayid(prepayId);
+            buyMapper.updateByPrimaryKeySelective(buy);
+        }
+        result.put("appId", appid);
+        result.put("package","prepay_id="+buy.getPrepayid());
+        result.put("timeStamp", System.currentTimeMillis());
+        result.put("nonceStr", StringUtils.randomCode(24));
+        result.put("signType", "MD5");
+        result.put("paySign", wechatService.sign(result));
+        result.remove("appId");
         return result;
     }
 

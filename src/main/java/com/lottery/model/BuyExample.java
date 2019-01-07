@@ -714,6 +714,76 @@ public class BuyExample {
             addCriterion("shareid not between", value1, value2, "shareid");
             return (Criteria) this;
         }
+        
+        public Criteria andPrepayidIsNull() {
+            addCriterion("prepayid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrepayidIsNotNull() {
+            addCriterion("prepayid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrepayidEqualTo(String value) {
+            addCriterion("prepayid =", value, "prepayid");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrepayidNotEqualTo(String value) {
+            addCriterion("prepayid <>", value, "prepayid");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrepayidGreaterThan(String value) {
+            addCriterion("prepayid >", value, "prepayid");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrepayidGreaterThanOrEqualTo(String value) {
+            addCriterion("prepayid >=", value, "prepayid");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrepayidLessThan(String value) {
+            addCriterion("prepayid <", value, "prepayid");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrepayidLessThanOrEqualTo(String value) {
+            addCriterion("prepayid <=", value, "prepayid");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrepayidLike(String value) {
+            addCriterion("prepayid like", value, "prepayid");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrepayidNotLike(String value) {
+            addCriterion("prepayid not like", value, "prepayid");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrepayidIn(List<String> values) {
+            addCriterion("prepayid in", values, "prepayid");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrepayidNotIn(List<String> values) {
+            addCriterion("prepayid not in", values, "prepayid");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrepayidBetween(String value1, String value2) {
+            addCriterion("prepayid between", value1, value2, "prepayid");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrepayidNotBetween(String value1, String value2) {
+            addCriterion("prepayid not between", value1, value2, "prepayid");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

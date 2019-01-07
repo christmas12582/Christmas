@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.codec.digest.Md5Crypt;
+import org.apache.shiro.crypto.hash.SimpleHash;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -151,7 +151,7 @@ public class WechatService {
 	 * @param paramMap
 	 * @return
 	 */
-	private String sign(Map<String, Object> paramMap){
+	public String sign(Map<String, Object> paramMap){
 		List<String> keyList = new ArrayList<String>();
 		Iterator<Entry<String, Object>> iterator = paramMap.entrySet().iterator();
 		while(iterator.hasNext()){
@@ -164,7 +164,8 @@ public class WechatService {
 		}
 		buffer.append("&key="+key);
 		String param = buffer.substring(1);
-		return Md5Crypt.md5Crypt(param.getBytes()).toUpperCase();
+		logger.info("签名字符串---"+param);
+		return new SimpleHash("MD5", param).toString().toUpperCase();
 	}
 	
 	/**
