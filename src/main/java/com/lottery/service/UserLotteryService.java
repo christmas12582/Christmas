@@ -79,7 +79,7 @@ public class UserLotteryService {
 			}
 			if(!StringUtils.isNullOrNone(shareNum)){
 				UserLottery shareUserLottery = findUserLotteryByShareNum(shareNum);
-				if(shareUserLottery!=null && shareUserLottery.getPrizenum()==null){
+				if(shareUserLottery!=null && shareUserLottery.getPrizenum()==null && !shareUserLottery.getUserid().equals(userId)){
 					shareUserLottery.setPrizenum(generatePrizenum(shareUserLottery.getUserid()));
 					userLotteryMapper.updateByPrimaryKey(shareUserLottery);
 				}
