@@ -21,6 +21,8 @@ public class UserLottery {
     private String prizenum;
 
     private String sharenum;
+    
+    private LotteryItem lotteryItem;
 
     public Integer getId() {
         return id;
@@ -85,4 +87,19 @@ public class UserLottery {
     public void setSharenum(String sharenum) {
         this.sharenum = sharenum == null ? null : sharenum.trim();
     }
+
+	/**
+	 * @return the lotteryItem
+	 */
+	public LotteryItem getLotteryItem() {
+		return lotteryItem;
+	}
+
+	/**
+	 * @param lotteryItem the lotteryItem to set
+	 */
+	public void setLotteryItem(LotteryItem lotteryItem) {
+		this.lotteryItem = lotteryItem;
+	}
+
 }

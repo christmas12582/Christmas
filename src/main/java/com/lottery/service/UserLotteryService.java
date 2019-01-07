@@ -4,7 +4,9 @@
 package com.lottery.service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import org.slf4j.Logger;
@@ -16,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.lottery.dao.UserLotteryMapper;
 import com.lottery.model.Lottery;
 import com.lottery.model.LotteryItem;
+import com.lottery.model.Product;
+import com.lottery.model.Unit;
 import com.lottery.model.UserLottery;
 import com.lottery.model.UserLotteryExample;
 import com.lottery.model.UserLotteryExample.Criteria;
@@ -55,7 +59,15 @@ public class UserLotteryService {
 		UserLotteryExample userLotteryExample = new UserLotteryExample();
 		Criteria criteria = userLotteryExample.createCriteria();
 		criteria.andUseridEqualTo(userId);
-		return userLotteryMapper.selectByExample(userLotteryExample);
+		List<UserLottery> selectByExample = userLotteryMapper.selectByExample(userLotteryExample);
+		Map<Integer, LotteryItem> lotteryItemMap = new HashMap<Integer, LotteryItem>();
+		for(UserLottery userLottery: selectByExample){
+			if(!lotteryItemMap.containsKey(userLottery.getLotteryitemid())){
+				lotteryItemMap.put(userLottery.getLotteryitemid(), lotteryService.findLotteryItemById(userLottery.getLotteryitemid()));
+			}
+			userLottery.setLotteryItem(lotteryItemMap.get(userLottery.getLotteryitemid()));
+		}
+		return selectByExample;
 	}
 	
 	/**
