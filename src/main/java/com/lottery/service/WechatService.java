@@ -212,7 +212,7 @@ public class WechatService {
 		byte[] response = HttpClientUtil.doPostForByte(buffer.substring(0), paramsmap);
 		try{
 			JsonUtils.toObject(new String(response, "UTF-8"), HashMap.class);
-			logger.info("获取小程序码错误---"+response);
+			logger.info("获取小程序码错误---"+new String(response, "UTF-8"));
 			response = null;
 		}catch (Exception e) {
 			
