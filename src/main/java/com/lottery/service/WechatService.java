@@ -211,8 +211,8 @@ public class WechatService {
 		buffer.append("?access_token=").append(accessToken);
 		byte[] response = HttpClientUtil.doPostForByte(buffer.substring(0), paramsmap);
 		try{
-			JsonUtils.toObject(new String(response, "UTF-8"), HashMap.class);
-			logger.info("获取小程序码错误---"+new String(response, "UTF-8"));
+			Map<String, Object> resMap = JsonUtils.toObject(new String(response, "UTF-8"), HashMap.class);
+			logger.info("获取小程序码错误---errcode"+resMap.get("resMap")+"---errmsg---"+resMap.get("errmsg"));
 			response = null;
 		}catch (Exception e) {
 			
