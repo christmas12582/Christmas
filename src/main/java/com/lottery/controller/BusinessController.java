@@ -488,7 +488,7 @@ public class BusinessController {
             return null;
         }
         byte[] rqcode= wechatService.createWXACode(accessToken,lotteryid.toString(),page);
-        if(StringUtils.isNullOrNone(rqcode))
+        if(rqcode==null)
             return null;
         return rqcode;
     }
