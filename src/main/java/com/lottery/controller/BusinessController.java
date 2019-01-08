@@ -15,6 +15,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,6 +26,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -45,6 +48,12 @@ public class BusinessController {
     
     @Autowired
 	private UserLotteryService userLotteryService;
+    
+    /**
+	 * 兑奖超期天数
+	 */
+	@Value("${exchange.expired}")
+	private Integer expired;
 
     //商家获取已购买的活动
     @ApiOperation(value = "商家获取已购买的活动产品", notes = "商家获取已购买的活动产品")
@@ -441,6 +450,13 @@ public class BusinessController {
 			}
 			if(userLottery.getExchangedate()!=null){
 				return new ResponseModel(500l, "奖项已兑换");
+			}
+			if(expired!=null){
+				Calendar calendar = Calendar.getInstance();
+				calendar.add(Calendar.DAY_OF_YEAR, expired);
+				if(new Date().after(calendar.getTime())){
+					return new ResponseModel(500l, "奖项已过期");
+				}
 			}
 			userLotteryService.exchangeUserLottery(userLottery.getId());
 		}
