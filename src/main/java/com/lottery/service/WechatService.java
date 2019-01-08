@@ -49,6 +49,13 @@ public class WechatService {
 	 */
 	@Value("${wechat.appid}")
 	private String appid;
+
+
+	/**
+	 * 客户端小程序ID
+	 */
+	@Value("${wechat.clientappid}")
+	private String clientappid;
 	
 	/**
 	 * 商户号
@@ -85,7 +92,15 @@ public class WechatService {
 	 */
 	@Value("${wechat.secret}")
 	private String secret;
-	
+
+
+
+	/**
+	 * 小程序唯一凭证密钥，即 AppSecret，获取方式同 appid
+	 */
+	@Value("${wechat.clientsecret}")
+	private String clientsecret;
+
 	/**
 	 * 商户端调用凭证
 	 */
@@ -95,7 +110,19 @@ public class WechatService {
 	 * 商户端调用凭证过期时间
 	 */
 	private Date accessTokenExpired;
-	
+
+	/**
+	 * 客户端调用凭证
+	 */
+	private String clientaccessToken;
+
+	/**
+	 * 客户端调用凭证过期时间
+	 */
+	private Date clientaccessTokenExpired;
+
+
+
 	/**
 	 * 微信统一下单
 	 * @param buy
@@ -210,13 +237,42 @@ public class WechatService {
 		StringBuffer buffer = new StringBuffer("https://api.weixin.qq.com/wxa/getwxacodeunlimit");
 		buffer.append("?access_token=").append(accessToken);
 		byte[] response = HttpClientUtil.doPostForByte(buffer.substring(0), paramsmap);
+
 		try{
+			String response_str=new String(response, "UTF-8");
 			JsonUtils.toObject(new String(response, "UTF-8"), HashMap.class);
-			logger.info("获取小程序码错误---"+response);
+			logger.info("获取小程序码错误---"+response_str);
 			response = null;
 		}catch (Exception e) {
 			
 		}
 		return response;
 	}
+
+	/**
+	 * 获取客户端access_token
+	 * @return
+	 */
+	public String fetchclientAccessToken(){
+		if(!StringUtils.isNullOrNone(clientaccessToken) && clientaccessTokenExpired!=null && clientaccessTokenExpired.after(new Date())){
+			return clientaccessToken;
+		}else{
+			Calendar calendar = Calendar.getInstance();
+			StringBuffer buffer = new StringBuffer("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential");
+			buffer.append("&appid=").append(clientappid).append("&secret=").append(clientsecret);
+			String response = HttpClientUtil.doGet(buffer.substring(0));
+			HashMap<String,Object> response_map= JsonUtils.toObject(response,HashMap.class);
+			if(response_map.containsKey("access_token")){
+				clientaccessToken = String.valueOf(response_map.get("access_token"));
+				int expires_in = Integer.parseInt(String.valueOf(response_map.get("expires_in")));
+				calendar.add(Calendar.SECOND, expires_in);
+				clientaccessTokenExpired = calendar.getTime();
+			}else{
+				logger.info("获取access_token错误---"+response_map.get("errmsg"));
+                clientaccessToken = null;
+			}
+			return clientaccessToken;
+		}
+	}
+	//生成客户端二维码
 }

@@ -4,17 +4,17 @@ import com.github.pagehelper.PageHelper;
 import com.lottery.common.MapFromPageInfo;
 import com.lottery.common.ResponseModel;
 import com.lottery.model.*;
-import com.lottery.service.BusinessService;
-import com.lottery.service.OperatorService;
-import com.lottery.service.UserLotteryService;
-import com.lottery.service.UserService;
+import com.lottery.service.*;
 import com.lottery.utils.StringUtils;
 import com.lottery.utils.WebUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -45,6 +45,11 @@ public class BusinessController {
     
     @Autowired
 	private UserLotteryService userLotteryService;
+
+    @Autowired
+    WechatService wechatService;
+
+    Logger logger= LoggerFactory.getLogger(CustomerController.class);
 
     //商家获取已购买的活动
     @ApiOperation(value = "商家获取已购买的活动产品", notes = "商家获取已购买的活动产品")
@@ -448,6 +453,45 @@ public class BusinessController {
 	}
 
 
+
+    @ApiOperation(value = "获取客户端二维码", notes = "获取客户端二维码")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "openid", dataType = "String", paramType = "query", required = true),
+            @ApiImplicitParam(name = "lotteryid", dataType = "int", paramType = "query", required = true),
+            @ApiImplicitParam(name = "page", dataType = "String", paramType = "query")
+    })
+	@RequestMapping(value = "getclientqrcode",method = RequestMethod.GET,produces = MediaType.IMAGE_JPEG_VALUE)
+    @ResponseBody
+    public byte[] getLotteryQrCode(String openid, Integer lotteryid,String page){
+        List<User> userlist = userService.findUserByOpenid(openid);
+        if (userlist == null){
+            logger.error("未找到该用户");
+            return null;
+        }
+        List<User> bussinessUserList=new ArrayList<>();
+        for(User item:userlist){
+            if (item.getType() == 2)
+                bussinessUserList.add(item);
+        }
+        if (bussinessUserList.isEmpty()){
+            logger.error("该用户不属于商家");
+            return null;
+        }
+        Buy buy = businessService.getBuybyLotteryid(lotteryid);
+        if (!buy.getUserid().equals(bussinessUserList.get(0).getId())){
+            logger.error("该活动不属于该商家");
+            return null;
+        }
+        String accessToken = wechatService.fetchclientAccessToken();
+        if(StringUtils.isNullOrNone(accessToken)){
+            logger.error("客户端accessToken为空");
+            return null;
+        }
+        byte[] rqcode= wechatService.createWXACode(accessToken,lotteryid.toString(),page);
+        if(StringUtils.isNullOrNone(rqcode))
+            return null;
+        return rqcode;
+    }
 
 }
 
