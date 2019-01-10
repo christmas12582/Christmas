@@ -17,6 +17,7 @@ import javafx.geometry.Pos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,6 +49,9 @@ public class DistributorController {
     @Autowired
     WechatService wechatService;
 
+    @Value("${defaultratio}")
+    Integer defaultratio;
+
     Logger logger= LoggerFactory.getLogger(DistributorController.class);
     /**
      * 成为分销商
@@ -72,9 +76,7 @@ public class DistributorController {
                 user.setIsvalid(1);
                 user.setType(4);
                 user.setOpenid(openid);
-                user.setRatio(100);//默认提成比例为100%
-
-
+                user.setRatio(defaultratio);//默认提成比例为100%
             User newuser=userService.adduser(user);
             return new ResponseModel(0L,"您已成功成为分销商",newuser);
         }else

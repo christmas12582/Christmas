@@ -64,6 +64,7 @@ file:
   video: avi,mov,mpeg,mp4
 
 locationpath: D:/upload/
+defaultratio: 100
 
 wechat:
   appid: wx18526bcd31d54c1f
