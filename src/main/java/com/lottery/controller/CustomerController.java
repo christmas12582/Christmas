@@ -187,23 +187,6 @@ public class CustomerController {
 	}
 	
 	/**
-	 * 分享活动
-	 * @param openid
-	 * @param userLotteryId
-	 * @return
-	 */
-	@ResponseBody
-	@RequestMapping(value = "/lottery/share", method = RequestMethod.POST)
-	@ApiOperation(value = "用户分享抽奖活动", notes = "用户分享抽奖活动")
-	public ResponseModel share(String openid, Integer userLotteryId){
-		User user = userService.findUserByOpenidAndType(openid, 3);
-		if(user == null){
-			return new ResponseModel(404l, "用户不存在");
-		}
-		return new ResponseModel(200l, "分享成功", userLotteryService.share(user.getId(), userLotteryId));
-	}
-	
-	/**
 	 * 获取兑奖二维码
 	 * @param openid
 	 * @param userlotteryId

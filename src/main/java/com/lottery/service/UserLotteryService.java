@@ -18,8 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.lottery.dao.UserLotteryMapper;
 import com.lottery.model.Lottery;
 import com.lottery.model.LotteryItem;
-import com.lottery.model.Product;
-import com.lottery.model.Unit;
 import com.lottery.model.UserLottery;
 import com.lottery.model.UserLotteryExample;
 import com.lottery.model.UserLotteryExample.Criteria;
@@ -114,6 +112,7 @@ public class UserLotteryService {
 			userLottery.setUserid(userId);
 			userLottery.setLotteryitemid(lotteryItemId);
 			userLottery.setLotteryid(lotteryItem.getLotteryid());
+			userLottery.setSharenum(generateSharenum(userId));
 			if(lottery.getForceshare()==null || lottery.getForceshare()==0){
 				userLottery.setPrizenum(generatePrizenum(userId));
 			}
