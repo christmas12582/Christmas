@@ -2,10 +2,8 @@ package com.lottery.service;
 
 import com.lottery.dao.BuyMapper;
 import com.lottery.dao.CashMapper;
-import com.lottery.model.Buy;
-import com.lottery.model.BuyExample;
-import com.lottery.model.Cash;
-import com.lottery.model.CashExample;
+import com.lottery.dao.UserMapper;
+import com.lottery.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +21,9 @@ public class DistributorService {
     @Autowired
     CashMapper cashMapper;
 
+    @Autowired
+    UserMapper userMapper;
+
 
     public List<Buy> mydistribute(Integer shareid){
         BuyExample buyExample = new BuyExample();
@@ -33,13 +34,20 @@ public class DistributorService {
 
 
     @Transactional(rollbackFor = Exception.class)
-    public void getcash(Integer createid,Integer money){
+    public void getcash(Integer createid,Integer money) throws Exception {
         Cash cash = new Cash();
         cash.setCreateid(createid);
         cash.setCreatetime(new Date());
         cash.setMoney(money);
         cash.setIsexchange(0);
         cashMapper.insertSelective(cash);
+        User user=userMapper.selectByPrimaryKey(createid);
+        Integer oldmoney=user.getMoney();
+        Integer newmoney=oldmoney-money;
+        user.setMoney(newmoney);
+        int count1=userMapper.updateByPrimaryKeySelective(user);
+        if (count1==0)
+            throw new Exception("发起提现失败，未找到user主键");
     }
 
     public List<Cash> myGetCashList(Integer createid,Integer isexchange){

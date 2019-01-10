@@ -299,7 +299,10 @@ public class BusinessService {
         //若有shareid则增加提成
         Integer shareid=buy.getShareid();
         Integer unitid=buy.getUnitid();
-        if(shareid!=null&&unitid!=null){
+        //判断是否自己购买
+        boolean ismysalfbuy=isMysalfBuy(buy.getUserid(),shareid);
+        ismysalfbuy=false;
+        if(shareid!=null&&unitid!=null&&!ismysalfbuy){
             User user=userMapper.selectByPrimaryKey(shareid);
             Unit unit=unitMapper.selectByPrimaryKey(unitid);
             if(user!=null&&unit!=null){
@@ -317,9 +320,26 @@ public class BusinessService {
                 logger.info("未找到shareid或unitid为对应的记录，不予分销提成");
         }else
             logger.info("buy中的shareid或unitid为null，不予分销提成");
+    }
+
+    public boolean isMysalfBuy(Integer buyid,Integer shareid){
+        if (shareid==null)
+            return false;
+        User buyuser=userMapper.selectByPrimaryKey(buyid);
+        User shareuser=userMapper.selectByPrimaryKey(shareid);
+        if (buyuser.getOpenid().equals(shareuser.getOpenid()))
+            return true;
+        else
+            return false;
 
 
     }
+
+
+
+
+
+
 
     public List<Buy> getMyDistribution(Integer businessid){
         List<Buy> buyList=new ArrayList<>();

@@ -145,7 +145,8 @@ public class ShiroConfiguration {
         filterChainDefinitionManager.put("/file/**", "anon");
         filterChainDefinitionManager.put("/fileupload/**", "anon");
         filterChainDefinitionManager.put("/business/**", "anon");
-        
+        filterChainDefinitionManager.put("/distributor/**", "anon");
+
         filterChainDefinitionManager.put("/customer/**", "anon");
         filterChainDefinitionManager.put("/lottery/**", "anon");
         filterChainDefinitionManager.put("/login", "anon");
