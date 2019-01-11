@@ -54,24 +54,12 @@ public class CustomerController {
 	/**
 	 * 保存用户信息
 	 * @param openid 微信OPENID
-	 * @param phone 用户手机号码
 	 * @return
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
-	@ApiOperation(value = "保存用户手机号码", notes = "保存用户手机号码")
-	public ResponseModel saveCustomer(String openid, String phone){
-		if(StringUtils.isNullOrNone(new String[]{openid, phone})){
-			return new ResponseModel(500l, "请输入手机号码");
-		}
-		List<User> userList = userService.findUserListByPhone(phone);
-		if(userList!=null && userList.size()>0){
-			for(User u: userList){
-				if(u.getType()==3 && u.getIsvalid() == 1 && !openid.equals(u.getOpenid())){
-					return new ResponseModel(500l, "手机号码已使用，请重新输入");
-				}
-			}
-		}
+	@ApiOperation(value = "保存用户", notes = "保存用户")
+	public ResponseModel saveCustomer(String openid){
 		User user = userService.findUserByOpenidAndType(openid, 3);
 		if(user==null){
 			user = new User();
@@ -79,9 +67,8 @@ public class CustomerController {
 			user.setOpenid(openid);
 			user.setType(3);
 		}
-		user.setPhone(phone);
 		userService.saveUser(user);
-		return new ResponseModel(200l, "保存手机号码成功");
+		return new ResponseModel(200l, "保存用户成功");
 	}
 	
 	/**
@@ -95,8 +82,8 @@ public class CustomerController {
 	@ApiOperation(value = "用户参与抽奖资格检查", notes = "用户是否可以参与抽奖")
 	public ResponseModel canLottery(String openid, Integer lotteryId){
 		User user = userService.findUserByOpenidAndType(openid, 3);
-		if(user==null || StringUtils.isNullOrNone(user.getPhone())){
-			return new ResponseModel(500l, "请先保存手机号码");
+		if(user==null){
+			return new ResponseModel(404l, "用户不存在");
 		}
 		Lottery lottery = lotteryService.findLotteryById(lotteryId);
 		if(lottery==null || lottery.getIsvalid() == 0){

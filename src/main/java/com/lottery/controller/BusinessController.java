@@ -48,6 +48,9 @@ public class BusinessController {
 
     @Autowired
     WechatService wechatService;
+    
+    @Autowired
+	private LotteryService lotteryService;
 
     Logger logger= LoggerFactory.getLogger(CustomerController.class);
 
@@ -439,6 +442,7 @@ public class BusinessController {
 		if(user == null){
 			return new ResponseModel(404l, "用户不存在");
 		}
+		String name = null;
 		synchronized (prizenum) {
 			UserLottery userLottery = userLotteryService.findUserLotteryByPrizenum(prizenum);
 			if(userLottery==null){
@@ -448,8 +452,10 @@ public class BusinessController {
 				return new ResponseModel(500l, "奖项已兑换");
 			}
 			userLotteryService.exchangeUserLottery(userLottery.getId());
+			LotteryItem lotteryItem = lotteryService.findLotteryItemById(userLottery.getLotteryitemid());
+			name = lotteryItem.getName();
 		}
-		return new ResponseModel(0l, "兑换成功");
+		return new ResponseModel(0l, "兑换成功", name);
 	}
 
 

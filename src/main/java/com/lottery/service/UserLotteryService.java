@@ -57,6 +57,7 @@ public class UserLotteryService {
 		UserLotteryExample userLotteryExample = new UserLotteryExample();
 		Criteria criteria = userLotteryExample.createCriteria();
 		criteria.andUseridEqualTo(userId);
+		criteria.andExchangedateIsNull();
 		List<UserLottery> selectByExample = userLotteryMapper.selectByExample(userLotteryExample);
 		Map<Integer, LotteryItem> lotteryItemMap = new HashMap<Integer, LotteryItem>();
 		for(UserLottery userLottery: selectByExample){
