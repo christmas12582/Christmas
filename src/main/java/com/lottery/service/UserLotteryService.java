@@ -100,8 +100,8 @@ public class UserLotteryService {
 				throw new RuntimeException("抽奖活动不存在或已失效");
 			}
 			if(!StringUtils.isNullOrNone(shareNum)){
-				UserLottery shareUserLottery = findUserLotteryByShareNum(shareNum, lottery.getId(), userId);
-				if(shareUserLottery!=null && shareUserLottery.getPrizenum()==null && !shareUserLottery.getUserid().equals(userId)){
+				UserLottery shareUserLottery = findUserLotteryByShareNum(shareNum);
+				if(shareUserLottery!=null && shareUserLottery.getPrizenum()==null && !shareUserLottery.getUserid().equals(userId) && !hasRelation(lottery.getId(), userId, shareUserLottery.getUserid())){
 					shareUserLottery.setPrizenum(generatePrizenum(shareUserLottery.getUserid()));
 					shareUserLottery.setOtheruserid(userId);
 					userLotteryMapper.updateByPrimaryKey(shareUserLottery);
@@ -215,23 +215,45 @@ public class UserLotteryService {
 	}
 	
 	/**
-	 * 根据分享号查询可认证的中奖信息
+	 * 根据分享号查询中奖信息
 	 * @param shareNum
-	 * @param lotteryId
-	 * @param otherUserId
 	 * @return
 	 */
-	public UserLottery findUserLotteryByShareNum(String shareNum, Integer lotteryId, Integer otherUserId){
+	public UserLottery findUserLotteryByShareNum(String shareNum){
 		UserLotteryExample userLotteryExample = new UserLotteryExample();
 		Criteria criteria = userLotteryExample.createCriteria();
 		criteria.andSharenumEqualTo(shareNum);
-		criteria.andLotteryidEqualTo(lotteryId);
-		criteria.andOtheruseridNotEqualTo(otherUserId);
 		List<UserLottery> userLotteryList = userLotteryMapper.selectByExample(userLotteryExample);
 		if(userLotteryList!=null && userLotteryList.size()>0){
 			return userLotteryList.get(0);
 		}
 		return null;
+	}
+	
+	/**
+	 * 在一次活动中两个用户是否存在认证关系
+	 * @param lotteryId
+	 * @param userId
+	 * @param otherUserId
+	 * @return
+	 */
+	private Boolean hasRelation(Integer lotteryId, Integer userId, Integer otherUserId){
+		UserLotteryExample userLotteryExample = new UserLotteryExample();
+		Criteria criteria = userLotteryExample.createCriteria();
+		criteria.andLotteryidEqualTo(lotteryId);
+		criteria.andUseridEqualTo(userId);
+		criteria.andOtheruseridEqualTo(otherUserId);
+		List<UserLottery> userLotteryList = userLotteryMapper.selectByExample(userLotteryExample);
+		if(userLotteryList!=null && userLotteryList.size()>0){
+			return Boolean.TRUE;
+		}
+		criteria.andUseridEqualTo(otherUserId);
+		criteria.andOtheruseridEqualTo(userId);
+		List<UserLottery> userLotteryList1 = userLotteryMapper.selectByExample(userLotteryExample);
+		if(userLotteryList1!=null && userLotteryList1.size()>0){
+			return Boolean.TRUE;
+		}
+		return Boolean.FALSE;
 	}
 	
 }
