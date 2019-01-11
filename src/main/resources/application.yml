@@ -76,3 +76,6 @@ wechat:
   secret: ffadd8817f1014de60e754f2a85099fd
   clientappid: wx4c018b9bcb00fcfa
   clientsecret: cc17c4ac3a2b46a8b1d8e2987a1f2835
+
+exchange:
+  expired: 30

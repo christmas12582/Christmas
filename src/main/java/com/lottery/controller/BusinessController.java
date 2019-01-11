@@ -14,6 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -51,6 +54,12 @@ public class BusinessController {
     
     @Autowired
 	private LotteryService lotteryService;
+    
+    /**
+	 * 兑奖超期天数
+	 */
+	@Value("${exchange.expired}")
+	private Integer expired;
 
     Logger logger= LoggerFactory.getLogger(CustomerController.class);
 
@@ -450,6 +459,14 @@ public class BusinessController {
 			}
 			if(userLottery.getExchangedate()!=null){
 				return new ResponseModel(500l, "奖项已兑换");
+			}
+			if(expired!=null){
+				Calendar calendar = Calendar.getInstance();
+				calendar.setTime(userLottery.getLotterydate());
+				calendar.add(Calendar.DAY_OF_YEAR, expired);
+				if(new Date().after(calendar.getTime())){
+					return new ResponseModel(500l, "奖项已过期");
+				}
 			}
 			userLotteryService.exchangeUserLottery(userLottery.getId());
 			LotteryItem lotteryItem = lotteryService.findLotteryItemById(userLottery.getLotteryitemid());

@@ -3,6 +3,7 @@
  */
 package com.lottery.service;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.Random;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +38,12 @@ public class UserLotteryService {
 	@Autowired
 	private LotteryService lotteryService;
 	
+	/**
+	 * 兑奖超期天数
+	 */
+	@Value("${exchange.expired}")
+	private Integer expired;
+	
 	private static final Logger logger = LoggerFactory.getLogger(UserLotteryService.class);
 
 	/**
@@ -58,6 +66,9 @@ public class UserLotteryService {
 		Criteria criteria = userLotteryExample.createCriteria();
 		criteria.andUseridEqualTo(userId);
 		criteria.andExchangedateIsNull();
+		Calendar calendar = Calendar.getInstance();
+		calendar.add(Calendar.DAY_OF_YEAR, -expired);
+		criteria.andLotterydateGreaterThanOrEqualTo(calendar.getTime());
 		List<UserLottery> selectByExample = userLotteryMapper.selectByExample(userLotteryExample);
 		Map<Integer, LotteryItem> lotteryItemMap = new HashMap<Integer, LotteryItem>();
 		for(UserLottery userLottery: selectByExample){
