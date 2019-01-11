@@ -301,7 +301,7 @@ public class BusinessService {
         Integer unitid=buy.getUnitid();
         //判断是否自己购买
         boolean ismysalfbuy=isMysalfBuy(buy.getUserid(),shareid);
-        ismysalfbuy=false;
+//        ismysalfbuy=false;
         if(shareid!=null&&unitid!=null&&!ismysalfbuy){
             User user=userMapper.selectByPrimaryKey(shareid);
             Unit unit=unitMapper.selectByPrimaryKey(unitid);
@@ -317,9 +317,9 @@ public class BusinessService {
                 userMapper.updateByPrimaryKeySelective(user);
                 logger.info("订单号："+orderid+"为userid："+shareid+"增加了"+newmoney+"（分）的分销提成");
             }else
-                logger.info("未找到shareid或unitid为对应的记录，不予分销提成");
+                logger.info("未找到shareid或unitid为对应的记录，不予分销提成||"+user+","+unit);
         }else
-            logger.info("buy中的shareid或unitid为null，不予分销提成");
+            logger.info("buy中的shareid或unitid为null,或自己购买自己分销的商品，不予分销提成||"+shareid+","+unitid+","+ismysalfbuy);
     }
 
     public boolean isMysalfBuy(Integer buyid,Integer shareid){
