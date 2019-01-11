@@ -604,6 +604,66 @@ public class UserLotteryExample {
             addCriterion("sharenum not between", value1, value2, "sharenum");
             return (Criteria) this;
         }
+        
+        public Criteria andOtheruseridIsNull() {
+            addCriterion("otheruserid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOtheruseridIsNotNull() {
+            addCriterion("otheruserid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOtheruseridEqualTo(Integer value) {
+            addCriterion("otheruserid =", value, "otheruserid");
+            return (Criteria) this;
+        }
+
+        public Criteria andOtheruseridNotEqualTo(Integer value) {
+            addCriterion("otheruserid <>", value, "otheruserid");
+            return (Criteria) this;
+        }
+
+        public Criteria andOtheruseridGreaterThan(Integer value) {
+            addCriterion("otheruserid >", value, "otheruserid");
+            return (Criteria) this;
+        }
+
+        public Criteria andOtheruseridGreaterThanOrEqualTo(Integer value) {
+            addCriterion("otheruserid >=", value, "otheruserid");
+            return (Criteria) this;
+        }
+
+        public Criteria andOtheruseridLessThan(Integer value) {
+            addCriterion("otheruserid <", value, "otheruserid");
+            return (Criteria) this;
+        }
+
+        public Criteria andOtheruseridLessThanOrEqualTo(Integer value) {
+            addCriterion("otheruserid <=", value, "otheruserid");
+            return (Criteria) this;
+        }
+
+        public Criteria andOtheruseridIn(List<Integer> values) {
+            addCriterion("otheruserid in", values, "otheruserid");
+            return (Criteria) this;
+        }
+
+        public Criteria andOtheruseridNotIn(List<Integer> values) {
+            addCriterion("otheruserid not in", values, "otheruserid");
+            return (Criteria) this;
+        }
+
+        public Criteria andOtheruseridBetween(Integer value1, Integer value2) {
+            addCriterion("otheruserid between", value1, value2, "otheruserid");
+            return (Criteria) this;
+        }
+
+        public Criteria andOtheruseridNotBetween(Integer value1, Integer value2) {
+            addCriterion("otheruserid not between", value1, value2, "otheruserid");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

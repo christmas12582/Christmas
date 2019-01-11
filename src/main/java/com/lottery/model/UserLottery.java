@@ -23,6 +23,8 @@ public class UserLottery {
     private String sharenum;
     
     private LotteryItem lotteryItem;
+    
+    private Integer otheruserid;
 
     public Integer getId() {
         return id;
@@ -100,6 +102,20 @@ public class UserLottery {
 	 */
 	public void setLotteryItem(LotteryItem lotteryItem) {
 		this.lotteryItem = lotteryItem;
+	}
+
+	/**
+	 * @return the otheruserid
+	 */
+	public Integer getOtheruserid() {
+		return otheruserid;
+	}
+
+	/**
+	 * @param otheruserid the otheruserid to set
+	 */
+	public void setOtheruserid(Integer otheruserid) {
+		this.otheruserid = otheruserid;
 	}
 
 }

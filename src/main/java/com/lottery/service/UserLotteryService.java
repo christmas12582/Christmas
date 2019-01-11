@@ -100,9 +100,10 @@ public class UserLotteryService {
 				throw new RuntimeException("抽奖活动不存在或已失效");
 			}
 			if(!StringUtils.isNullOrNone(shareNum)){
-				UserLottery shareUserLottery = findUserLotteryByShareNum(shareNum);
+				UserLottery shareUserLottery = findUserLotteryByShareNum(shareNum, lottery.getId(), userId);
 				if(shareUserLottery!=null && shareUserLottery.getPrizenum()==null && !shareUserLottery.getUserid().equals(userId)){
 					shareUserLottery.setPrizenum(generatePrizenum(shareUserLottery.getUserid()));
+					shareUserLottery.setOtheruserid(userId);
 					userLotteryMapper.updateByPrimaryKey(shareUserLottery);
 				}
 			}
@@ -214,14 +215,18 @@ public class UserLotteryService {
 	}
 	
 	/**
-	 * 根据分享号查询中奖信息
+	 * 根据分享号查询可认证的中奖信息
 	 * @param shareNum
+	 * @param lotteryId
+	 * @param otherUserId
 	 * @return
 	 */
-	public UserLottery findUserLotteryByShareNum(String shareNum){
+	public UserLottery findUserLotteryByShareNum(String shareNum, Integer lotteryId, Integer otherUserId){
 		UserLotteryExample userLotteryExample = new UserLotteryExample();
 		Criteria criteria = userLotteryExample.createCriteria();
 		criteria.andSharenumEqualTo(shareNum);
+		criteria.andLotteryidEqualTo(lotteryId);
+		criteria.andOtheruseridNotEqualTo(otherUserId);
 		List<UserLottery> userLotteryList = userLotteryMapper.selectByExample(userLotteryExample);
 		if(userLotteryList!=null && userLotteryList.size()>0){
 			return userLotteryList.get(0);
