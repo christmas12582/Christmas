@@ -25,9 +25,12 @@ public class DistributorService {
     UserMapper userMapper;
 
 
-    public List<Buy> mydistribute(Integer shareid){
+    public List<Buy> mydistribute(Integer shareid,Integer ispay){
         BuyExample buyExample = new BuyExample();
-        buyExample.createCriteria().andShareidEqualTo(shareid);
+        BuyExample.Criteria criteria=buyExample.createCriteria();
+        criteria.andShareidEqualTo(shareid);
+        if (ispay!=null)
+            criteria.andIspayEqualTo(ispay);
         return   buyMapper.selectByExample(buyExample);
 
     }

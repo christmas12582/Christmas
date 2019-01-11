@@ -137,11 +137,13 @@ public class DistributorController {
     @ApiOperation(value = "我的分销记录", notes = "我的分销记录")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "openid", dataType = "string", paramType = "query"),
+            @ApiImplicitParam(name = "ispay", dataType = "int", paramType = "query"),
             @ApiImplicitParam(name = "pagenum", dataType = "int", paramType = "query"),
             @ApiImplicitParam(name = "pagesize", dataType = "int", paramType = "query")
     })
     public ResponseModel myDistribute(
             @RequestParam(value ="openid")String openid,
+            @RequestParam(value ="ispay",required = false)Integer ispay,
             @RequestParam(value = "pagenum", required = false, defaultValue = "1") Integer pagenum,
             @RequestParam(value = "pagesize", required = false, defaultValue = "10") Integer pagesize
     ){
@@ -151,7 +153,7 @@ public class DistributorController {
         Integer shareid=user.getId();
         PageHelper.startPage(pagenum,pagesize);
         PageHelper.orderBy("buydate desc");
-        List<Buy> buyList= distributorService.mydistribute(shareid);
+        List<Buy> buyList= distributorService.mydistribute(shareid,ispay);
         for(Buy buy:buyList){
             if(buy.getProductid()!=null){
                 Product product=businessService.getProductByid(buy.getProductid());
