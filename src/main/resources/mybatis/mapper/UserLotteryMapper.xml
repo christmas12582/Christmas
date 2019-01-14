@@ -262,7 +262,7 @@
     select 
       ul.id, ul.lotterydate, ul.lotteryitemid, ul.userid, ul.exchangedate, ul.lotteryid, ul.prizenum, ul.sharenum, ul.otheruserid
     from t_user_lottery ul
-    left join t_lotter l on l.id = ul.lotteryid
+    left join t_lottery l on l.id = ul.lotteryid
     where <![CDATA[ ul.updatetime <= l.lotterydate ]]>
       and ul.userid = #{userId,jdbcType=INTEGER}
       and ul.lotteryid = #{lotteryId,jdbcType=INTEGER}
@@ -271,7 +271,7 @@
     select 
       ul.id, ul.lotterydate, ul.lotteryitemid, ul.userid, ul.exchangedate, ul.lotteryid, ul.prizenum, ul.sharenum, ul.otheruserid
     from t_user_lottery ul
-    left join t_lotter l on l.id = ul.lotteryid
+    left join t_lottery l on l.id = ul.lotteryid
     where <![CDATA[ l.updatetime <= ul.lotterydate and ul.lotterydate >= #{expiredtime,jdbcType=TIMESTAMP} ]]>
       and ul.userid = #{userId,jdbcType=INTEGER}
       and ul.exchangedate is null
