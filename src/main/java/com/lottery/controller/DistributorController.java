@@ -183,7 +183,7 @@ public class DistributorController {
         User user = userService.findUserByOpenidAndType(openid,4);
         if (user==null)
             return new ResponseModel(500L,"您尚未成为分销商");
-        if(user.getMoney()<money)
+        if(user.getMoney()==null||user.getMoney()<money)
             return new ResponseModel(500L,"你的提现金额超过限额");
         try {
             distributorService.getcash(user.getId(),money);
