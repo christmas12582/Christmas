@@ -64,7 +64,8 @@ public class DistributorController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "openid", dataType = "string", paramType = "query")
     })
-    public ResponseModel IWantToDistribute(@RequestParam(value ="openid")String openid){
+    public ResponseModel IWantToDistribute(@RequestParam(value ="openid")String openid,
+                                           @RequestParam(value ="phone")String phone){
         User olduser=userService.findUserByOpenidAndType(openid,4);
         if (olduser==null){
             User buser=userService.findUserByOpenidAndType(openid,2);
@@ -76,6 +77,7 @@ public class DistributorController {
                 user.setIsvalid(1);
                 user.setType(4);
                 user.setOpenid(openid);
+                user.setPhone(phone);
                 user.setRatio(defaultratio);//默认提成比例为100%
             User newuser=userService.adduser(user);
             return new ResponseModel(0L,"您已成功成为分销商",newuser);
@@ -183,7 +185,9 @@ public class DistributorController {
         User user = userService.findUserByOpenidAndType(openid,4);
         if (user==null)
             return new ResponseModel(500L,"您尚未成为分销商");
-        if(user.getMoney()==null||user.getMoney()<money)
+        if(user.getMoney()==null)
+            return new ResponseModel(500L,"您可用提现金额为0");
+        if(user.getMoney()<money)
             return new ResponseModel(500L,"你的提现金额超过限额");
         try {
             distributorService.getcash(user.getId(),money);
