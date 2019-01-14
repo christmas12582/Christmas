@@ -25,6 +25,8 @@ public class UserLottery {
     private LotteryItem lotteryItem;
     
     private Integer otheruserid;
+    
+    private User business;
 
     public Integer getId() {
         return id;
@@ -116,6 +118,20 @@ public class UserLottery {
 	 */
 	public void setOtheruserid(Integer otheruserid) {
 		this.otheruserid = otheruserid;
+	}
+
+	/**
+	 * @return the business
+	 */
+	public User getBusiness() {
+		return business;
+	}
+
+	/**
+	 * @param business the business to set
+	 */
+	public void setBusiness(User business) {
+		this.business = business;
 	}
 
 }

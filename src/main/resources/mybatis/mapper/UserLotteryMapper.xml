@@ -11,6 +11,9 @@
     <result column="prizenum" property="prizenum" jdbcType="VARCHAR" />
     <result column="sharenum" property="sharenum" jdbcType="VARCHAR" />
     <result column="otheruserid" property="otheruserid" jdbcType="INTEGER" />
+    <result column="name" property="business.name" jdbcType="VARCHAR" />
+    <result column="address" property="business.address" jdbcType="VARCHAR" />
+    <result column="phone" property="business.phone" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -284,9 +287,11 @@
   </select>
   <select id="selectByUserIdAndExpiredtime" resultMap="BaseResultMap" >
     select 
-      ul.id, ul.lotterydate, ul.lotteryitemid, ul.userid, ul.exchangedate, ul.lotteryid, ul.prizenum, ul.sharenum, ul.otheruserid
+      ul.id, ul.lotterydate, ul.lotteryitemid, ul.userid, ul.exchangedate, ul.lotteryid, ul.prizenum, ul.sharenum, ul.otheruserid, u.name, u.phone, u.address
     from t_user_lottery ul
     left join t_lottery l on l.id = ul.lotteryid
+    left join t_buy b on b.lotteryid = l.id
+    left join t_user u on u.id = b.userid
     where <![CDATA[ l.updatetime <= ul.lotterydate and ul.lotterydate >= #{expiredtime,jdbcType=TIMESTAMP} ]]>
       and ul.userid = #{userId,jdbcType=INTEGER}
       and ul.exchangedate is null
