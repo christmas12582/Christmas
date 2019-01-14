@@ -141,6 +141,10 @@ public class CustomerController {
 		if(userLottery==null || !userLottery.getUserid().equals(user.getId())){
 			return new ResponseModel(404l, "获奖信息不存在");
 		}
+		Lottery lottery = lotteryService.findLotteryById(userLottery.getLotteryid());
+		if(lottery.getUpdatetime()!=null && userLottery.getLotterydate().before(lottery.getUpdatetime())){
+			return new ResponseModel(404l, "获奖信息不存在");
+		}
 		Map<String, Object> data = JsonUtils.toObject(JsonUtils.toJson(userLottery), HashMap.class);
 		LotteryItem lotteryItem = lotteryService.findLotteryItemById(userLottery.getLotteryitemid());
 		if(lotteryItem!=null){
@@ -196,6 +200,10 @@ public class CustomerController {
 		}
 		UserLottery userLottery = userLotteryService.findUserLotteryById(userLotteryId);
 		if(userLottery==null || !userLottery.getUserid().equals(user.getId())){
+			return;
+		}
+		Lottery lottery = lotteryService.findLotteryById(userLottery.getLotteryid());
+		if(lottery.getUpdatetime()!=null && userLottery.getLotterydate().before(lottery.getUpdatetime())){
 			return;
 		}
 		String accessToken = wechatService.fetchAccessToken();

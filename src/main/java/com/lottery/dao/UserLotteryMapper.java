@@ -2,6 +2,8 @@ package com.lottery.dao;
 
 import com.lottery.model.UserLottery;
 import com.lottery.model.UserLotteryExample;
+
+import java.util.Date;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
@@ -31,4 +33,6 @@ public interface UserLotteryMapper {
     int updateByPrimaryKey(UserLottery record);
     
     List<UserLottery> selectByUserIdAndLotteryId(@Param("userId") Integer userId, @Param("lotteryId") Integer lotteryId);
+    
+    List<UserLottery> selectByUserIdAndExpiredtime(@Param("userId") Integer userId, @Param("expiredtime") Date expiredtime);
 }

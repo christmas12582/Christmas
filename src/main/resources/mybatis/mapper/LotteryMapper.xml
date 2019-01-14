@@ -7,6 +7,7 @@
     <result column="mcount" property="mcount" jdbcType="INTEGER" />
     <result column="forceshare" property="forceshare" jdbcType="INTEGER" />
     <result column="viewcount" property="viewcount" jdbcType="INTEGER" />
+    <result column="updatetime" property="updatetime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -67,7 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, isvalid, mcount, forceshare, viewcount
+    id, isvalid, mcount, forceshare, viewcount, updatetime
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.lottery.model.LotteryExample" >
     select
@@ -101,9 +102,9 @@
   </delete>
   <insert id="insert" parameterType="com.lottery.model.Lottery" >
     insert into t_lottery (id, isvalid, mcount, 
-      forceshare, viewcount)
+      forceshare, viewcount, updatetime)
     values (#{id,jdbcType=INTEGER}, #{isvalid,jdbcType=INTEGER}, #{mcount,jdbcType=INTEGER}, 
-      #{forceshare,jdbcType=INTEGER}, #{viewcount,jdbcType=INTEGER})
+      #{forceshare,jdbcType=INTEGER}, #{viewcount,jdbcType=INTEGER}, #{updatetime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.lottery.model.Lottery" >
     <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
@@ -126,6 +127,9 @@
       <if test="viewcount != null" >
         viewcount,
       </if>
+      <if test="updatetime != null" >
+        updatetime,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -142,6 +146,9 @@
       </if>
       <if test="viewcount != null" >
         #{viewcount,jdbcType=INTEGER},
+      </if>
+      <if test="updatetime != null" >
+        #{updatetime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -169,6 +176,9 @@
       <if test="record.viewcount != null" >
         viewcount = #{record.viewcount,jdbcType=INTEGER},
       </if>
+      <if test="record.updatetime != null" >
+        updatetime = #{record.updatetime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -180,7 +190,8 @@
       isvalid = #{record.isvalid,jdbcType=INTEGER},
       mcount = #{record.mcount,jdbcType=INTEGER},
       forceshare = #{record.forceshare,jdbcType=INTEGER},
-      viewcount = #{record.viewcount,jdbcType=INTEGER}
+      viewcount = #{record.viewcount,jdbcType=INTEGER},
+      updatetime = #{record.updatetime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -200,6 +211,9 @@
       <if test="viewcount != null" >
         viewcount = #{viewcount,jdbcType=INTEGER},
       </if>
+      <if test="updatetime != null" >
+        updatetime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -208,7 +222,8 @@
     set isvalid = #{isvalid,jdbcType=INTEGER},
       mcount = #{mcount,jdbcType=INTEGER},
       forceshare = #{forceshare,jdbcType=INTEGER},
-      viewcount = #{viewcount,jdbcType=INTEGER}
+      viewcount = #{viewcount,jdbcType=INTEGER},
+      updatetime = #{updatetime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

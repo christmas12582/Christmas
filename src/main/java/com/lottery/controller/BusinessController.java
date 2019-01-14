@@ -149,7 +149,7 @@ public class BusinessController {
             @RequestParam(value = "lotteryid") Integer lotteryid,
             @RequestParam(value = "orderno") Integer orderno,
             @RequestParam(value = "name") String name,
-            @RequestParam(value = "icon") String icon,
+            @RequestParam(value = "icon", required=false) String icon,
             @RequestParam(value = "mcount") Integer mcount,
             @RequestParam(value = "weight") Integer weight
     ) {

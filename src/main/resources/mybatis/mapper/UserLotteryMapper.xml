@@ -70,7 +70,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, lotterydate, lotteryitemid, userid, exchangedate, lotteryid, prizenum, sharenum
+    id, lotterydate, lotteryitemid, userid, exchangedate, lotteryid, prizenum, sharenum, otheruserid
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.lottery.model.UserLotteryExample" >
     select
@@ -260,9 +260,20 @@
   </update>
   <select id="selectByUserIdAndLotteryId" resultMap="BaseResultMap" >
     select 
-    <include refid="Base_Column_List" />
-    from t_user_lottery
-    where userid = #{userId,jdbcType=INTEGER}
-      and lotteryid = #{lotteryId,jdbcType=INTEGER}
+      ul.id, ul.lotterydate, ul.lotteryitemid, ul.userid, ul.exchangedate, ul.lotteryid, ul.prizenum, ul.sharenum, ul.otheruserid
+    from t_user_lottery ul
+    left join t_lottery l on l.id = ul.lotteryid
+    where <![CDATA[ ul.updatetime <= l.lotterydate ]]>
+      and ul.userid = #{userId,jdbcType=INTEGER}
+      and ul.lotteryid = #{lotteryId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByUserIdAndExpiredtime" resultMap="BaseResultMap" >
+    select 
+      ul.id, ul.lotterydate, ul.lotteryitemid, ul.userid, ul.exchangedate, ul.lotteryid, ul.prizenum, ul.sharenum, ul.otheruserid
+    from t_user_lottery ul
+    left join t_lottery l on l.id = ul.lotteryid
+    where <![CDATA[ l.updatetime <= ul.lotterydate and ul.lotterydate >= #{expiredtime,jdbcType=TIMESTAMP} ]]>
+      and ul.userid = #{userId,jdbcType=INTEGER}
+      and ul.exchangedate is null
   </select>
 </mapper>
