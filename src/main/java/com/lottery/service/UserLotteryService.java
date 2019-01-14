@@ -62,14 +62,9 @@ public class UserLotteryService {
 	 * @return
 	 */
 	public List<UserLottery> findUserLotteryListByUserId(Integer userId){
-		UserLotteryExample userLotteryExample = new UserLotteryExample();
-		Criteria criteria = userLotteryExample.createCriteria();
-		criteria.andUseridEqualTo(userId);
-		criteria.andExchangedateIsNull();
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.DAY_OF_YEAR, -expired);
-		criteria.andLotterydateGreaterThanOrEqualTo(calendar.getTime());
-		List<UserLottery> selectByExample = userLotteryMapper.selectByExample(userLotteryExample);
+		List<UserLottery> selectByExample = userLotteryMapper.selectByUserIdAndExpiredtime(userId, calendar.getTime());
 		Map<Integer, LotteryItem> lotteryItemMap = new HashMap<Integer, LotteryItem>();
 		for(UserLottery userLottery: selectByExample){
 			if(!lotteryItemMap.containsKey(userLottery.getLotteryitemid())){

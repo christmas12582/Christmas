@@ -1,5 +1,9 @@
 package com.lottery.model;
 
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class Lottery {
     private Integer id;
 
@@ -10,6 +14,9 @@ public class Lottery {
     private Integer forceshare;
 
     private Integer viewcount;
+    
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private Date updatetime;
 
     public Integer getId() {
         return id;
@@ -50,4 +57,18 @@ public class Lottery {
     public void setViewcount(Integer viewcount) {
         this.viewcount = viewcount;
     }
+
+	/**
+	 * @return the updatetime
+	 */
+	public Date getUpdatetime() {
+		return updatetime;
+	}
+
+	/**
+	 * @param updatetime the updatetime to set
+	 */
+	public void setUpdatetime(Date updatetime) {
+		this.updatetime = updatetime;
+	}
 }

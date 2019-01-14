@@ -107,6 +107,7 @@ public class BusinessService {
         lottery.setIsvalid(isvalid);
         lottery.setMcount(mcount);
         lottery.setForceshare(forceshare);
+        lottery.setUpdatetime(new Date());
         return lotteryMapper.updateByPrimaryKeySelective(lottery);
 
     }
@@ -281,6 +282,7 @@ public class BusinessService {
         lottery.setIsvalid(1);
         lottery.setMcount(100);
         lottery.setForceshare(0);//默认
+        lottery.setUpdatetime(new Date());
         lotteryMapper.insertSelective(lottery);
 
         BuyExample buyExample= new BuyExample();
