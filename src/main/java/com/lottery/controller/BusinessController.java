@@ -215,6 +215,7 @@ public class BusinessController {
         Buy buy = businessService.getBuybyLotteryid(lotteryid);
         if (!buy.getUserid().equals(bussinessUserList.get(0).getId()))
             return new ResponseModel(500L, "该活动不属于该用户", null);
+        gcount = 0;
         HashMap<String, Object> result = businessService.updateItem(lotteryid, itemid, orderno, name, icon, gcount, mcount, weight);
         if ((Integer) result.get("count") > 0)
             return new ResponseModel(0L, "更新成功", null);
